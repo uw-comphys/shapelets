@@ -10,7 +10,7 @@
 
 `Shapelets` is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
 
-Due to these powerful properties, they have seen extensive use in recent years, with several different formulations and applications, including
+Due to these properties, they have seen extensive use in recent years, with several different formulations and applications, including
 
 * Astronomy/astrophysics [[A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), [R. Massey (2005)](https://doi.org/10.48550/arXiv.astro-ph/0408445), [L. Lentati (2015)](https://doi.org/10.48550/arXiv.1412.1427), [S. Birrer (2015)](https://doi.org/10.48550/arXiv.1504.07629), [G. Desvignes (2016)](https://doi.org/10.48550/arXiv.1602.08511), [J. Berge (2019)](https://doi.org/10.48550/arXiv.1903.05837)], 
 * Self-assembly materials [[R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307), [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353), [M. P. Tino (in revision)](https://github.com/uw-comphys/shapelets)], 
