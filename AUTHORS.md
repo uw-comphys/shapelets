@@ -1,6 +1,7 @@
-                  Shapelets Authors
+## `Shapelets` Authors
 
-Nasser Mohieddin Abukhdeir
 Matthew Peres Tino
-Rob Suderman
-Dan Lizotte
+Abbas Yusuf Abdulaziz
+Nasser Mohieddin Abukhdeir
+Robert Suderman
+Thomas Akdeniz
