@@ -15,5 +15,6 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+from .functions import *
 from .entry_points import *
 from .run import *
