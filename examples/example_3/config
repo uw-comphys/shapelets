@@ -1,0 +1,6 @@
+[general]
+image_name = sqrAFM2.png
+method = orientation
+
+[orientation]
+pattern_order = square

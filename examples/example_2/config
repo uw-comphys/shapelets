@@ -1,0 +1,7 @@
+[general]
+image_name = hexSIM1.png
+method = identify_defects
+
+[identify_defects]
+pattern_order = hexagonal
+num_clusters = 10
