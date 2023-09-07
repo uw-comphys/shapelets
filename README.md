@@ -59,13 +59,13 @@ The `shapelets` package makes use of [entry points](https://packaging.python.org
 
 The entry points currently developed for `shapelets` are,
 
-* `shapelets config` - here, 'config' is the name of the configuration file that executes specific methods or applications that are described by the parameters set in this file. Please see the [interface methods](#interface-methods) and [examples](https://github.com/uw-comphys/shapelets) for more details.
+* `shapelets config` - here, 'config' is the name of the configuration file that executes specific methods or applications that are described by the parameters set in this file. Please see [interface methods](#interface-methods) and [example documentation](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) for more details.
 * `shapelets-test` - this triggers all unit tests developed in the [tests](https://github.com/uw-comphys/shapelets) directory and will report any failures. It is encouraged to use this command if making any additions to the package codebase or installing the package for the first time.
 
 
 ### Interface Methods
 
-The `shapelets` package can be used in two different formats, but users are encouraged to see the examples [examples](https://github.com/uw-comphys/shapelets) to understand how to use both formats.
+The `shapelets` package can be used in two different formats, but users are encouraged to see the examples [examples](https://github.com/uw-comphys/shapelets/tree/main/examples) and related [documentation](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) to understand how to use both formats.
 
 In brief, the two formats are:
 
@@ -75,7 +75,7 @@ In brief, the two formats are:
 
 ## Examples of Usage
 
-Several in-depth examples were developed that explore the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. All examples can be found [**here**](https://github.com/uw-comphys/shapelets). The examples should be the first place for new users to understand how to use the shapelets package. All examples have instructions to use the `shapelets` package via both [**interface methods**](#interface-methods).
+Several in-depth examples were developed that explore the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. All examples can be found [**here**](https://github.com/uw-comphys/shapelets/tree/main/examples) with documentation for the examples found [**here**](https://github.com/uw-comphys/shapelets/tree/main/docs/examples). The examples should be the first place for new users to understand how to use the shapelets package. All examples have instructions to use the `shapelets` package via both [**interface methods**](#interface-methods).
 
 * Examples 1-3 demonstrate use of the `shapelets.self_assembly` submodule to compute relevant methods such as the response distance method ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307)), local pattern orientation ([M. P. Tino (in revision)](https://github.com/uw-comphys/shapelets)) and defect identification method ([M. P. Tino (in revision)](https://github.com/uw-comphys/shapelets)).
 * Example 4 demonstrates use of the `shapelets.astronomy` submodule to compute the decomposition and reconstruction of galactic images [[A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), [R. Massey (2005)](https://doi.org/10.48550/arXiv.astro-ph/0408445)].
