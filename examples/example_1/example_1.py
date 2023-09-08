@@ -15,6 +15,43 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-from .misc import *
-from .quant import *
-from .wavelength import *
+## Section 1: importing modules
+import os 
+
+from shapelets.self_assembly import (
+    convresponse,
+    readimage,
+    rdistance,
+    get_wavelength,
+    process
+) 
+
+## Section 2: parameters
+image_name = "lamSIM1.png"
+shapelet_order = 'default' 
+num_clusters = 20
+ux = [50, 80]
+uy = [150, 180]
+
+## Section 3: code
+
+# 3.1: image and output directory handling
+image_path = os.getcwd()+'/images/'
+image = readimage(image_name = image_name, image_path = image_path)
+save_path = os.getcwd()+'/output/'
+if not os.path.exists(save_path): os.mkdir("output")
+
+# 3.2: get the characteristic wavelength of the pattern
+char_wavelength = get_wavelength(image = image)
+
+# 3.3: get the convolutional response 
+response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
+
+# 3.4: compute the response distance 
+try:
+    rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
+except NameError:
+    rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = 'default', uy = 'default')
+
+# processing and saving the results to the **output/** directory 
+process(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
