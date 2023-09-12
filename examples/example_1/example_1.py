@@ -20,10 +20,10 @@ import os
 
 from shapelets.self_assembly import (
     convresponse,
-    readimage,
+    read_image,
     rdistance,
     get_wavelength,
-    process
+    process_output
 ) 
 
 ## Section 2: parameters
@@ -37,7 +37,7 @@ uy = [150, 180]
 
 # 3.1: image and output directory handling
 image_path = os.getcwd()+'/images/'
-image = readimage(image_name = image_name, image_path = image_path)
+image = read_image(image_name = image_name, image_path = image_path)
 save_path = os.getcwd()+'/output/'
 if not os.path.exists(save_path): os.mkdir("output")
 
@@ -54,4 +54,4 @@ except NameError:
     rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = 'default', uy = 'default')
 
 # processing and saving the results to the **output/** directory 
-process(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
+process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)

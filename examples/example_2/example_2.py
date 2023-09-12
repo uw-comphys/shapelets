@@ -20,10 +20,10 @@ import os
 
 from shapelets.self_assembly import (
     convresponse,
-    readimage,
+    read_image,
     defectid,
     get_wavelength,
-    process
+    process_output
 ) 
 
 ## Section 2: parameters
@@ -35,7 +35,7 @@ num_clusters = 10
 
 # 3.1: image and output directory handling
 image_path = os.getcwd()+'/images/'
-image = readimage(image_name = image_name, image_path = image_path)
+image = read_image(image_name = image_name, image_path = image_path)
 save_path = os.getcwd()+'/output/'
 if not os.path.exists(save_path): os.mkdir("output")
 
@@ -52,4 +52,4 @@ except NameError:
     centroids, clusterMembers, defects = defectid(response = response, l = char_wavelength, pattern_order = pattern_order, num_clusters = 'default')
 
 # processing and saving the results to the **output/** directory 
-process(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
+process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)

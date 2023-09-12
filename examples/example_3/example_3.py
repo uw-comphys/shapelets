@@ -20,10 +20,10 @@ import os
 
 from shapelets.self_assembly import (
     convresponse,
-    readimage,
+    read_image,
     orientation,
     get_wavelength,
-    process
+    process_output
 ) 
 
 ## Section 2: parameters
@@ -34,7 +34,7 @@ pattern_order = "square"
 
 # 3.1: image and output directory handling
 image_path = os.getcwd()+'/images/'
-image = readimage(image_name = image_name, image_path = image_path)
+image = read_image(image_name = image_name, image_path = image_path)
 save_path = os.getcwd()+'/output/'
 if not os.path.exists(save_path): os.mkdir("output")
 
@@ -48,4 +48,4 @@ response, orients = convresponse(image = image, l = char_wavelength, shapelet_or
 mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, response = response, orients = orients)
 
 # processing and saving the results to the **output/** directory 
-process(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
+process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
