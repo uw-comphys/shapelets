@@ -1,0 +1,8 @@
+[general]
+method = galaxy_decompose
+
+
+[galaxy_decompose]
+fits_path = galaxies.fits
+shapelet_order = default
+compression_order = 20

@@ -23,6 +23,8 @@ from .self_assembly.misc import *
 from .self_assembly.quant import *
 from .self_assembly.wavelength import *
 
+from .astronomy.galaxy import *
+
 def run(config_file: str) -> None:
     r""" 
     
@@ -39,6 +41,27 @@ def run(config_file: str) -> None:
     config = configparser.ConfigParser()
     config.read(config_file)
 
+    # handle method
+    method = config.get('general', 'method')
+
+    #galaxy_decomposition
+    if method == 'galaxy_decompose':
+        save_path = os.getcwd()+'/output/'
+        if not os.path.exists(save_path): os.mkdir("output")
+        
+        fits_path = os.getcwd()+'/images/' + config.get('galaxy_decompose', 'fits_path')
+        shapelet_order = config.get('galaxy_decompose', 'shapelet_order', fallback = 'default')
+        compression_order = config.get('galaxy_decompose', 'compression_order', fallback = 'default')
+
+        output_base_path = save_path+fits_path[fits_path.rfind('/'):-5]
+        n_max = int([shapelet_order, 10][shapelet_order == 'default'])
+        compression_factor = int([compression_order, 25][compression_order == 'default'])
+
+        data = load_fits_data(fits_path)
+        (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(data, output_base_path)
+        decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)
+        return
+
     # image and output paths
     image_path = os.getcwd()+'/images/'
     save_path = os.getcwd()+'/output/'
@@ -51,9 +74,6 @@ def run(config_file: str) -> None:
 
     # obtain characteristic wavelength, needed for all applications
     char_wavelength = get_wavelength(image = image)
-    
-    # handle method
-    method = config.get('general', 'method')
 
 
     ## response_distance
