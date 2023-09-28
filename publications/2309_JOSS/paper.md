@@ -63,19 +63,19 @@ The table below summarizes the different shapelet functions implemented in the `
 
 | Shapelet Functions     | Description                                                                                                                                  |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cartesian     | Cartesian shapelets from ref. [@Refregier2003] via `shapelets.functions.cartesian1D`, `shapelets.functions.cartesian2D`            |
-| Polar             | Polar shapelets from ref. [@Massey2005] via `shapelets.functions.polar2D`                                                                       |
-| Orthonormal polar  | Orthonormal polar shapelets with constant radial scale from ref. [@Akdeniz2018] via  `shapelets.functions.orthonormalpolar2D`                  |
-| Exponential   | Exponential shapelets from ref. [@Berge2019] via `shapelets.functions.exponential1D`, `shapelets.functions.exponential2D`          |
+| Cartesian     | Cartesian shapelets [@Refregier2003] via `shapelets.functions.cartesian1D`, `shapelets.functions.cartesian2D`            |
+| Polar             | Polar shapelets [@Massey2005] via `shapelets.functions.polar2D`                                                                       |
+| Orthonormal polar  | Orthonormal polar shapelets with constant radial scale [@Akdeniz2018] via  `shapelets.functions.orthonormalpolar2D`                  |
+| Exponential   | Exponential shapelets [@Berge2019] via `shapelets.functions.exponential1D`, `shapelets.functions.exponential2D`          |
 
 The table below summarizes the specific shapelet applications implemented in this package.
 
 | Shapelet Applications    		  | Description                                                                                                                       |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Galaxy decomposition            | Galactic image decomposition & reconstruction [@Refregier2003] via `shapelets.astronomy.TODO`                                                |
-| Response distance         | Response distance method for self-assembly microscopy imaging from refs. [@Suderman2015; @Akdeniz2018] via `shapelets.self_assembly.rdistance` |
-| Orientation                     | Local pattern orientation for self-assembly microscopy imaging from ref. [@Tino2023] via `shapelets.self_assembly.orientation`                    |
-| Defect identification     | Defect identification method for self-assembly microscopy imaging from ref. [@Tino2023] via `shapelets.self_assembly.defectid`                    |
+| Galaxy decomposition            | Galactic image decomposition & reconstruction [@Refregier2003] via `shapelets.astronomy.decompose_galaxies`                                                |
+| Response distance         | Response distance method for self-assembly microscopy imaging [@Suderman2015; @Akdeniz2018] via `shapelets.self_assembly.rdistance` |
+| Orientation                     | Local pattern orientation for self-assembly microscopy imaging [@Tino2023] via `shapelets.self_assembly.orientation`                    |
+| Defect identification     | Defect identification method for self-assembly microscopy imaging [@Tino2023] via `shapelets.self_assembly.defectid`                    |
 
 More information, such as installation instructions and application-specific examples can be found in the package [README](https://github.com/uw-comphys/shapelets) file.
 
@@ -101,17 +101,17 @@ Alternatively, the Python-based software interface of the `shapelets` package ca
 For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See [here](https://github.com/uw-comphys/shapelets/tree/main/examples) and [here](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) for examples and their associated documentation, respectively.
 
 Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], local pattern orientation [@Tino2023], and defect identification method [@Tino2023].
-Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting).
+Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here. 
 
 ## Example 1 - Response Distance Method
 
-[Example 1](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image from ref. [@Suderman2015], shown below.
+[Example 1](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image [@Suderman2015], shown below.
 
 ![](images/lamSIM1.png){ width=20%, height=20%}
 
 ### Response Distance
 
-The response distance [@Suderman2015] is computed as $$d_{i, j} = \min \| \vec{R} - \vec{r_{i,j}} \|_2$$ where $\vec{r_{i,j}}$ denotes the given response vector at pixel location ${i, j}$ and $\vec{R}$ is the reference set of response vectors. See ref. [@Suderman2015] for more details.
+The response distance [@Suderman2015] is computed as $$d_{i, j} = \min \| \vec{R} - \vec{r_{i,j}} \|_2$$ where $\vec{r_{i,j}}$ denotes the given response vector at pixel location ${i, j}$ and $\vec{R}$ is the reference set of response vectors. 
 
 ### Configuration file Method
 
@@ -129,18 +129,20 @@ The configuration file (`config`) contains the following information,
 
 where
 
-* *shapelet_order* details the maximum shapelet order ($m'$) to use during convolution (i.e., $m = [1, m']$; see ref. [@Tino2023]] for more details),
+* *shapelet_order* details the maximum shapelet order ($m'$) to use during convolution (i.e., $m = [1, m']) [@Tino2023],
 * *num_clusters* details the number of clusters required for k-means clustering [@Wu2012], and
 * [*ux*, *uy*] detail the coordinates of the user-defined reference subdomain required for the response distance method [@Suderman2015].
 
+*Note - the shapelet_order parameter in this example is based on the definition from [Akdeniz et al. (2018)](https://doi.org/10.1088/1361-6528/aaf353). This is different from the definition used in astronomy methods in this package.*
+
 Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst) under the section "Method parameters".
 
-To run this example, navigate the terminal directory to "shapelets/examples/example_1". Then, type `shapelets config` into your command line. The outputs will be available in "shapelets/examples/example_1/output", containing the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
+To run this example, navigate the terminal directory to "shapelets/examples/example_1". Then, type `shapelets config` into the command line. The outputs will be available in "shapelets/examples/example_1/output", containing the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
 
 ![](images/lamSIM1_response_distance_k20.png){ width=20%, height=20%}
 ![](images/lamSIM1_response_distance_overlay_k20.png){ width=20%, height=20%}
 
-**Note** - typically, you may not know the **ux** and **uy** parameters for your image when computing the response distance for the first time. If this is the case, please see the section "Selecting subdomain bounds during runtime" in the [Example 1 documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst).
+**Note** - typically, you may not know the **ux** and **uy** parameters for the image when computing the response distance for the first time. If this is the case, please see the section "Selecting subdomain bounds during runtime" in the [Example 1 documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst).
 
 ### Scripting Method
 
@@ -151,13 +153,13 @@ After executing `example_1.py`, the outputs (shown above) will be available in "
 ## Example 2 - Defect Identification Method
 
 
-[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2023]. This example will use a simulated hexagonal self-assembly microscopy image from ref. [@Suderman2015], shown below.
+[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2023]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown below.
 
 ![](images/hexSIM1.png){ width=20%, height=20%}
 
 ### Defect Identification Method
 
-The defect identification method [@Tino2023] is a modification from the response distance method from ref. [@Suderman2015].
+The defect identification method [@Tino2023] is a modification from the response distance method [@Suderman2015].
 
 The user is required to manually select the clusters associated with defects or defect structures, and the *defect response distance* is computed for each cluster.
 
@@ -184,7 +186,7 @@ where
 
 Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_2.rst) under section "Method parameters".
 
-To run this example, navigate the terminal directory to "shapelets/examples/example_2". Then, type `shapelets config` into your command line.
+To run this example, navigate the terminal directory to "shapelets/examples/example_2". Then, type `shapelets config` into the command line.
 
 You will be required to select the clusters associated with defects or defect structures during runtime. Details for this specific process can be found in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_2.rst) under section "Config method - running config" or "Scripting method - executing example_2.py", depending on the preferred package interface method.
 
@@ -204,7 +206,54 @@ After executing `example_2.py`, the outputs (shown above) will be available in "
 
 ## Example 4 - Galactic Image Decomposition & Reconstruction
 
-TODO (Abbas)
+[Example 4](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) demonstrates use of the `shapelets.astronomy` submodule to decompose a collection of galaxies into a linear combination of shapelet functions. This example will use a subset of galaxies from the Hubble Deep Field North [@Refregier2003], shown below as a *linear* (left) and *mean normalized* (right) greyscale image.
+
+![](images/galaxies_linear.png){ width=20%, height=20%}
+![](images/galaxies_std.png){ width=20%, height=20%}
+
+### Galaxy Decomposition
+
+The galaxy decomposition method is based on the properties of cartesian shapelet functions [@Refregier2003], where any (image) function can be represented (or approximated) as a sum of scaled shapelet functions.
+
+In this example, the astronomical intensity/pixel data is stored in a Flexible Image Transport System (FITS) file, designed to standarize the exchange of astronomical image data between observatories.
+
+These intesities represent localized celestial objects (such as galaxies) that, once separated from the surrounding image, are decomposed into a linear combination of shapelet functions. 
+
+### Configuration file Method
+
+The configuration file (`config`) contains the following information,
+
+	[general]
+	fits_name = galaxies.fits
+	method = galaxy_decompose
+
+	[galaxy_decompose] 
+	shapelet_order = default 
+	compression_order = 20 
+
+where
+
+* *shapelet_order* details the maximum order of shapelets used in the decomposition, and
+* *compression_order* details the number of significant shapelet coefficients used in the final reconstruction.
+
+*Note - the shapelet_order parameter in this example is based on the definition from [Refregier et al. (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x). This is different from the definition used in self-assembly methods in this package.*
+
+Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_4.rst) under section "Method parameters".
+
+To run this example, navigate the terminal directory to "shapelets/examples/example_4". Then, type `shapelets config` into the command line.
+
+The outputs will be available in "shapelets/examples/example_4/output", containing two types of images corresponding to (1) the locations of galaxies highlighted on the linear and mean normalized image, and (2) images containing information about each decomposed galaxy, including: the subdomain of the original image, reconstructions of the galaxy using all calculated coefficients and a compressed set of coefficients, and the compressed reconstruction's relative error.
+
+The galaxy map and one example of a decomposed galaxy are shown below:
+
+![](images/galaxies_map.png){ width=20%, height=20%}
+![](images/galaxies_decomposed.png){ width=20%, height=20%}
+
+### Scripting Method
+
+For users wishing to interact with the `shapelets` package in a more traditional format, the `example_4.py` file is setup to obtain the same outputs as seen above without any code modifications needed.
+
+After executing `example_4.py`, the outputs (shown above) will be available in "shapelets/examples/example_4/output".
 
 # Acknowledgements
 
