@@ -101,7 +101,7 @@ Alternatively, the Python-based software interface of the `shapelets` package ca
 For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See [here](https://github.com/uw-comphys/shapelets/tree/main/examples) and [here](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) for examples and their associated documentation, respectively.
 
 Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], local pattern orientation [@Tino2023], and defect identification method [@Tino2023].
-Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here. 
+Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here.
 
 ## Example 1 - Response Distance Method
 
@@ -111,7 +111,7 @@ Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomp
 
 ### Response Distance
 
-The response distance [@Suderman2015] is computed as $$d_{i, j} = \min \| \vec{R} - \vec{r_{i,j}} \|_2$$ where $\vec{r_{i,j}}$ denotes the given response vector at pixel location ${i, j}$ and $\vec{R}$ is the reference set of response vectors. 
+The response distance [@Suderman2015] is computed as $$d_{i, j} = \min \| \vec{R} - \vec{r_{i,j}} \|_2$$ where $\vec{r_{i,j}}$ denotes the given response vector at pixel location ${i, j}$ and $\vec{R}$ is the reference set of response vectors.
 
 ### Configuration file Method
 
@@ -217,7 +217,7 @@ The galaxy decomposition method is based on the properties of cartesian shapelet
 
 In this example, the astronomical intensity/pixel data is stored in a Flexible Image Transport System (FITS) file, designed to standarize the exchange of astronomical image data between observatories.
 
-These intesities represent localized celestial objects (such as galaxies) that, once separated from the surrounding image, are decomposed into a linear combination of shapelet functions. 
+These intesities represent localized celestial objects (such as galaxies) that, once separated from the surrounding image, are decomposed into a linear combination of shapelet functions.
 
 ### Configuration file Method
 
@@ -227,9 +227,9 @@ The configuration file (`config`) contains the following information,
 	fits_name = galaxies.fits
 	method = galaxy_decompose
 
-	[galaxy_decompose] 
-	shapelet_order = default 
-	compression_order = 20 
+	[galaxy_decompose]
+	shapelet_order = default
+	compression_order = 20
 
 where
 
