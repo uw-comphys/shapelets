@@ -44,24 +44,6 @@ def run(config_file: str) -> None:
     # handle method
     method = config.get('general', 'method')
 
-    #galaxy_decomposition
-    if method == 'galaxy_decompose':
-        save_path = os.getcwd()+'/output/'
-        if not os.path.exists(save_path): os.mkdir("output")
-        
-        fits_path = os.getcwd()+'/images/' + config.get('galaxy_decompose', 'fits_path')
-        shapelet_order = config.get('galaxy_decompose', 'shapelet_order', fallback = 'default')
-        compression_order = config.get('galaxy_decompose', 'compression_order', fallback = 'default')
-
-        output_base_path = save_path+fits_path[fits_path.rfind('/'):-5]
-        n_max = int([shapelet_order, 10][shapelet_order == 'default'])
-        compression_factor = int([compression_order, 25][compression_order == 'default'])
-
-        data = load_fits_data(fits_path)
-        (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(data, output_base_path)
-        decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)
-        return
-
     # image and output paths
     image_path = os.getcwd()+'/images/'
     save_path = os.getcwd()+'/output/'
@@ -69,12 +51,16 @@ def run(config_file: str) -> None:
     if not os.path.exists(save_path): os.mkdir("output")
 
     # parsing image
-    image_name = config.get('general', 'image_name')
-    image = read_image(image_name = image_name, image_path = image_path)
+    if config.get('general', 'image_name', fallback=None):
+        image_name = config.get('general', 'image_name')
+        image = read_image(image_name = image_name, image_path = image_path)
 
-    # obtain characteristic wavelength, needed for all applications
-    char_wavelength = get_wavelength(image = image)
+        # obtain characteristic wavelength, needed for all self-assembly applications
+        char_wavelength = get_wavelength(image = image)
 
+    # retrieving .fits path (if .fits file is provided)
+    if config.get('general', 'fits_name', fallback=None):
+        fits_path = os.getcwd()+'/images/' + config.get('general', 'fits_name')
 
     ## response_distance
     if method == 'response_distance':
@@ -116,3 +102,16 @@ def run(config_file: str) -> None:
 
         process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', \
                        centroids = centroids, clusterMembers = clusterMembers, defects = defects)
+
+    #galaxy_decomposition
+    elif method == 'galaxy_decompose':
+        shapelet_order = config.get('galaxy_decompose', 'shapelet_order', fallback = 'default')
+        compression_order = config.get('galaxy_decompose', 'compression_order', fallback = 'default')
+
+        output_base_path = save_path+fits_path[fits_path.rfind('/'):-5]
+        n_max = int([shapelet_order, 10][shapelet_order == 'default'])
+        compression_factor = int([compression_order, 25][compression_order == 'default'])
+
+        fits_data = load_fits_data(fits_path)
+        (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(fits_data, output_base_path)
+        decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)

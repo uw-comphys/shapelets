@@ -45,12 +45,12 @@ The directory in "shapelets/examples/example_4" should contain the following.
 * **example_4.py** contains the script to run example 4 via scripting method
 * **images/** contains the fits used in this example, show below is the data with a linear colour scale scale and an image scaled from the mean and standard deviation
 
-.. image:: ../images/galaxies_linear.jpg
+.. image:: ../images/galaxies_linear.png
 	:width: 45%
 	:align: left
 	:alt: image of galaxies as seen by normal telecsope
 
-.. image:: ../images/galaxies_std.jpg
+.. image:: ../images/galaxies_std.png
 	:width: 45%
 	:align: right
 	:alt: image of galaxies normalized to the mean of the data
@@ -65,7 +65,7 @@ Note these parameters are the same if using the configuration-file based method 
 
 These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
 
-* **fits_path** 
+* **fits_name** 
 
 	* str - string, path to the .fits data file containing the astronomical data
 
@@ -89,17 +89,16 @@ The *general* section of the configuration file contains two parameters.
 
 	[general] 
 	method = galaxy_decompose
+	fits_name = galaxies.fits 
 
-The "method" parameter is required.
+The "method" and "fits_name" parameter is required.
 
-The *galaxy_decompose* section of the configuration file contains three parameters. 
+The *galaxy_decompose* section of the configuration file contains two parameters. 
 
 	[galaxy_decompose] 
-	fits_path = galaxies.fits 
 	shapelet_order = default 
 	compression_order = 20 
 
-The "fits_path" parameter is required.
 These parameters are explained in detail in the above section "Method parameters".
 
 
