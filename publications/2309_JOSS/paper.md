@@ -14,26 +14,26 @@ authors:
  - name: Abbas Yusuf Abdulaziz
    orcid: XXXX-XXXX-XXXX-XXXX
    affiliation: 1
- - name: Nasser Mohieddin Abukhdeir^[Corresponding author]
-   orcid: 0000-0002-1772-0376
-   affiliation: "1, 2, 3" # Need quotes for multiple affiliations
  - name: Robert Suderman
    orcid: XXXX-XXXX-XXXX-XXXX
-   affiliation: 4
+   affiliation: 2
  - name: Thomas Akdeniz
    orcid: XXXX-XXXX-XXXX-XXXX
-   affiliation: 5
+   affiliation: 3
+ - name: Nasser Mohieddin Abukhdeir^[Corresponding author]
+   orcid: 0000-0002-1772-0376
+   affiliation: "1, 4, 5" # Need quotes for multiple affiliations
 affiliations:
  - name: Department of Chemical Engineering, University of Waterloo, Ontario, Canada
    index: 1
  - name: Department of Physics and Astronomy, University of Waterloo, Ontario, Canada
-   index: 2
- - name: Waterloo Institute for Nanotechnology, University of Waterloo, Ontario, Canada
-   index: 3
- - name: Google Inc.
    index: 4
- - name: East Coast Asset Management SEZC
+ - name: Waterloo Institute for Nanotechnology, University of Waterloo, Ontario, Canada
    index: 5
+ - name: Google Inc.
+   index: 2
+ - name: East Coast Asset Management SEZC
+   index: 3
 date:
 bibliography: paper.bib
 ---
