@@ -36,16 +36,18 @@ Installing `shapelets` highly depends on the OS of your machine. Please follow t
 1. Update your Ubuntu system via `sudo apt-get update`
 2. Install `git`, `python3`, and `pip` via `sudo apt-get install git python3 python3-pip`
 3. Clone the `shapelets` repository via `git clone https://github.com/uw-comphys/shapelets.git`
-4. To install `shapelets`, navigate to your /shapelets directory, then type `pip3 install .`
+4. To install `shapelets`, navigate to your /shapelets/ directory (not /shapelets/shapelets/), then type `pip3 install .`
 5. To ensure correct installation, type `shapelets-test`, which should trigger the [custom command](#custom-commands) to initiate unit testing
 
 ### Mac OS
 
-1. Install [Homebrew](https://brew.sh/); it is an amazing package manager that will make this process easier
-2. Install `git`, `python3`, and `pip` via `brew install python3` (which also installs pip) then `brew install git`
-3. Clone the `shapelets` repository via `git clone https://github.com/uw-comphys/shapelets.git`
-4. To install `shapelets`, navigate to your /shapelets directory, then type `pip3 install .`
-5. To ensure correct installation, type `shapelets-test`, which should trigger the [custom command](#custom-commands) to initiate unit testing 
+1. Ensure your macOS is at least macOS 12 Monterey (released 2021)
+2. Open terminal
+3. Install [Homebrew](https://brew.sh/) by copy and pasting the command from the homepage of the website into your terminal
+4. Install `git`, `python3.9`, and `pip` in the terminal via `brew install git python@3.9` (which also installs pip) 
+5. Clone the `shapelets` repository via `git clone https://github.com/uw-comphys/shapelets.git`
+6. To install `shapelets`, navigate to your /shapelets/ directory (not /shapelets/shapelets/), then type `pip3.9 install .`
+7. To ensure correct installation, type `shapelets-test`, which should trigger the [custom command](#custom-commands) to initiate unit testing 
 
 ### Windows
 
@@ -54,10 +56,9 @@ For Windows users, we **strongly** recommend using WSL (Windows Subsystem for Li
 1. Install Ubuntu 22.04 LTS from the Microsoft Store
 2. Open Ubuntu 22.04 LTS and create a Unix profile (username and password) 
 3. Enter `sudo apt-get update` into your terminal to get the most recent Ubuntu updates
-4. Install `git`, `python3`, and `pip` via `sudo apt-get install git python3 python3-pip`
-5. Install a graphics library needed to use `openCV` for `shapelets` via `sudo apt-get install libgl1-mesa-glx`
+4. Install `git`, `python3`, and `pip` and a necessary graphics library via `sudo apt-get install git python3 python3-pip libgl1-mesa-glx`
 5. Clone the `shapelets` repository via `git clone https://github.com/uw-comphys/shapelets.git`
-6. To install `shapelets`, navigate to your /shapelets directory, then type `pip3 install .`
+6. To install `shapelets`, navigate to your /shapelets directory (not /shapelets/shapelets/), then type `pip3 install .`
     * Note: to locate where your Ubuntu directories are stored, type `explorer.exe .` into the terminal, and your Windows explorer will open with the correct path to your Ubuntu system
     * You can pin this address to your system by clicking *File* then *Pin to Quick Access*
 7. To be able to use the [custom commands](#custom-commands) developed for `shapelets`, please follow the instructions [**here**](#editing-path-to-use-shapelets-custom-commands)
