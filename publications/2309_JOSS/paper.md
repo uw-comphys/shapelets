@@ -12,13 +12,10 @@ authors:
    orcid: 0009-0005-6832-1761
    affiliation: 1
  - name: Abbas Yusuf Abdulaziz
-   orcid: XXXX-XXXX-XXXX-XXXX
    affiliation: 1
  - name: Robert Suderman
-   orcid: XXXX-XXXX-XXXX-XXXX
    affiliation: 2
  - name: Thomas Akdeniz
-   orcid: XXXX-XXXX-XXXX-XXXX
    affiliation: 3
  - name: Nasser Mohieddin Abukhdeir^[Corresponding author]
    orcid: 0000-0002-1772-0376
