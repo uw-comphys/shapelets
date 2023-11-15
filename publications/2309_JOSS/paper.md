@@ -45,7 +45,6 @@ For ease of use, `shapelets` also provides a text configuration-based user inter
 
 Lastly, the `shapelets` package includes a set of detailed examples which demonstrate usage of the software through both the text configuration-based and programmatic interfaces. These examples include both astronomy and self-assembly applications, providing users with a basis for developing their own applications of the package and shapelets functions, in general.
 
-
 # Statement of Need
 
 Shapelets are a class of complete localized orthogonal basis functions with a broad range of applications in image processing and reconstruction [@Refregier2003; @Massey2005; @Suderman2015; @Akdeniz2018; @Tino2023]. Despite their increasingly widespread use, there currently is no single software package that is both broadly accessible (e.g. written in Python or other high-level programming language) and implements several useful applications. Currently, there exists an open-source astronomy-focused [shapelet software package](https://www.astro.dur.ac.uk/~rjm/shapelets/code/index.php) [@Massey2005], however, it is written in the [Interactive Data Language (IDL) programming language](https://en.wikipedia.org/wiki/IDL_(programming_language)) which is not widely used in the science and engineering communities. Furthermore, this package has not been updated in over a decade. Given the increasingly broad usage of shapelets in areas outside of astronomy/astrophysics, an open-source Python-based shapelets software package would provide access to these functions and their applications to a larger community, along with facilitating open-source scientific software development through the existence of a centralized software package that allows for contribution and collaboration.
@@ -82,16 +81,15 @@ The `shapelets` python package can be used in two different ways: text-based con
 
 ## Understanding the Configuration File Method
 
-The text-based user interface for `shapelets` is centered around configuration files and the CLI (command line interface). Each use of the shapelets package (via configuration files) should have a main directory (here called "shapelets_example") with standard sub-directories and required files as shown below.
+The text-based user interface for `shapelets` is centered around configuration files and the CLI (command line interface). Each use of the shapelets package (via configuration files) should have a main directory (here called "shapelets_example") with standard sub-directories and required files as shown in \autoref{fig:sample_dir}.
 
-![](images/user_interface.png){ width=150%, height=150%}
+![Sample directory hierarchy.\label{fig:sample_dir}](images/user_interface.png){ width=40% }
 
 The main (shapelets_example) directory contains the main configuration file (e.g., `config`) which is a plain-text file specifying specific parameters or methods to be used. Acceptable parameters and options for the configuration file can be found throughout the [examples](https://github.com/uw-comphys/shapelets/tree/main/examples), depending on the shapelet-based method being applied.
 
 The `images/` subdirectory contains the data for image analysis and must be present. The `output/` subdirectory is created by the `shapelets` software and contains output data/images based on the analysis directed in the `config`.
 
 Alternatively, the Python-based software interface of the `shapelets` package can be used either interactively or via scripting through standard import of either shapelet function implementations and/or application submodules.
-
 
 # Examples of Usage
 
@@ -102,9 +100,9 @@ Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomp
 
 ## Example 1 - Response Distance Method
 
-[Example 1](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image [@Suderman2015], shown below.
+[Example 1](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:lamSIM1}.
 
-![](images/lamSIM1.png){ width=20%, height=20%}
+![Simulated stripe self-assembly nanostructure [@Suderman2015].\label{fig:lamSIM1}](images/lamSIM1.png){ width=40% }
 
 ### Response Distance
 
@@ -134,10 +132,9 @@ where
 
 Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst) under the section "Method parameters".
 
-To run this example, navigate the terminal directory to "shapelets/examples/example_1". Then, type `shapelets config` into the command line. The outputs will be available in "shapelets/examples/example_1/output", containing the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
+To run this example, navigate the terminal directory to "shapelets/examples/example_1". Then, type `shapelets config` into the command line. The outputs, shown in \autoref{fig:lamSIM1_RD}, will be available in "shapelets/examples/example_1/output", containing the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
 
-![](images/lamSIM1_response_distance_k20.png){ width=20%, height=20%}
-![](images/lamSIM1_response_distance_overlay_k20.png){ width=20%, height=20%}
+![Response distance (left) with superimposition onto \autoref{fig:lamSIM1} (right).\label{fig:lamSIM1_RD}](images/lamSIM1_response_distance_k20.png){ width=80% }
 
 **Note** - typically, you may not know the **ux** and **uy** parameters for the image when computing the response distance for the first time. If this is the case, please see the section "Selecting subdomain bounds during runtime" in the [Example 1 documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst).
 
@@ -145,14 +142,13 @@ To run this example, navigate the terminal directory to "shapelets/examples/exam
 
 For users wishing to interact with the `shapelets` package in a more traditional format, the `example_1.py` file is setup to obtain the same outputs as seen above without any code modifications needed.
 
-After executing `example_1.py`, the outputs (shown above) will be available in "shapelets/examples/example_1/output".
+After executing `example_1.py`, the outputs (\autoref{fig:lamSIM1_RD}) will be available in "shapelets/examples/example_1/output".
 
 ## Example 2 - Defect Identification Method
 
+[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2023]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:hexSIM1}.
 
-[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2023]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown below.
-
-![](images/hexSIM1.png){ width=20%, height=20%}
+![Simulated hexagonal self-assembly nanostructure [@Suderman2015].\label{fig:hexSIM1}](images/hexSIM1.png){ width=40% }
 
 ### Defect Identification Method
 
@@ -187,26 +183,21 @@ To run this example, navigate the terminal directory to "shapelets/examples/exam
 
 You will be required to select the clusters associated with defects or defect structures during runtime. Details for this specific process can be found in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_2.rst) under section "Config method - running config" or "Scripting method - executing example_2.py", depending on the preferred package interface method.
 
-The outputs will be available in "shapelets/examples/example_2/output", containing the following four images corresponding to (1) the locations of each cluster through the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) this scalar field superimposed onto the original image.
+The outputs, shown in \autoref{fig:hexSIM1_defectid}, will be available in "shapelets/examples/example_2/output", containing the following four images corresponding to (1) the locations of each cluster through the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) this scalar field superimposed onto the original image.
 
-![](images/hexSIM1_defectid_clustloc_k10.png){ width=20%, height=20%}
-![](images/hexSIM1_defectid_rc_k10.png){ width=20%, height=20%}
-
-![](images/hexSIM1_defectid_drd_k10.png){ width=20%, height=20%}
-![](images/hexSIM1_defectid_drd_overlay_k10.png){ width=20%, height=20%}
+![Defect identification method [@Tino2023] applied to \autoref{fig:hexSIM1} (right).\label{fig:hexSIM1_defectid}](images/hexSIM1_defectid.png){ width=80% }
 
 ### Scripting Method
 
 For users wishing to interact with the `shapelets` package in a more traditional format, the `example_2.py` file is setup to obtain the same outputs as seen above without any code modifications needed.
 
-After executing `example_2.py`, the outputs (shown above) will be available in "shapelets/examples/example_2/output".
+After executing `example_2.py`, the outputs (\autoref{fig:hexSIM1_defectid}) will be available in "shapelets/examples/example_2/output".
 
 ## Example 4 - Galactic Image Decomposition & Reconstruction
 
-[Example 4](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) demonstrates use of the `shapelets.astronomy` submodule to decompose a collection of galaxies into a linear combination of shapelet functions. This example will use a subset of galaxies from the Hubble Deep Field North [@Refregier2003], shown below as a *linear* (left) and *mean normalized* (right) greyscale image.
+[Example 4](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) demonstrates use of the `shapelets.astronomy` submodule to decompose a collection of galaxies into a linear combination of shapelet functions. This example will use a subset of galaxies from the Hubble Deep Field North [@Refregier2003], shown in \autoref{fig:galaxies}.
 
-![](images/galaxies_linear.png){ width=20%, height=20%}
-![](images/galaxies_std.png){ width=20%, height=20%}
+![Galaxy image subset for analysis: linear (left) and mean normalized (right) greyscale images.\label{fig:galaxies}](images/galaxies.png){ width=80% }
 
 ### Galaxy Decomposition
 
@@ -239,18 +230,15 @@ Possible values for each parameter, including default values where applicable, a
 
 To run this example, navigate the terminal directory to "shapelets/examples/example_4". Then, type `shapelets config` into the command line.
 
-The outputs will be available in "shapelets/examples/example_4/output", containing two types of images corresponding to (1) the locations of galaxies highlighted on the linear and mean normalized image, and (2) images containing information about each decomposed galaxy, including: the subdomain of the original image, reconstructions of the galaxy using all calculated coefficients and a compressed set of coefficients, and the compressed reconstruction's relative error.
+The outputs, shown in \autoref{fig:galaxies_output}, will be available in "shapelets/examples/example_4/output", containing two types of images corresponding to (1) the locations of galaxies highlighted on the linear and mean normalized image, and (2) images containing information about each decomposed galaxy, including: the subdomain of the original image, reconstructions of the galaxy using all calculated coefficients and a compressed set of coefficients, and the compressed reconstruction's relative error.
 
-The galaxy map and one example of a decomposed galaxy are shown below:
-
-![](images/galaxies_map.png){ width=20%, height=20%}
-![](images/galaxies_decomposed.png){ width=20%, height=20%}
+![Galaxy map (left) and decomposed galaxy example (right).\label{fig:galaxies_output}](images/galaxies_output.png){ width=100% }
 
 ### Scripting Method
 
 For users wishing to interact with the `shapelets` package in a more traditional format, the `example_4.py` file is setup to obtain the same outputs as seen above without any code modifications needed.
 
-After executing `example_4.py`, the outputs (shown above) will be available in "shapelets/examples/example_4/output".
+After executing `example_4.py`, the outputs (\autoref{fig:galaxies_output}) will be available in "shapelets/examples/example_4/output".
 
 # Acknowledgements
 
