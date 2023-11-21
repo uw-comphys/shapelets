@@ -55,6 +55,10 @@ For Windows users, we **strongly** recommend using WSL (Windows Subsystem for Li
 
 1. Install Ubuntu 22.04 LTS from the Microsoft Store
 2. Open Ubuntu 22.04 LTS and create a Unix profile (username and password) 
+	* If you experience the following error when opening Ubuntu: WSLRegisterDistribution failed with error: 0x80370102, follow these steps
+	* On your PC, search for *features*, and click on *Turn Windows Features on and off*
+	* Make sure the following are enabled: *Hyper-V*, *Virtual Machine Platform*, and *Windows Subsystem for Linux*
+	* Restart your PC and retry step 2
 3. Enter `sudo apt-get update` into your terminal to get the most recent Ubuntu updates
 4. Install `git`, `python3`, and `pip` and a necessary graphics library via `sudo apt-get install git python3 python3-pip libgl1-mesa-glx`
 5. Clone the `shapelets` repository via `git clone https://github.com/uw-comphys/shapelets.git`

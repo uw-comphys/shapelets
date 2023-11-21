@@ -49,8 +49,8 @@ def run_tests():
     r"""
     
     Main function that runs all the unit tests via unittest from Python STL.
-    This is only invoked via the entry point "testshapelets" from the topmost shapelets directory.
-    I.e., only from the directory "/.../shapelets/" should you enter "testshapelets" via the CLI 
+    This is only invoked via the entry point "shapelets-test" from the topmost shapelets directory.
+    I.e., only from the directory "/.../shapelets/" should you enter "shapelets-test" via the CLI 
         (command line interface).
     
     """
