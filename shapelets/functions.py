@@ -370,7 +370,7 @@ def exponential2D(n, m, x1, x2, beta = 1):
     Parameters
     ----------
     n : int
-        Shapelet order. Must be non-negative. Acceptable values :math:`n > 0`.
+        Shapelet order. Must be non-negative. Acceptable values :math:`n \geq 0`.
     m : int
         Also describes shapelet order. Acceptable values :math:`m \in [-n, n]`.
     x1 : float or np.ndarray
@@ -401,7 +401,7 @@ def exponential2D(n, m, x1, x2, beta = 1):
     if n < 0:
         raise ValueError('n must be a non-negative integer.')
     elif np.abs(m) > n:
-        raise ValueError('m must be between -n and n.')
+        raise ValueError('m must be an integer between -n and n.')
 
     # Define common expressions
     nm = n - np.abs(m)
