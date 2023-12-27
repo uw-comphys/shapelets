@@ -25,12 +25,8 @@ def run_shapelets():
     r""" 
     
     Main function that runs shapelets.
-    This is only invoked via the entry point "shapelets".
-    I.e., in a directory with a configuration plaintext file, you should enter "shapelets filename" where
-        'filename' is the name of the configuration plaintext file via the CLI (command line interface).
-
-    Args (from command line):
-        config_file: Filename of the config file to load. Required parameter.
+    This is only invoked via the entry point "shapelets CONFIG" where
+        'filename' is the name of the configuration plaintext file via the CLI (command line interface).        
 
     """
     
@@ -42,16 +38,14 @@ def run_shapelets():
         config_file = sys.argv[1]
         run(config_file)
 
-    else: # if the user provides more than 1 argument (in addition to opencmp). Print error messages and quit.
+    else: # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
         raise RuntimeError("Improper use of shapelets module. Try 'shapelets config' with config file present.")
 
 def run_tests():
     r"""
     
-    Main function that runs all the unit tests via unittest from Python STL.
-    This is only invoked via the entry point "shapelets-test" from the topmost shapelets directory.
-    I.e., only from the directory "/.../shapelets/" should you enter "shapelets-test" via the CLI 
-        (command line interface).
+    Main function that runs all the unit tests from shapelets/tests/ via unittest from Python STL.
+    This is only invoked via the entry point "shapelets-test" from the top-most shapelets directory.
     
     """
 
@@ -71,7 +65,7 @@ def run_tests():
         try: yield
         finally: os.chdir(oldir)
 
-    # get platform and then assume entry point "testshapelets" executed from top-level directory
+    # get platform and then assume entry point "shapelets-test" executed from top-level directory
     user_os = str(platform.system())
     if user_os == 'Windows':
         os.chdir("tests\\")
