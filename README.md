@@ -10,7 +10,7 @@
 
 ## Summary 
 
-`Shapelets` is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
+`shapelets` is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
 
 Due to these properties, they have seen extensive use in recent years, with several different formulations and applications:
 
@@ -91,13 +91,14 @@ The `shapelets` package can be used in two different formats.
 
 Several in-depth examples (using both formats described above) were developed that showcase the applications of the `shapelets` package. 
 The [examples](https://github.com/uw-comphys/shapelets/tree/main/examples) and related [documentation](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) should be explored by all new users.
+They are summarized here:
 
 * Examples 1-3 use the `shapelets.self_assembly` sub-module to quantify order from microscopy images of materials (namely those from self-assembly):
     * The response distance method ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307))
     * Local pattern orientation ([M. P. Tino (accepted)](https://github.com/uw-comphys/shapelets))
     * Defect identification method ([M. P. Tino (accepted)](https://github.com/uw-comphys/shapelets))
 * Example 4 uses the `shapelets.astronomy` sub-module:
-    * Galaxy decomposition and reconstruction [[A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)]
+    * Galaxy decomposition and reconstruction ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))
 
 
 ## Contribute
