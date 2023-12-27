@@ -47,8 +47,10 @@ def run(config_file: str) -> None:
     # image and output paths
     image_path = os.getcwd()+'/images/'
     save_path = os.getcwd()+'/output/'
-    if not os.path.exists(image_path): raise RuntimeError(f"Path '{image_path}' does not exist.")
-    if not os.path.exists(save_path): os.mkdir("output")
+    if not os.path.exists(image_path): 
+        raise RuntimeError(f"Path '{image_path}' does not exist.")
+    if not os.path.exists(save_path): 
+        os.mkdir("output")
 
     # parsing image
     if config.get('general', 'image_name', fallback=None):
@@ -103,7 +105,7 @@ def run(config_file: str) -> None:
         process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', \
                        centroids = centroids, clusterMembers = clusterMembers, defects = defects)
 
-    #galaxy_decomposition
+    ## galaxy_decomposition
     elif method == 'galaxy_decompose':
         shapelet_order = config.get('galaxy_decompose', 'shapelet_order', fallback = 'default')
         compression_order = config.get('galaxy_decompose', 'compression_order', fallback = 'default')
