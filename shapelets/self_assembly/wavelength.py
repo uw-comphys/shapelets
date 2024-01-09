@@ -15,6 +15,8 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+import numbers 
+
 import numpy as np
 
 __all__ = [
@@ -65,7 +67,7 @@ def lambda_to_beta(m, l):
     beta = (l / np.sqrt(m)) * f
     return beta
 
-def get_wavelength(image, rng = [0, 50], verbose = True):
+def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True):
     r""" Find characteristic wavelength of an image from [1, 2].
 
     matthew@matthew: The rng needs to be optimized better. 
@@ -99,7 +101,9 @@ def get_wavelength(image, rng = [0, 50], verbose = True):
     --------
     
     """
-    
+    if type(image) != np.ndarray:
+        raise TypeError('image input must be numpy array.')
+
     # Step 1: Find spectral density
     DFT = np.fft.fft2(image)
     DFT[0, 0] = 0.1
@@ -129,6 +133,8 @@ def get_wavelength(image, rng = [0, 50], verbose = True):
     
     if verbose:
         print('Wavelength of image is {:.2f} pixels'.format(rai_wave[i_max]))
+    
+    assert isinstance(rai_wave[i_max], numbers.Real)
     
     return rai_wave[i_max]
 

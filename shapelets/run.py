@@ -67,16 +67,22 @@ def run(config_file: str) -> None:
     ## response_distance
     if method == 'response_distance':
         shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
+        if shapelet_order != 'default':
+            shapelet_order = ast.literal_eval(shapelet_order)
+
         num_clusters = config.get('response_distance', 'num_clusters', fallback = 'default')
+        if num_clusters != 'default':
+            num_clusters = ast.literal_eval(num_clusters)
+
         ux = config.get('response_distance', 'ux', fallback = 'default')
         uy = config.get('response_distance', 'uy', fallback = 'default')
-        # if ux/uy are a list (but read by configparser as a str), then convert to list)
         if ux != 'default':
             ux = ast.literal_eval(ux)
         if uy != 'default':
             uy = ast.literal_eval(uy)
 
         response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
+
         rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
 
         process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', \
@@ -87,6 +93,7 @@ def run(config_file: str) -> None:
         pattern_order = config.get('orientation', 'pattern_order')
 
         response, orients = convresponse(image = image, l = char_wavelength, shapelet_order = 6, normresponse = 'Individual')
+
         mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, \
                                                     response = response, orients = orients)
 
@@ -96,9 +103,13 @@ def run(config_file: str) -> None:
     ## defectid
     elif method == 'identify_defects':
         pattern_order = config.get('identify_defects', 'pattern_order')
-        num_clusters = config.get('identify_defects', 'num_clusters', fallback = 'default')
+
+        num_clusters = config.get('identify_defects', 'num_clusters', fallback = 'default') 
+        if num_clusters != 'default':
+            num_clusters = ast.literal_eval(num_clusters)
 
         response = convresponse(image = image, l = char_wavelength, shapelet_order = 'default', normresponse = 'Vector')[0]
+
         centroids, clusterMembers, defects = defectid(response = response, l = char_wavelength, \
                                                       pattern_order = pattern_order, num_clusters = num_clusters)
 
