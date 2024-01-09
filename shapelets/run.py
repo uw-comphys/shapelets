@@ -47,17 +47,27 @@ def run(config_file: str) -> None:
     # image and output paths
     image_path = os.getcwd()+'/images/'
     save_path = os.getcwd()+'/output/'
-    if not os.path.exists(image_path): raise RuntimeError(f"Path '{image_path}' does not exist.")
-    if not os.path.exists(save_path): os.mkdir("output")
+    if not os.path.exists(image_path): 
+        raise RuntimeError(f"Path '{image_path}' does not exist.")
+    if not os.path.exists(save_path): 
+        os.mkdir("output")
 
     # parsing image
+    if config.get('general', 'image_name', fallback=None):
+        image_name = config.get('general', 'image_name')
+        image = read_image(image_name = image_name, image_path = image_path)
     if config.get('general', 'image_name', fallback=None):
         image_name = config.get('general', 'image_name')
         image = read_image(image_name = image_name, image_path = image_path)
 
         # obtain characteristic wavelength, needed for all self-assembly applications
         char_wavelength = get_wavelength(image = image)
+        # obtain characteristic wavelength, needed for all self-assembly applications
+        char_wavelength = get_wavelength(image = image)
 
+    # retrieving .fits path (if .fits file is provided)
+    if config.get('general', 'fits_name', fallback=None):
+        fits_path = os.getcwd()+'/images/' + config.get('general', 'fits_name')
     # retrieving .fits path (if .fits file is provided)
     if config.get('general', 'fits_name', fallback=None):
         fits_path = os.getcwd()+'/images/' + config.get('general', 'fits_name')
