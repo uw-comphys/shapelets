@@ -15,8 +15,9 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-import numpy as np
 from math import comb as choose
+
+import numpy as np
 from scipy.special import binom, erf
 
 from ..functions import cartesian1D, cartesian2D
@@ -244,8 +245,7 @@ def get_compressed_nspace(s_coeff: np.ndarray, n_compress: int) -> np.ndarray:
 
     Notes
     -----
-    Often an image can be accurately reconstructed using only several of the shapelet functions with the largest coefficients.
-    Ignoring smaller coefficient functions helps to avoid overfitting to the image noise
+    Often an image can be accurately reconstructed using only several of the shapelet functions with the largest coefficients. Ignoring smaller coefficient functions helps to avoid overfitting to the image noise
 
     Examples
     -----

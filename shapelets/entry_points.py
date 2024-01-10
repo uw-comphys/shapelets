@@ -24,10 +24,7 @@ from .run import *
 
 def run_shapelets():
     r""" 
-
-    Main function that runs shapelets.
-    This is only invoked via the entry point "shapelets CONFIG" where
-        CONFIG is the name of the configuration plaintext file.      
+    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file.      
 
     """
     # Arguments for command line use
@@ -44,18 +41,14 @@ def run_shapelets():
 
 def run_tests():
     r"""
-    
-    Main function that runs all the unit tests from shapelets/tests/ via unittest from Python STL.
-    This is only invoked via the entry point "shapelets-test" from the top-most shapelets directory.
+    Main function that runs all the unit tests from shapelets/tests/ via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from the top-most shapelets directory.
     
     """
-
     @contextlib.contextmanager
     def tempWorkingDir(path):
         r"""
         
-        Temporarily create a working directory to execute CLI commands without actually
-        changing the root of the global directory.
+        Temporarily create a working directory to execute CLI commands without actually changing the root of the global directory.
 
         From stackoverflow:
         https://stackoverflow.com/questions/75048986/way-to-temporarily-change-the-directory-in-python-to-execute-code-without-affect

@@ -157,8 +157,7 @@ def polar2D(n, m, x1, x2, beta = 1):
     n : int
         Shapelet order. Acceptable values :math:`n \geq 0`.
     m : int
-        Also describes shapelet order. Acceptable values :math:`m \in [-n, n]`.
-        However, if n is odd/even, m must be odd/even respectively.
+        Also describes shapelet order. Acceptable values :math:`m \in [-n, n]`. However, if n is odd/even, m must be odd/even respectively.
     x1 : float or np.ndarray
         First input to shapelet function.
     x2 : float or np.ndarray
@@ -240,10 +239,7 @@ def orthonormalpolar2D(m, x1, x2, beta = 1):
 
     Notes
     -----
-    The orthonormal shapelet framework from [1] only supports n = 0.
-    See [2] for computing the characteristic wavelength.
-    Note that this shapelet formulation is a re-parameterization 
-        of that found in polar2D().
+    The orthonormal shapelet framework from [1] only supports n = 0. See [2] for computing the characteristic wavelength. Note that this shapelet formulation is a re-parameterization of that found in polar2D().
 
     References
     ----------
@@ -297,6 +293,7 @@ def exponential1D(n, x1, beta = 1):
     -------
     Sc(x1) : float or numpy.ndarray
         Shapelet function evaluated with Sc(x1).
+        
     References
     ----------
     .. [1] https://doi.org/10.1093/mnras/stz787

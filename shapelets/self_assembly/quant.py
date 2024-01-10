@@ -37,9 +37,7 @@ __all__ = [
 
 def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of 
-    shapelets kernels and an image, extracting the magnitude of response
-    as well as the shapelet-based orientation.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
     
     Parameters
     ----------
@@ -48,14 +46,11 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
     l : float
         The characteristic wavelength of the image.
     shapelet_order : str or int
-        'default' to use higher-order shapelets (m<=m') as in ref [3].
-        Can also accept integer value to use shapelets for m = [1, shapelet_order].
+        'default' to use higher-order shapelets (m<=m') as in ref [3]. Can also accept integer value to use shapelets for m = [1, shapelet_order].
     normresponse : str, optional
-        Normalize magnitude of response (omega) in terms of response vectors = "Vector". Default. 
-        Normalize each m-fold response wrt itself on [0, 1) = "Individual".
+        Normalize magnitude of response (omega) in terms of response vectors = "Vector". Default. Normalize each m-fold response wrt itself on [0, 1) = "Individual".
     verbose: bool
-        True (default) to print out results of orientation algorithm to console.
-        False to not print any results or information to console.
+        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
 
     Returns
     -------
@@ -205,19 +200,14 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
     pattern_order : str
         Pattern order. Options are: 'stripe', 'square', 'hexagonal'.
     num_clusters : int or str
-        The number of clusters as input to k-means clustering [4].
-        Can use "default" to get default value based on pattern_order.
-        For stripe, square, and hexagonal patterns, the minimum value is 
-            4, 8, and 10 respectively. 
+        The number of clusters as input to k-means clustering [4]. Can use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively. 
     
     Returns
     -------
     centroids : np.ndarray
-        The centroids from k-means clustering [2].
-        Each centroid is a row vector.
+        The centroids from k-means clustering [2]. Each centroid is a row vector.
     clusterMembers2D : np.ndarray
-        Shows which cluster each pixel from image is a member of.
-        I.e., value of 1 would mean it belongs to the cluster with centroid as centroids[1].
+        Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster with centroid as centroids[1].
     defects : np.ndarray
         The result of the defect response distance method. See [1]. 
 
@@ -311,8 +301,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
 
 def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
     r""" 
-    Finds the local pattern orientation using shapelet 
-    orientation at max response via an iterative scheme from [1].
+    Finds the local pattern orientation using shapelet orientation at max response via an iterative scheme from [1].
 
     Parameters
     ----------
@@ -323,11 +312,9 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
     response : np.ndarray
         The 3D array corresponding to shapelet response from convresponse().
     orients : np.ndarray
-        The 3D array corresponding to the orientation at max response,
-        obtained from convresponse().
+        The 3D array corresponding to the orientation at max response, obtained from convresponse().
     verbose: bool
-        True (default) to print out results of orientation algorithm to console.
-        False to not print any results or information to console.
+        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
 
     Returns
     -------
@@ -339,6 +326,10 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
         Applying smoothing/blending to the dilated mask via median filter kernel [2]. See [1].
     maxval : float
         The maximum allowed orientation value, where maxval = 2*np.pi / (m)
+    
+    Notes
+    -----
+    This function uses shapelets.self_assembly.misc.trim_image during iteration to converge on an acceptable orientation result. 
 
     References
     ----------
@@ -413,19 +404,13 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,i
     response : np.ndarray
         The 3D array corresponding to shapelet response from convresponse().
     num_clusters : str or int
-        The number of clusters as input to k-means clustering [3].
-        If str, acceptable value is "default" (which uses 20).
+        The number of clusters as input to k-means clustering [3]. If str, acceptable value is "default" (which uses 20).
     ux : str or list
-        The bounds in the x-direction for the reference region.
-        If using list option, must be 2 element list.
-        Choosing "default" will force user to choose ref. region at runtime.
+        The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime.
     uy : str or list
-        The bounds in the y-direction for the reference region.
-        If using list option, must be 2 element list.
-        Choosing "default" will force user to choose ref. region at runtime.
+        The bounds in the y-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime.
     verbose: bool
-        True (default) to print out results of orientation algorithm to console.
-        False to not print any results or information to console.
+        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
 
     Returns
     -------

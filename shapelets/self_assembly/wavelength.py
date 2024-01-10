@@ -26,8 +26,7 @@ __all__ = [
 
 def lambda_to_beta(m: int, l: float):
     r""" 
-    Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
-    to the appropriate beta value for orthonormal polar shapelets from [3].
+    Converts lambda (l), the characteristic wavelength of the pattern [1, 2] to the appropriate beta value for orthonormal polar shapelets from [3].
     
     Parameters
     ----------
@@ -66,18 +65,14 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
     r""" 
     Find characteristic wavelength of an image from [1, 2].
 
-    matthew@matthew: The rng needs to be optimized better. 
-    For example, if the wavelength is bigger than 50 need to fix this.
-    But, if we just let rng = None (i.e., all wavelengths) then it will
-    find way too big of a wavelength as the scale...
+    matthew@matthew: The rng needs to be optimized better. For example, if the wavelength is bigger than 50 need to fix this. But, if we just let rng = None (i.e., all wavelengths) then it will find way too big of a wavelength as the scale...
     
     Parameters
     ----------
     image : np.ndarray
         The image to be processed.
     rng : list
-        Range of wavelengths to consider for maximum wavelength.
-        I.e., will return max wavelength in range of [0, 50] (default). 
+        Range of wavelengths to consider for maximum wavelength. I.e., will return max wavelength in range of [0, 50] (default). 
 
     Returns
     -------
@@ -129,8 +124,7 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
 
 def radialavg(image: np.ndarray):
     r""" 
-    Calculates the radially averaged intensity of an image. 
-    Based on work from [1, 2].
+    Calculates the radially averaged intensity of an image. Based on work from [1, 2].
     
     Parameters
     ----------
@@ -140,8 +134,7 @@ def radialavg(image: np.ndarray):
     Returns
     -------
     rai : np.ndarray
-        A 1d array with one intensity per integer radius, excluding 0.
-        eg. For image with radii [0, 1, 2, 3], len(rai) = 3.
+        A 1d array with one intensity per integer radius, excluding 0. eg. For image with radii [0, 1, 2, 3], len(rai) = 3.
 
     References
     ----------

@@ -15,15 +15,13 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-import numpy as np
-
 from dataclasses import dataclass
-from astropy.io import fits
-import sep
 
+from astropy.io import fits
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse, Patch
-
+import numpy as np
+import sep
 
 from .misc import *
 
