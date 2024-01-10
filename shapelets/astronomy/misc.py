@@ -25,8 +25,7 @@ SQRTPI = np.sqrt(np.pi)
 
 def decompose_analytic(image: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, nspace: list[tuple[int, int]]=None) -> np.ndarray:
     r"""
-    Decomposes image into shapelet coefficents analytically by evaluating a 
-    series of integrals.
+    Decomposes image into shapelet coefficents analytically by evaluating a series of integrals.
 
     Parameters
     ----------
@@ -162,8 +161,7 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
 # calculate improved parameters to optimize shapelet coeffcients
 def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, nspace: list[tuple]=None) -> tuple[float, np.ndarray]:
     r"""
-    Calculates an object's characteristic scale and centroid using its calculated shapelet coefficients.
-    These new parameters can be used to decompose the image again with lower error.
+    Calculates an object's characteristic scale and centroid using its calculated shapelet coefficients. These new parameters can be used to decompose the image again with lower error.
 
     Parameters
     ----------
@@ -205,8 +203,7 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
 
 def get_nspace(n_max: int) -> np.ndarray:
     r"""
-    Returns a set of (n1, n2) combinations such that the sum of the elements of 
-    n is less than n_max (||n||_1 <= n_max).
+    Returns a set of (n1, n2) combinations such that the sum of the elements of n is less than n_max (||n||_1 <= n_max).
 
     Parameters
     ----------

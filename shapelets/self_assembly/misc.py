@@ -116,6 +116,12 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     
     It was used to generate Figures 6, 7, 8, and 9 from [1].
 
+    NOTE: any image saved from the **kwargs argument is trimmed using 
+        shapelets.self_assembly.misc.trim_image().
+        This is because the convolution with shapelet kernels is padded on
+        the edges, producing a fuzzy convolutional response.
+        The trim_image() function removes this fuzzy response.
+
     Parameters
     ----------
     image : numpy.ndarray

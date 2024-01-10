@@ -106,8 +106,7 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
 
 def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: bool=True) -> tuple[list[Stamp], list[Stamp]]:
     r"""
-    Extracts a list of galaxy image stamps and star image stamps from the 
-    provided astronomical image data.
+    Extracts a list of galaxy image stamps and star image stamps from the provided astronomical image data.
 
     Parameters
     ----------
@@ -220,9 +219,7 @@ def load_fits_data(filename: str) -> np.ndarray:
     
     Notes
     -----
-    Flexible Image Transport System (or FITS) files were designed to standarize the 
-    exchange of astronomical image data between observatories[1]. FITS provide a method
-    to transport arrays and tables of data alongside its related metadata. 
+    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories[1]. FITS provide a method to transport arrays and tables of data alongside its related metadata. 
     
     References
     ----------
