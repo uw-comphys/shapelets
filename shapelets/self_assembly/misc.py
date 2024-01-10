@@ -29,11 +29,12 @@ __all__ = [
     'make_grid',
     'read_image',
     'process_output',
-    'trimage'
+    'trim_image'
 ]
 
 def make_grid(N: int):
-    r""" Make discretized grid based on width (N).
+    r""" 
+    Make discretized grid based on width (N).
     
     Parameters
     ----------
@@ -67,7 +68,8 @@ def make_grid(N: int):
 
 
 def read_image(image_name, image_path, verbose = True):
-    r""" Read an image using cv2 (OpenCV) with some extra handling.
+    r""" 
+    Read an image using cv2 (OpenCV) with some extra handling.
     
     Parameters
     ----------
@@ -114,10 +116,13 @@ def read_image(image_name, image_path, verbose = True):
 
 
 def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
-    r""" Processes and saves output from any of the functions below,
+    r""" 
+    Processes and saves output from any of the functions below,
         * shapelets.self_assembly.quant.rdistance()
         * shapelets.self_assembly.quant.orientation()
         * shapelets.self_assembly.quant.defectid()
+    
+    It was used to generate Figures 6, 7, 8, and 9 from [1].
 
     Parameters
     ----------
@@ -136,6 +141,10 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     * output_from = 'orientation'         -->     mask, dilate, orientation, maxval
     * output_from = 'identify_defects'    -->     defects, centroids, clusterMembers
 
+    References
+    ----------
+    .. [1] TODO: REFTINO
+
     Examples
     --------
     
@@ -152,7 +161,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # final image processing for response distance scalar field
         d = (d-d.min()) / (d.max()-d.min())
         d = 1-d
-        d = trimage(im=d, l=char_wavelength)
+        d = trim_image(im=d, l=char_wavelength)
 
         # plot and save
         plt.figure()
@@ -162,7 +171,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname1, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.imshow(d,alpha=0.7, cmap='summer')
         plt.axis('off')
         plotname2 = f"{image_name[:-4]}_response_distance_overlay_k{num_clusters}.png"
@@ -178,7 +187,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         
         # plot and save
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray', alpha = 0.5)
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray', alpha = 0.5)
         mask[mask == 0.0] = np.nan
         plt.imshow(mask, cmap='hsv', vmin=0, vmax=maxval)
         plt.axis('off')
@@ -186,7 +195,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname1, dpi=600, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.imshow(dilate, cmap='hsv', alpha = 0.7, vmin=0, vmax=maxval)
         plt.axis('off')
         plotname2 = f"{image_name[:-4]}_orientation_dilate.png"
@@ -199,7 +208,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname3, dpi=600, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.axis('off')
         im = plt.imshow(orientation, cmap='hsv', alpha = 0.7, vmin=0, vmax=maxval)
         ax = plt.gca()
@@ -219,12 +228,12 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # apply some smoothing on scale of half lambda
         kernelsize = int(np.round(char_wavelength/2, 0))
         defects = median_filter(defects, size = kernelsize)
-        defects = trimage(defects, char_wavelength) 
+        defects = trim_image(defects, char_wavelength) 
 
         # cluster location image
         plt.close()
         num_clusters = centroids.shape[0]
-        clusterMembersTrim = trimage(clusterMembers, char_wavelength)
+        clusterMembersTrim = trim_image(clusterMembers, char_wavelength)
         im = plt.imshow(clusterMembersTrim, cmap='jet')
         # get the unique colours of this plot
         values = np.unique(clusterMembersTrim.ravel())
@@ -253,18 +262,17 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         for plot in range(num_clusters):
             label_placement = np.linspace(start=0, stop=2*np.pi, num=len(categories))
         
-            # handle subplots
-            if num_clusters == 4: ax[plot] = plt.subplot(2, 2, plot+1, polar=True)
-            elif num_clusters == 8: ax[plot] = plt.subplot(2, 4, plot+1, polar=True)
-            elif num_clusters == 10: ax[plot] = plt.subplot(3, 4, plot+1, polar=True)
-            else: ax[plot] = plt.subplot(6, 4, plot+1, polar=True)
-            
-            # plot parameters to reproduce publication
-            if num_clusters == 4: xtickpos = 0.4; fsize = 12
-            elif num_clusters == 8: xtickpos = 0.48; fsize = 11
-            elif num_clusters == 10: xtickpos = 0.58; fsize = 10
-            else: xtickpos = 0.45; fsize = 11
-                
+            # handle subplot specifications
+            numrows = (num_clusters // 4) + (num_clusters % 4)
+            ax[plot] = plt.subplot(numrows, 4, plot+1, polar=True)
+
+            if numrows <= 3:
+                xtickpos = 0.55
+                fsize = 10
+            else:
+                xtickpos = 0.66
+                fsize = 9    
+
             ax[plot].set_title(label='Centroid {}'.format(plot), fontsize=fsize)
             ax[plot].set_xticks(label_placement, labels=categories, position=(0,xtickpos), fontsize=fsize)
             ax[plot].set_yticklabels([])
@@ -288,7 +296,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # overlay
         plt.figure()
         image_norm = (image-image.min()) / (image.max()-image.min())
-        image_trim = trimage(image_norm, char_wavelength)
+        image_trim = trim_image(image_norm, char_wavelength)
         plt.imshow(image_trim, cmap='gray')
         plt.imshow(defects, cmap = 'gray', alpha = 0.6)
         plt.axis('off')
@@ -300,8 +308,10 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         raise ValueError(f"output_from parameter as {output_from} not recognized by process_output().")
 
 
-def imdiff(im1, im2):
-    r""" This function computes the normalized difference between two images.
+def image_difference(im1, im2):
+    r""" 
+    This function computes the normalized difference between two images.
+    It was used to generate Figure 5 from [1].
 
     Parameters
     ----------
@@ -321,6 +331,7 @@ def imdiff(im1, im2):
     
     References
     ----------
+    .. [1] TODO: REFTINO
 
     Examples
     --------
@@ -340,9 +351,10 @@ def imdiff(im1, im2):
     return diff
 
 
-def trimage(im, l):
-    r""" Trim image based on characteristic wavelength (l). 
-        Useful for images post convolution.
+def trim_image(im, l):
+    r""" 
+    Trim image edges based on characteristic wavelength (l). 
+    Useful for images post convolution, as edges can present distortions.
 
     Parameters
     ----------
@@ -357,6 +369,8 @@ def trimage(im, l):
 
     Notes
     -----
+    The characteristic wavelength is roughly the distance between feature centers,
+    thus making it an appropriate size for image trim or truncation after convolution.
 
     References
     ----------

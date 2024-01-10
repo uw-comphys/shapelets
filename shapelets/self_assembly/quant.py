@@ -23,7 +23,7 @@ from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
 
-from .misc import trimage, make_grid
+from .misc import trim_image, make_grid
 from .wavelength import lambda_to_beta
 from ..functions import orthonormalpolar2D
 
@@ -34,11 +34,11 @@ __all__ = [
     'rdistance'
 ]
 
-def convresponse(image: np.ndarray, l: float, shapelet_order = 'default', 
-                 normresponse: str = 'Vector', verbose: bool = True):
-    r""" This function computes the convolution between a range of 
-         shapelets kernels and an image, extracting the magnitude of response
-         as well as the shapelet-based orientation.
+def convresponse(image: np.ndarray, l: float, shapelet_order = 'default', normresponse: str = 'Vector', verbose: bool = True):
+    r""" 
+    This function computes the convolution between a range of 
+    shapelets kernels and an image, extracting the magnitude of response
+    as well as the shapelet-based orientation.
     
     Parameters
     ----------
@@ -192,9 +192,9 @@ def convresponse(image: np.ndarray, l: float, shapelet_order = 'default',
     return omega, phi
 
 
-def defectid(response: np.ndarray, l: float, pattern_order: str,
-             num_clusters: int or str):
-    r""" Defect identification method from [1].
+def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: int or str):
+    r""" 
+    Computes the defect identification method from [1].
 
     Parameters
     ----------
@@ -208,7 +208,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str,
         The number of clusters as input to k-means clustering [4].
         Can use "default" to get default value based on pattern_order.
         For stripe, square, and hexagonal patterns, the minimum value is 
-            4, 8, and 10 respectively.
+            4, 8, and 10 respectively. 
     
     Returns
     -------
@@ -280,7 +280,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str,
     
     # clustering 
     t1 = time.time()
-    print("Performing k-means clustering, this may take a while...")
+    print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
     centroids = kmeans(response2D, num_clusters)[0]
     clusterMembers1D, dists1D = vq(response2D, centroids)
     clusterMembers2D = clusterMembers1D.reshape(response.shape[0:2]) 
@@ -289,7 +289,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str,
     print(f"Clustering runtime = {t2:0.3} s")
 
     # get inputs of selected clusters
-    clusterMembers2DTrim = trimage(clusterMembers2D, l)
+    clusterMembers2DTrim = trim_image(clusterMembers2D, l)
     plt.imshow(clusterMembers2DTrim, cmap='jet')
     plt.axis('off')
     plt.title('a = add point; del/backspace = remove point; enter = finish')
@@ -317,10 +317,10 @@ def defectid(response: np.ndarray, l: float, pattern_order: str,
     return centroids, clusterMembers2D, defects 
 
 
-def orientation(pattern_order: str, l: float, response: np.ndarray, 
-                orients: np.ndarray, verbose: bool = True):
-    r""" Finds the local pattern orientation using shapelet 
-         orientation at max response via an iterative scheme from [1].
+def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
+    r""" 
+    Finds the local pattern orientation using shapelet 
+    orientation at max response via an iterative scheme from [1].
 
     Parameters
     ----------
@@ -393,7 +393,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray,
 
     while not accept_solution:
         resp = np.where(resp_og > resptol, 1, 0)
-        mask = trimage((orient * resp), l)
+        mask = trim_image((orient * resp), l)
         
         dilate = grey_dilation(mask, size=dilationsize)
         orientation_final = median_filter(dilate, size=blendsize)
@@ -417,10 +417,9 @@ def orientation(pattern_order: str, l: float, response: np.ndarray,
     return mask, dilate, orientation_final, maxval
 
 
-def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: str or int, 
-              ux: str or list, uy: str or list, verbose: bool = True):
-    r""" Compute the response distance method from [1] using the
-         methodology described in [2].
+def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: str or int, ux: str or list, uy: str or list, verbose: bool = True):
+    r""" 
+    Compute the response distance method from [1] using the methodology described in [2].
 
     Parameters
     ----------

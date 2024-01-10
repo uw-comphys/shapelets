@@ -25,8 +25,9 @@ __all__ = [
 ]
 
 def lambda_to_beta(m, l):
-    r""" Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
-         to the appropriate beta value for orthonormal polar shapelets from [3].
+    r""" 
+    Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
+    to the appropriate beta value for orthonormal polar shapelets from [3].
     
     Parameters
     ----------
@@ -68,7 +69,8 @@ def lambda_to_beta(m, l):
     return beta
 
 def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True):
-    r""" Find characteristic wavelength of an image from [1, 2].
+    r""" 
+    Find characteristic wavelength of an image from [1, 2].
 
     matthew@matthew: The rng needs to be optimized better. 
     For example, if the wavelength is bigger than 50 need to fix this.
@@ -139,8 +141,9 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
     return rai_wave[i_max]
 
 def radialavg(image):
-    r""" Calculates the radially averaged intensity of an image. 
-         Based on work from [1, 2].
+    r""" 
+    Calculates the radially averaged intensity of an image. 
+    Based on work from [1, 2].
     
     Parameters
     ----------
