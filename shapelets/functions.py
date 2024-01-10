@@ -28,7 +28,8 @@ __all__ = [
 ]
 
 def cartesian1D(n, x1, beta = 1):
-    r""" 1D cartesian shapelet function from [1].
+    r""" 
+    1D cartesian shapelet function from [1].
 
     Defined in 1D as [1]_,
 
@@ -56,17 +57,9 @@ def cartesian1D(n, x1, beta = 1):
     Sc(x1) : float or np.ndarray
         Shapelet function evaluated with S(x1).
 
-    Notes
-    -----
-    Notes go here
-
     References
     ----------
     .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
-    Examples
-    --------
-    Example goes here
 
     """
     if n < 0:
@@ -83,9 +76,9 @@ def cartesian1D(n, x1, beta = 1):
 
     return Sc(x1)
 
-
 def cartesian2D(n1, n2, x1, x2, beta = 1):
-    r""" Cartesian shapelet function from [1].
+    r""" 
+    Cartesian shapelet function from [1].
 
     Defined in 2D as [1]_,
 
@@ -117,15 +110,9 @@ def cartesian2D(n1, n2, x1, x2, beta = 1):
     Sc(x1, x2) : float or np.ndarray
         Returns continuous shapelet evaluated with (x1, x2).
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
-    Examples
-    --------
 
     """
     if n1 < 0 or n2 < 0:
@@ -145,9 +132,9 @@ def cartesian2D(n1, n2, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
-
 def polar2D(n, m, x1, x2, beta = 1):
-    r""" 2D polar shapelet function from [1].
+    r""" 
+    2D polar shapelet function from [1].
 
     Defined as [1]_,
 
@@ -184,17 +171,10 @@ def polar2D(n, m, x1, x2, beta = 1):
     Sc(x1, x2) : float  or np.ndarray
         Returns continuous shapelet evaluated with (x1, x2).
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] https://doi.org/10.1111/j.1365-2966.2005.09453.x
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 0:
@@ -224,9 +204,9 @@ def polar2D(n, m, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
-
 def orthonormalpolar2D(m, x1, x2, beta = 1):
-    r""" Orthonormal 2D polar shapelet function from [1].
+    r""" 
+    Orthonormal 2D polar shapelet function from [1].
 
     Defined as [1]_,
 
@@ -239,7 +219,7 @@ def orthonormalpolar2D(m, x1, x2, beta = 1):
 
     where :math:`\beta` is the shapelet length scale,
           :math:`f` is a geometric scale factor,
-          :math:`l` is the characteristic wavelength of the image, and
+          :math:`l` is the characteristic wavelength of the image (see [2]), and
           :math:`m` is the shapelet degree of rotational symmetry.
 
     Parameters
@@ -262,14 +242,13 @@ def orthonormalpolar2D(m, x1, x2, beta = 1):
     -----
     The orthonormal shapelet framework from [1] only supports n = 0.
     See [2] for computing the characteristic wavelength.
+    Note that this shapelet formulation is a re-parameterization 
+        of that found in polar2D().
 
     References
     ----------
     .. [1] https://doi.org/10.1088/1361-6528/aaf353
     .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
-
-    Examples
-    --------
 
     """
     if m < 1:
@@ -289,9 +268,9 @@ def orthonormalpolar2D(m, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
-
 def exponential1D(n, x1, beta = 1):
-    r""" 1D exponential shapelet function from [1].
+    r""" 
+    1D exponential shapelet function from [1].
 
     Defined in 1D as [1]_,
 
@@ -318,18 +297,10 @@ def exponential1D(n, x1, beta = 1):
     -------
     Sc(x1) : float or numpy.ndarray
         Shapelet function evaluated with Sc(x1).
-
-    Notes
-    -----
-
     References
     ----------
     .. [1] https://doi.org/10.1093/mnras/stz787
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 1:
@@ -349,9 +320,9 @@ def exponential1D(n, x1, beta = 1):
 
     return Sc(x1)
 
-
 def exponential2D(n, m, x1, x2, beta = 1):
-    r""" 2D exponential shapelet function from [1].
+    r"""
+    2D exponential shapelet function from [1].
 
     Defined in 2D as [1]_,
 
@@ -385,17 +356,10 @@ def exponential2D(n, m, x1, x2, beta = 1):
     Sc(x1, x2) : float or numpy.ndarray
         Returns continuous shapelet evaluated with (x1, x2).
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] https://doi.org/10.1093/mnras/stz787
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 0:

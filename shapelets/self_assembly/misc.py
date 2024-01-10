@@ -66,7 +66,6 @@ def make_grid(N: int):
 
     return grid_x, grid_y
 
-
 def read_image(image_name, image_path, verbose = True):
     r""" 
     Read an image using cv2 (OpenCV) with some extra handling.
@@ -89,12 +88,6 @@ def read_image(image_name, image_path, verbose = True):
     -----
     The bounds for either threshold (-1, 1) are intentional to align with 
     the minimum and maximum of shapelet function intensity.
-
-    References
-    ----------
-
-    Examples
-    --------
     
     """
     if os.path.exists(image_path):
@@ -113,7 +106,6 @@ def read_image(image_name, image_path, verbose = True):
         return f
     else: 
         raise RuntimeError('Image path does not exist.')
-
 
 def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     r""" 
@@ -145,9 +137,6 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     ----------
     .. [1] TODO: REFTINO
 
-    Examples
-    --------
-    
     """
     os.chdir(save_path)
 
@@ -307,7 +296,6 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     else: 
         raise ValueError(f"output_from parameter as {output_from} not recognized by process_output().")
 
-
 def image_difference(im1, im2):
     r""" 
     This function computes the normalized difference between two images.
@@ -333,11 +321,7 @@ def image_difference(im1, im2):
     ----------
     .. [1] TODO: REFTINO
 
-    Examples
-    --------
-    
     """
-    
     if im1.shape != im2.shape:
         raise RuntimeError("Must ensure both images are of same dimensions!")
     
@@ -349,7 +333,6 @@ def image_difference(im1, im2):
     diff = 1 - ( (diff-diff.min()) / (diff.max()-diff.min()) )
     
     return diff
-
 
 def trim_image(im, l):
     r""" 
@@ -372,13 +355,6 @@ def trim_image(im, l):
     The characteristic wavelength is roughly the distance between feature centers,
     thus making it an appropriate size for image trim or truncation after convolution.
 
-    References
-    ----------
-
-    Examples
-    --------
-    
     """
-
     trim = int(l)
     return im[trim:-trim, trim:-trim]

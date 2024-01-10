@@ -191,7 +191,6 @@ def convresponse(image: np.ndarray, l: float, shapelet_order = 'default', normre
 
     return omega, phi
 
-
 def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: int or str):
     r""" 
     Computes the defect identification method from [1].
@@ -221,17 +220,10 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: i
     defects : np.ndarray
         The result of the defect response distance method. See [1]. 
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] TODO: REFTINO
     .. [2] https://doi.org/10.1007/978-3-642-29807-3
-
-
-    Examples
-    --------
 
     """
     if not isinstance(response, np.ndarray):
@@ -316,7 +308,6 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: i
     
     return centroids, clusterMembers2D, defects 
 
-
 def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
     r""" 
     Finds the local pattern orientation using shapelet 
@@ -348,16 +339,10 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
     maxval : float
         The maximum allowed orientation value, where maxval = 2*np.pi / (m)
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] TODO: REFTINO
     .. [2] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
-
-    Examples
-    --------
     
     """
     if (not isinstance(response, np.ndarray)) or (not isinstance(orients, np.ndarray)):
@@ -416,7 +401,6 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
 
     return mask, dilate, orientation_final, maxval
 
-
 def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: str or int, ux: str or list, uy: str or list, verbose: bool = True):
     r""" 
     Compute the response distance method from [1] using the methodology described in [2].
@@ -447,17 +431,11 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: str or int,
     d : np.ndarray
         The response distance scalar field.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] https://doi.org/10.1088/1361-6528/aaf353
     .. [3] https://doi.org/10.1007/978-3-642-29807-3
-
-    Examples
-    --------
 
     """
     if not isinstance(image, np.ndarray):

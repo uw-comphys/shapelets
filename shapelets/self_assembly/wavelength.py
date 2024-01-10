@@ -40,18 +40,12 @@ def lambda_to_beta(m, l):
     -------
     beta : float
         The characteristic shapelet length scale parameter based on [3].
-    
-    Notes
-    -----
 
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
     .. [3] https://doi.org/10.1088/1361-6528/aaf353
-    
-    Examples
-    --------
 
     """
     if m == 4:   
@@ -90,17 +84,10 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
     l : float or list
         The characteristic wavelength of the image.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
-    
-
-    Examples
-    --------
     
     """
     if type(image) != np.ndarray:
@@ -156,16 +143,10 @@ def radialavg(image):
         A 1d array with one intensity per integer radius, excluding 0.
         eg. For image with radii [0, 1, 2, 3], len(rai) = 3.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
-    
-    Examples
-    --------
     
     """
     # Determine two arrays, x and y, which contain the indices of the image.
