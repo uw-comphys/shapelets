@@ -33,13 +33,10 @@ GALAXY_COLOUR = 'red'
 
 REFINE_ITERATIONS = 4
 
-# postage stamp extraction ------------------------------------
 @dataclass
 class Stamp:
-    r""" Stamp
-    ----------
-
-    Contains the necessary information to extract a celestial object from a given dataset
+    r""" 
+    Contains the necessary information to extract a celestial object from a given dataset.
 
     Parameters
     ----------
@@ -52,10 +49,6 @@ class Stamp:
     beta : float
         The characteristic shapelet scale that the celestial object will be decomposed at
 
-    Notes 
-    -----
-    Notes go here
-
     """
     x1: np.ndarray
     x2: np.ndarray
@@ -63,7 +56,8 @@ class Stamp:
     beta: float
 
 def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], data: np.ndarray, n_max: int, n_compress: int, output_path: str=None) -> None:
-    r"""Decomposes a series of galaxies into a reduced shapelet representation
+    r"""
+    Decomposes a series of galaxies into a reduced shapelet representation.
 
     Parameters
     ----------
@@ -79,12 +73,6 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
         length of truncated list of shapelet coefficients used to reconstruct astronomical data
     output_path : folder to store output images. if set to None no images are saved
         
-    Returns
-    -------
-    None
-
-    Notes 
-    -----
     """
     if output_path == None:
         print("No output path provided, galaxy decomposition comparisons will not be saved")
@@ -118,7 +106,7 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
 
 def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: bool=True) -> tuple[list[Stamp], list[Stamp]]:
     r"""
-    Extracts a list of galaxy image stamps and star image stamps from the provided astronomical image data
+    Extracts a list of galaxy image stamps and star image stamps from the provided astronomical image data.
 
     Parameters
     ----------
@@ -133,10 +121,6 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
         list of stamps for the galaxies found in the astronomical image data
     star_stamp_list : [Stamp]
         list of stamps for the stars found in the astronomical image data
-
-    Notes 
-    -----
-    Notes go here
 
     """
     if output_path == None:
@@ -220,7 +204,8 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
     return galaxy_stamp_list, star_stamp_list, data
 
 def load_fits_data(filename: str) -> np.ndarray:
-    r"""Loads data as ndarray from provided .fits file
+    r"""
+    Loads data as ndarray from provided .fits file.
 
     Parameters
     ----------
@@ -234,9 +219,7 @@ def load_fits_data(filename: str) -> np.ndarray:
     
     Notes
     -----
-    Flexible Image Transport System (or FITS) files were designed to standarize the 
-    exchange of astronomical image data between observatories[1]. FITS provide a method
-    to transport arrays and tables of data alongside its related metadata. 
+    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories[1]. FITS provide a method to transport arrays and tables of data alongside its related metadata. 
     
     References
     ----------
@@ -249,7 +232,8 @@ def load_fits_data(filename: str) -> np.ndarray:
         return data.byteswap(inplace=True).newbyteorder()
     
 def create_plots(data: np.ndarray, reconstructed: np.ndarray, reconstructed_compressed: np.ndarray, compression_factor: int, output_path: str=None) -> None:
-    r"""Displays original data and image reconstructions, alongside an error 
+    r"""
+    Displays original data and image reconstructions, alongside an error.
 
     Parameters
     ----------
@@ -264,14 +248,7 @@ def create_plots(data: np.ndarray, reconstructed: np.ndarray, reconstructed_comp
     output_path : string
         file_path to save images to. if set to None fig is not saved
         
-    Returns
-    -------
-    None
-
-    Notes 
-    -----
     """
-        
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
 
     ax1.imshow(data, origin='lower')

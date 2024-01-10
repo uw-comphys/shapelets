@@ -15,6 +15,8 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+import numbers 
+
 import numpy as np
 
 __all__ = [
@@ -22,9 +24,10 @@ __all__ = [
     'get_wavelength',
 ]
 
-def lambda_to_beta(m, l):
-    r""" Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
-         to the appropriate beta value for orthonormal polar shapelets from [3].
+def lambda_to_beta(m: int, l: float):
+    r""" 
+    Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
+    to the appropriate beta value for orthonormal polar shapelets from [3].
     
     Parameters
     ----------
@@ -37,18 +40,12 @@ def lambda_to_beta(m, l):
     -------
     beta : float
         The characteristic shapelet length scale parameter based on [3].
-    
-    Notes
-    -----
 
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
     .. [3] https://doi.org/10.1088/1361-6528/aaf353
-    
-    Examples
-    --------
 
     """
     if m == 4:   
@@ -65,8 +62,9 @@ def lambda_to_beta(m, l):
     beta = (l / np.sqrt(m)) * f
     return beta
 
-def get_wavelength(image, rng = [0, 50], verbose = True):
-    r""" Find characteristic wavelength of an image from [1, 2].
+def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True):
+    r""" 
+    Find characteristic wavelength of an image from [1, 2].
 
     matthew@matthew: The rng needs to be optimized better. 
     For example, if the wavelength is bigger than 50 need to fix this.
@@ -86,20 +84,15 @@ def get_wavelength(image, rng = [0, 50], verbose = True):
     l : float or list
         The characteristic wavelength of the image.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
     
-
-    Examples
-    --------
-    
     """
-    
+    if type(image) != np.ndarray:
+        raise TypeError('image input must be numpy array.')
+
     # Step 1: Find spectral density
     DFT = np.fft.fft2(image)
     DFT[0, 0] = 0.1
@@ -130,11 +123,14 @@ def get_wavelength(image, rng = [0, 50], verbose = True):
     if verbose:
         print('Wavelength of image is {:.2f} pixels'.format(rai_wave[i_max]))
     
+    assert isinstance(rai_wave[i_max], numbers.Real)
+    
     return rai_wave[i_max]
 
-def radialavg(image):
-    r""" Calculates the radially averaged intensity of an image. 
-         Based on work from [1, 2].
+def radialavg(image: np.ndarray):
+    r""" 
+    Calculates the radially averaged intensity of an image. 
+    Based on work from [1, 2].
     
     Parameters
     ----------
@@ -147,16 +143,10 @@ def radialavg(image):
         A 1d array with one intensity per integer radius, excluding 0.
         eg. For image with radii [0, 1, 2, 3], len(rai) = 3.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://hdl.handle.net/10012/8922
-    
-    Examples
-    --------
     
     """
     # Determine two arrays, x and y, which contain the indices of the image.

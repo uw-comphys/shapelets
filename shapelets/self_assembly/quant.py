@@ -16,6 +16,7 @@
 ########################################################################################################################
 
 import time 
+from typing import Union
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,7 +24,7 @@ from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
 
-from .misc import trimage, make_grid
+from .misc import trim_image, make_grid
 from .wavelength import lambda_to_beta
 from ..functions import orthonormalpolar2D
 
@@ -34,22 +35,27 @@ __all__ = [
     'rdistance'
 ]
 
-def convresponse(image, l, shapelet_order = 'default', normresponse = 'Vector'):
-    r""" This function computes the convolution between a range of 
-         shapelets and an image.
+def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
+    r""" 
+    This function computes the convolution between a range of 
+    shapelets kernels and an image, extracting the magnitude of response
+    as well as the shapelet-based orientation.
     
     Parameters
     ----------
     image : numpy.ndarray
-        The image for convolution with shapelet functions.
+        The image to be convolved with shapelet kernels.
     l : float
         The characteristic wavelength of the image.
     shapelet_order : str or int
         'default' to use higher-order shapelets (m<=m') as in ref [3].
-        Can also accept integer value to use shapelets for m <= int.
+        Can also accept integer value to use shapelets for m = [1, shapelet_order].
     normresponse : str, optional
         Normalize magnitude of response (omega) in terms of response vectors = "Vector". Default. 
         Normalize each m-fold response wrt itself on [0, 1) = "Individual".
+    verbose: bool
+        True (default) to print out results of orientation algorithm to console.
+        False to not print any results or information to console.
 
     Returns
     -------
@@ -69,9 +75,27 @@ def convresponse(image, l, shapelet_order = 'default', normresponse = 'Vector'):
     .. [3] TODO: REFTINO
 
     """
-    if shapelet_order == 'default': mmax = None
-    else: mmax = int(shapelet_order)
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image parameter must be a numpy array.')
+
+    if isinstance(shapelet_order, str):
+        if shapelet_order == 'default': 
+            mmax = None
+        else:
+            raise ValueError('shapelet_order parameter as a str must be "default".')
+        
+    elif isinstance(shapelet_order, int):
+        mmax = shapelet_order
+
+    else:
+        raise TypeError('shapelet_order parameter must either be "default" or integer value.')
     
+    if not isinstance(normresponse, str):
+        raise TypeError('normresponse parameter must be of type str.')
+    
+    elif normresponse not in ['Vector', 'Individual']:
+        raise ValueError('Valid normresponse parameters are "Vector" or "Individual".')
+
     minRespTol = 0.1
     
     Ny, Nx = image.shape
@@ -106,7 +130,8 @@ def convresponse(image, l, shapelet_order = 'default', normresponse = 'Vector'):
             con = fftconvolve(image, shapelet, mode = 'same')
             omega[:,:,i] = np.abs(con)
             phi[:,:,i] = np.angle(con)
-        print(f"Convolution complete for shapelets m <= {mmax}")
+        if verbose:
+            print(f"Convolution complete for shapelets m <= {mmax}")
 
     else:
         omega = np.empty((Ny, Nx, 200)) 
@@ -149,7 +174,8 @@ def convresponse(image, l, shapelet_order = 'default', normresponse = 'Vector'):
         m -= 1
         omega = omega[:,:,:m]
         phi = phi[:,:,:m]
-        print(f"Convolution complete for shapelets m <= {m} before tolerance exceeded")
+        if verbose:
+            print(f"Convolution complete for shapelets m <= {m} before tolerance exceeded")
 
     if normresponse == 'Vector': 
         norms = np.linalg.norm(omega, axis = 2)
@@ -166,21 +192,23 @@ def convresponse(image, l, shapelet_order = 'default', normresponse = 'Vector'):
 
     return omega, phi
 
-
-def defectid(response, l, pattern_order, num_clusters):
-    r""" Defect identification method from [1].
+def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: Union[str,int]):
+    r""" 
+    Computes the defect identification method from [1].
 
     Parameters
     ----------
     response : np.ndarray
-        The 3D array corresponding to the response of the convolution for a 
-        range of shapelets, obtained from shapelet_response().
+        The 3D array corresponding to shapelet response from convresponse().
     l : float
         The characteristic wavelength of the image.
     pattern_order : str
         Pattern order. Options are: 'stripe', 'square', 'hexagonal'.
-    num_clusters : int
+    num_clusters : int or str
         The number of clusters as input to k-means clustering [4].
+        Can use "default" to get default value based on pattern_order.
+        For stripe, square, and hexagonal patterns, the minimum value is 
+            4, 8, and 10 respectively. 
     
     Returns
     -------
@@ -193,24 +221,29 @@ def defectid(response, l, pattern_order, num_clusters):
     defects : np.ndarray
         The result of the defect response distance method. See [1]. 
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] TODO: REFTINO
     .. [2] https://doi.org/10.1007/978-3-642-29807-3
 
-
-    Examples
-    --------
-
     """
+    if not isinstance(response, np.ndarray):
+        raise TypeError('response parameter must be a numpy array.')
+    
+    if isinstance(num_clusters, str):
+        if num_clusters != 'default':
+            raise ValueError('num_clusters as str type must be "default".')
+    elif not isinstance(num_clusters, int):
+        raise TypeError('num_clusters must be integer or "default".')
+
+    if not isinstance(pattern_order, str):
+        raise TypeError('pattern_order parameter must be of str type.')
+    
     if pattern_order == 'stripe': 
         if num_clusters == 'default':
             num_clusters = 4
         elif int(num_clusters) < 4:
-            print("'num_clusters' parameter too low, defaulting to 4.")
+            print("num_clusters parameter too low, defaulting to 4.")
             num_clusters = 4
         else:
             num_clusters = int(num_clusters)
@@ -219,7 +252,7 @@ def defectid(response, l, pattern_order, num_clusters):
         if num_clusters == 'default':
             num_clusters = 8
         elif int(num_clusters) < 8:
-            print("'num_clusters' parameter too low, defaulting to 8.")
+            print("num_clusters parameter too low, defaulting to 8.")
             num_clusters = 8
         else:
             num_clusters = int(num_clusters)
@@ -228,19 +261,19 @@ def defectid(response, l, pattern_order, num_clusters):
         if num_clusters == 'default':
             num_clusters = 10
         elif int(num_clusters) < 10:
-            print("'num_clusters' parameter too low, defaulting to 10.")
+            print("num_clusters parameter too low, defaulting to 10.")
             num_clusters = 10
         else:
             num_clusters = int(num_clusters)
             
     else: 
-        raise ValueError("'pattern_order' parameter not supported by pattern_orientation().")
+        raise ValueError('Valid pattern_order parameters are "stripe", "square", "hexagonal".')
     
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
     t1 = time.time()
-    print("Performing k-means clustering, this may take a while...")
+    print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
     centroids = kmeans(response2D, num_clusters)[0]
     clusterMembers1D, dists1D = vq(response2D, centroids)
     clusterMembers2D = clusterMembers1D.reshape(response.shape[0:2]) 
@@ -249,7 +282,7 @@ def defectid(response, l, pattern_order, num_clusters):
     print(f"Clustering runtime = {t2:0.3} s")
 
     # get inputs of selected clusters
-    clusterMembers2DTrim = trimage(clusterMembers2D, l)
+    clusterMembers2DTrim = trim_image(clusterMembers2D, l)
     plt.imshow(clusterMembers2DTrim, cmap='jet')
     plt.axis('off')
     plt.title('a = add point; del/backspace = remove point; enter = finish')
@@ -276,10 +309,10 @@ def defectid(response, l, pattern_order, num_clusters):
     
     return centroids, clusterMembers2D, defects 
 
-
-def orientation(pattern_order, l, response, orients):
-    r""" Finds the local pattern orientation using shapelet 
-         orientation at max response via an iterative scheme from [1].
+def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
+    r""" 
+    Finds the local pattern orientation using shapelet 
+    orientation at max response via an iterative scheme from [1].
 
     Parameters
     ----------
@@ -288,11 +321,13 @@ def orientation(pattern_order, l, response, orients):
     l : float
         The characteristic wavelength of the image.
     response : np.ndarray
-        The 3D array corresponding to the response of the convolution for a 
-        range of shapelets, obtained from shapelet_response().
+        The 3D array corresponding to shapelet response from convresponse().
     orients : np.ndarray
         The 3D array corresponding to the orientation at max response,
-        obtained from shapelet_response().
+        obtained from convresponse().
+    verbose: bool
+        True (default) to print out results of orientation algorithm to console.
+        False to not print any results or information to console.
 
     Returns
     -------
@@ -305,18 +340,18 @@ def orientation(pattern_order, l, response, orients):
     maxval : float
         The maximum allowed orientation value, where maxval = 2*np.pi / (m)
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] TODO: REFTINO
     .. [2] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
-
-    Examples
-    --------
     
     """
+    if (not isinstance(response, np.ndarray)) or (not isinstance(orients, np.ndarray)):
+        raise TypeError('response and orients parameters must be np.ndarray types.')
+
+    if not isinstance(pattern_order, str):
+        raise TypeError('pattern_order parameter must be of str type.')
+
     params = {
         'stripe': 0,
         'square': 3, 
@@ -324,7 +359,8 @@ def orientation(pattern_order, l, response, orients):
     }
 
     if pattern_order not in params:
-        raise ValueError("'pattern_order' parameter not supported by pattern_orientation().")
+        raise ValueError('Valid pattern_order parameters are "stripe", "square", "hexagonal".')
+    
     ind = params[pattern_order]
     maxval = 2*np.pi / (ind+1)
         
@@ -338,76 +374,104 @@ def orientation(pattern_order, l, response, orients):
     resptol = 1.0
     errtol = 0.01
     
-    print(f"Beginning iteration with response tolerance = {errtol}\n")
+    if verbose:
+        print(f"Beginning iteration with response tolerance = {errtol}\n")
+
     while not accept_solution:
         resp = np.where(resp_og > resptol, 1, 0)
-        mask = trimage((orient * resp), l)
+        mask = trim_image((orient * resp), l)
         
         dilate = grey_dilation(mask, size=dilationsize)
-        orientation = median_filter(dilate, size=blendsize)
+        orientation_final = median_filter(dilate, size=blendsize)
     
         # compute error on undefined values after blending
-        err = (orientation == 0.0).sum() / orientation.size
+        err = (orientation_final == 0.0).sum() / orientation_final.size
             
         if err > errtol:
             #TODO: alex@matthew: adaptive step width for resptol
             resptol -= 0.01
             resptol = np.round(resptol, 2)
-            print(f"Orientation failed with error {err:0.5}. Reducing threshold to {resptol}")
+            if verbose:
+                print(f"Orientation failed with error {err:0.5}. Reducing threshold to {resptol}")
         elif resptol < 0:
             raise RuntimeError('Orientation failed to produce plot.')
         else:
-            print(f"Orientation successful with error {err:0.5}")
+            if verbose:
+                print(f"Orientation successful with error {err:0.5}")
             accept_solution = True  
 
-    return mask, dilate, orientation, maxval
+    return mask, dilate, orientation_final, maxval
 
-
-def rdistance(image, response, num_clusters, ux, uy):
-    r""" Compute the response distance method from [1] using the
-         methodology described in [2, 3].
+def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,int], ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
+    r""" 
+    Compute the response distance method from [1] using the methodology described in [2].
 
     Parameters
     ----------
     image : numpy.ndarray
         The image loaded as a numpy array.
     response : np.ndarray
-        The 3D array corresponding to the response of the convolution for a 
-        range of shapelets, obtained from shapelet_response()
-    num_clusters : int
-        The number of clusters as input to k-means clustering [4].
-    ux : list (or str if 'default')
+        The 3D array corresponding to shapelet response from convresponse().
+    num_clusters : str or int
+        The number of clusters as input to k-means clustering [3].
+        If str, acceptable value is "default" (which uses 20).
+    ux : str or list
         The bounds in the x-direction for the reference region.
-    uy : list (or str if 'default')
+        If using list option, must be 2 element list.
+        Choosing "default" will force user to choose ref. region at runtime.
+    uy : str or list
         The bounds in the y-direction for the reference region.
+        If using list option, must be 2 element list.
+        Choosing "default" will force user to choose ref. region at runtime.
+    verbose: bool
+        True (default) to print out results of orientation algorithm to console.
+        False to not print any results or information to console.
 
     Returns
     -------
     d : np.ndarray
         The response distance scalar field.
 
-    Notes
-    -----
-
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] https://doi.org/10.1088/1361-6528/aaf353
-    .. [3] TODO: REFTINO
-    .. [4] https://doi.org/10.1007/978-3-642-29807-3
-
-    Examples
-    --------
+    .. [3] https://doi.org/10.1007/978-3-642-29807-3
 
     """
-    if num_clusters == 'default': num_clusters = 20
-    else: num_clusters = int(num_clusters)
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image must be a numpy array.')
+    
+    if not isinstance(response, np.ndarray):
+        raise TypeError('response must be a numpy array.')
 
-    if ux == 'default' or uy == 'default': choose_ref = True
-    else: choose_ref = False
+    if isinstance(num_clusters, str):
+        if num_clusters == 'default': 
+            num_clusters = 20
+        else:
+            raise ValueError('If num_clusters is str type, must be "default" otherwise use int.')
+        
+    elif not isinstance(num_clusters, int):
+        raise TypeError('If num_clusters is not str type, must be int.')
 
+    if type(ux) != type(uy):
+        raise TypeError('ux and uy parameters must be both be "default" or both 2-element lists.')
+    
+    elif isinstance(ux, str):
+        if ux == 'default' and uy == 'default':
+            choose_ref = True 
+        else:
+            raise ValueError('As str types, ux and uy parameters must be "default".')
+    
+    elif isinstance(ux, list):
+        if len(ux) != 2 or len(uy) != 2:
+            raise ValueError('ux or uy has less or more than 2 elements.')
+        else:
+            ux = [int(val) for val in ux]
+            uy = [int(val) for val in uy]
+            choose_ref = False
+    
     if choose_ref:
-
         num_bounds = 0
         print("Please select 4 corner points: a = add point; del/backspace = remove point; enter = finish")
         while num_bounds != 4:
@@ -440,7 +504,7 @@ def rdistance(image, response, num_clusters, ux, uy):
         plt.title('Image with reference region', fontsize = 12)
         plt.axis('off')
         plt.show()"""
-        
+    
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]
     uX, uY = np.meshgrid(np.arange(ux[0], ux[1] + 1), np.arange(uy[0], uy[1] + 1))
@@ -449,10 +513,12 @@ def rdistance(image, response, num_clusters, ux, uy):
 
     if num_clusters != 0:
         response_ref, distortion = kmeans(response_ref_whole, num_clusters)
-        print(f"kmeans successful with {num_clusters} centroids & distortion value of: {distortion:0.3}")
+        if verbose:
+            print(f"kmeans successful with {num_clusters} centroids & distortion value of: {distortion:0.3}")
     else:
         response_ref = response_ref_whole.copy()
-        print("Proceeding to compute response distance without k-means clustering:")
+        if verbose:
+            print("Proceeding to compute response distance without k-means clustering:")
 
     t1 = time.time()
     d = np.zeros((Ny, Nx))
@@ -460,14 +526,16 @@ def rdistance(image, response, num_clusters, ux, uy):
     for i in range(Nx):
         if int(100* i / Nx) in compList:
             compList = compList[1:]
-            print(f"Response distance {int(100* i / Nx)}% complete")
+            if verbose:
+                print(f"Response distance {int(100* i / Nx)}% complete")
         for j in range(Ny):
             dists = np.zeros(response_ref.shape[0])
             for refvec in range(response_ref.shape[0]):
                 dists[refvec] = np.linalg.norm(response[j, i] - response_ref[refvec])
             d[j, i] = dists.min()
-    print("Response distance 100% complete")
     
-    print(f"Response distance runtime = {time.time()-t1:0.3} s")
+    if verbose:
+        print("Response distance 100% complete")
+        print(f"Response distance runtime = {time.time()-t1:0.3} s")
 
     return d
