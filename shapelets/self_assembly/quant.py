@@ -16,6 +16,7 @@
 ########################################################################################################################
 
 import time 
+from typing import Union
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -34,7 +35,7 @@ __all__ = [
     'rdistance'
 ]
 
-def convresponse(image: np.ndarray, l: float, shapelet_order = 'default', normresponse: str = 'Vector', verbose: bool = True):
+def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
     r""" 
     This function computes the convolution between a range of 
     shapelets kernels and an image, extracting the magnitude of response
@@ -191,7 +192,7 @@ def convresponse(image: np.ndarray, l: float, shapelet_order = 'default', normre
 
     return omega, phi
 
-def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: int or str):
+def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: Union[str,int]):
     r""" 
     Computes the defect identification method from [1].
 
@@ -401,7 +402,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
 
     return mask, dilate, orientation_final, maxval
 
-def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: str or int, ux: str or list, uy: str or list, verbose: bool = True):
+def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,int], ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
     r""" 
     Compute the response distance method from [1] using the methodology described in [2].
 

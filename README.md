@@ -29,7 +29,8 @@ The `shapelets` package provides reference documentation and code for four (4) s
 
 ## Installation
 
-Installing `shapelets` is highly dependent on the operating system of your machine. Package is currently compatible with Python 3.10.
+`shapelets` requires Python 3.10 or greater.
+Installing `shapelets` is highly dependent on the operating system of your machine. 
 
 ### Mac OS
 

@@ -66,7 +66,7 @@ def make_grid(N: int):
 
     return grid_x, grid_y
 
-def read_image(image_name, image_path, verbose = True):
+def read_image(image_name: str, image_path: str, verbose: bool = True):
     r""" 
     Read an image using cv2 (OpenCV) with some extra handling.
     
@@ -107,7 +107,7 @@ def read_image(image_name, image_path, verbose = True):
     else: 
         raise RuntimeError('Image path does not exist.')
 
-def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
+def process_output(image: np.ndarray, image_name: str, save_path: str, output_from: str, **kwargs) -> None:
     r""" 
     Processes and saves output from any of the functions below,
         * shapelets.self_assembly.quant.rdistance()
@@ -122,6 +122,8 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         The image loaded as a numpy array.
     image_name : str
         The name of the loaded image.
+    save_path : str
+        The path to save results.
     output_from : str
         The name of the method for which we will process and save the output/results.
         Options are: 'response_distance', 'orientation', or 'identify_defects'
@@ -296,7 +298,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     else: 
         raise ValueError(f"output_from parameter as {output_from} not recognized by process_output().")
 
-def image_difference(im1, im2):
+def image_difference(im1: np.ndarray, im2: np.ndarray):
     r""" 
     This function computes the normalized difference between two images.
     It was used to generate Figure 5 from [1].
@@ -334,7 +336,7 @@ def image_difference(im1, im2):
     
     return diff
 
-def trim_image(im, l):
+def trim_image(im: np.ndarray, l: float):
     r""" 
     Trim image edges based on characteristic wavelength (l). 
     Useful for images post convolution, as edges can present distortions.
@@ -343,7 +345,7 @@ def trim_image(im, l):
     ----------
     im : np.ndarray
         The image to trim.
-    l : scalar
+    l : float
         The characteristic wavelength
     
     Returns

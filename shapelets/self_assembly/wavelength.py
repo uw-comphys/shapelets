@@ -24,7 +24,7 @@ __all__ = [
     'get_wavelength',
 ]
 
-def lambda_to_beta(m, l):
+def lambda_to_beta(m: int, l: float):
     r""" 
     Converts lambda (l), the characteristic wavelength of the pattern [1, 2]
     to the appropriate beta value for orthonormal polar shapelets from [3].
@@ -127,7 +127,7 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
     
     return rai_wave[i_max]
 
-def radialavg(image):
+def radialavg(image: np.ndarray):
     r""" 
     Calculates the radially averaged intensity of an image. 
     Based on work from [1, 2].
