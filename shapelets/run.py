@@ -27,7 +27,6 @@ from .self_assembly.wavelength import *
 
 def run(config_file: str) -> None:
     r""" 
-    
     Main run function that handles input configuration file.
     
     Parameters

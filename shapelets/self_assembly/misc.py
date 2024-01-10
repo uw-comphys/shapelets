@@ -38,15 +38,15 @@ def make_grid(N: int):
     
     Parameters
     ----------
-    N : int
-        The width of the kernel (odd numbers only)
+    * N: int
+        * The width of the kernel (odd numbers only)
 
     Returns
     -------
-    grid_x : np.ndarray
-        The grid's x coordinate space
-    grid_y : np.ndarray
-        The grid's y coordinate space
+    * grid_x: np.ndarray
+        * The grid's x coordinate space
+    * grid_y: np.ndarray
+        * The grid's y coordinate space
     
     Notes
     -----
@@ -70,17 +70,17 @@ def read_image(image_name: str, image_path: str, verbose: bool = True):
     
     Parameters
     ----------
-    image_name : str
-        The filename of the image (including extension).
-    image_path : str
-        The path holding the image.
-    verbose : bool
-        True to print image-related information.
+    * image_name: str
+        * The filename of the image (including extension)
+    * image_path: str
+        * The path holding the image
+    * verbose: bool
+        * True to print image-related information
     
     Returns
     -------
-    f : np.ndarray
-        The image as a numpy array.
+    * f: np.ndarray
+        * The image as a numpy array.
 
     Notes
     -----
@@ -111,20 +111,20 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     * shapelets.self_assembly.quant.orientation()
     * shapelets.self_assembly.quant.defectid()
     
-    It was used to generate Figures 6, 7, 8, and 9 from [1].
+    It was used to generate Figures 6, 7, 8, and 9 from ref [1]_.
 
     NOTE: any image saved from the **kwargs argument is trimmed using shapelets.self_assembly.misc.trim_image(). This is because the convolution with shapelet kernels is padded on the edges, producing a fuzzy convolutional response. The trim_image() function removes this fuzzy response.
 
     Parameters
     ----------
-    image : numpy.ndarray
-        The image loaded as a numpy array.
-    image_name : str
-        The name of the loaded image.
-    save_path : str
-        The path to save results.
-    output_from : str
-        The name of the method for which we will process and save the output/results. Options are: 'response_distance', 'orientation', or 'identify_defects'
+    * image: numpy.ndarray
+        * The image loaded as a numpy array
+    * image_name: str
+        * The name of the loaded image
+    * save_path: str
+        * The path to save results
+    * output_from: str
+        * The name of the method for which we will process and save the output/results. Options are: 'response_distance', 'orientation', or 'identify_defects'
 
     Notes
     -----
@@ -298,19 +298,19 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
 
 def image_difference(im1: np.ndarray, im2: np.ndarray):
     r""" 
-    This function computes the normalized difference between two images. It was used to generate Figure 5 from [1].
+    This function computes the normalized difference between two images. It was used to generate Figure 5 from ref [1]_.
 
     Parameters
     ----------
-    im1 : np.ndarray
-        The first image.
-    im2 : np.ndarray
-        The second image.
+    * im1: np.ndarray
+        * The first image
+    * im2: np.ndarray
+        * The second image
         
     Returns
     -------
-    diff : np.ndarray
-        The normalized difference in the input images.
+    * diff: np.ndarray
+        * The normalized difference in the input images
 
     Notes
     -----
@@ -339,14 +339,14 @@ def trim_image(im: np.ndarray, l: float):
 
     Parameters
     ----------
-    im : np.ndarray
-        The image to trim.
-    l : float
-        The characteristic wavelength
+    * im: np.ndarray
+        * The image to trim
+    * l: float
+        * The characteristic wavelength
     
     Returns
     -------
-    The trimmed image.
+    The trimmed image
 
     Notes
     -----

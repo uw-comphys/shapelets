@@ -47,7 +47,6 @@ def run_tests():
     @contextlib.contextmanager
     def tempWorkingDir(path):
         r"""
-        
         Temporarily create a working directory to execute CLI commands without actually changing the root of the global directory.
 
         From stackoverflow:

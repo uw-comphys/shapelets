@@ -41,27 +41,27 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
     
     Parameters
     ----------
-    image : numpy.ndarray
-        The image to be convolved with shapelet kernels.
-    l : float
-        The characteristic wavelength of the image.
-    shapelet_order : str or int
-        'default' to use higher-order shapelets (m<=m') as in ref [3]. Can also accept integer value to use shapelets for m = [1, shapelet_order].
-    normresponse : str, optional
-        Normalize magnitude of response (omega) in terms of response vectors = "Vector". Default. Normalize each m-fold response wrt itself on [0, 1) = "Individual".
-    verbose: bool
-        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
+    * image: numpy.ndarray
+        * The image to be convolved with shapelet kernels
+    * l: float
+        * The characteristic wavelength of the image
+    * shapelet_order: str or int
+        * 'default' to use higher-order shapelets (m<=m') as in ref. [3]_. Can also accept integer value to use shapelets for m = [1, shapelet_order]
+    * normresponse: str, optional
+        * Normalize magnitude of response (omega) in terms of response vectors = "Vector". Default. Normalize each m-fold response wrt itself on [0, 1) = "Individual"
+    * verbose: bool, optional
+        * True (default) to print out results of orientation algorithm to console. False to not print any results or information to console
 
     Returns
     -------
-    omega : numpy.ndarray
-        The magnitude of response.
-    phi : numpy.ndarray
-        The shapelet orientation at maximum response on [0, 2pi/m).
+    * omega: numpy.ndarray
+        * The magnitude of response
+    * phi: numpy.ndarray
+        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition from [1].
+    This function uses the orthonormal polar shapelet definition from ref. [1]_.
 
     References
     ----------
@@ -189,27 +189,27 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
 
 def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: Union[str,int]):
     r""" 
-    Computes the defect identification method from [1].
+    Computes the defect identification method from ref. [1]_.
 
     Parameters
     ----------
-    response : np.ndarray
-        The 3D array corresponding to shapelet response from convresponse().
-    l : float
-        The characteristic wavelength of the image.
-    pattern_order : str
-        Pattern order. Options are: 'stripe', 'square', 'hexagonal'.
-    num_clusters : int or str
-        The number of clusters as input to k-means clustering [4]. Can use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively. 
+    * response: np.ndarray
+        * The 3D array corresponding to shapelet response from convresponse()
+    * l: float
+        * The characteristic wavelength of the image
+    * pattern_order: str
+        * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    * num_clusters: str or int
+        * The number of clusters as input to k-means clustering [2]_. Can use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively
     
     Returns
     -------
-    centroids : np.ndarray
-        The centroids from k-means clustering [2]. Each centroid is a row vector.
-    clusterMembers2D : np.ndarray
-        Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster with centroid as centroids[1].
-    defects : np.ndarray
-        The result of the defect response distance method. See [1]. 
+    * centroids: np.ndarray
+        * The centroids from k-means clustering [2]_. Each centroid is a row vector
+    * clusterMembers2D: np.ndarray
+        * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster that has centroid #1
+    * defects: np.ndarray
+        The result of the defect response distance method. See ref. [1]_.
 
     References
     ----------
@@ -301,35 +301,35 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
 
 def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
     r""" 
-    Finds the local pattern orientation using shapelet orientation at max response via an iterative scheme from [1].
+    Finds the local pattern orientation using shapelet orientation at max response via an iterative scheme from ref. [1]_.
 
     Parameters
     ----------
-    pattern_order : str
-        Pattern order. Options are: 'stripe', 'square', 'hexagonal'.
-    l : float
-        The characteristic wavelength of the image.
-    response : np.ndarray
-        The 3D array corresponding to shapelet response from convresponse().
-    orients : np.ndarray
-        The 3D array corresponding to the orientation at max response, obtained from convresponse().
-    verbose: bool
-        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
+    * pattern_order: str
+        * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    * l: float
+        * The characteristic wavelength of the image
+    * response: np.ndarray
+        * The 3D array corresponding to shapelet response from convresponse()
+    * orients: np.ndarray
+        * The 3D array corresponding to the orientation at max response, obtained from convresponse()
+    * verbose: bool, optional
+        * True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
 
     Returns
     -------
-    mask : np.ndarray
-        The mask for well-defined features. See [1].
-    dilate : np.ndarray
-        The dilated mask. See [1].
-    orientation : np.ndarray
-        Applying smoothing/blending to the dilated mask via median filter kernel [2]. See [1].
-    maxval : float
-        The maximum allowed orientation value, where maxval = 2*np.pi / (m)
+    * mask: np.ndarray
+        * The mask for well-defined features. See ref. [1]_
+    * dilate: np.ndarray
+        * The dilated mask. See ref. [1]_
+    * orientation: np.ndarray
+        * Applying smoothing/blending to the dilated mask via median filter kernel [2]_. See ref. [1]_
+    * maxval: float
+        * The maximum allowed orientation value, where $maxval = 2*np.pi / m$
     
     Notes
     -----
-    This function uses shapelets.self_assembly.misc.trim_image during iteration to converge on an acceptable orientation result. 
+    This function uses ``shapelets.self_assembly.misc.trim_image`` during iteration to converge on an acceptable orientation result. 
 
     References
     ----------
@@ -395,27 +395,27 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
 
 def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,int], ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
     r""" 
-    Compute the response distance method from [1] using the methodology described in [2].
+    Compute the response distance method from ref. [1]_ using the methodology described in ref. [2]_.
 
     Parameters
     ----------
-    image : numpy.ndarray
-        The image loaded as a numpy array.
-    response : np.ndarray
-        The 3D array corresponding to shapelet response from convresponse().
-    num_clusters : str or int
-        The number of clusters as input to k-means clustering [3]. If str, acceptable value is "default" (which uses 20).
-    ux : str or list
-        The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime.
-    uy : str or list
-        The bounds in the y-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime.
-    verbose: bool
-        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console.
+    * image: numpy.ndarray
+        * The image loaded as a numpy array
+    * response: np.ndarray
+        * The 3D array corresponding to shapelet response from convresponse()
+    * num_clusters: str or int
+        * The number of clusters as input to k-means clustering [3]_. If str, acceptable value is "default" (which uses 20)
+    * ux: str or list
+        * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime
+    * uy: str or list
+        * The bounds in the y-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region at runtime
+    * verbose: bool, optional
+        True (default) to print out results of orientation algorithm to console. False to not print any results or information to console
 
     Returns
     -------
-    d : np.ndarray
-        The response distance scalar field.
+    * d: np.ndarray
+        * The response distance scalar field.
 
     References
     ----------
