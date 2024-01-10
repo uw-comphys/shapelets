@@ -19,27 +19,28 @@ import contextlib
 import os
 import platform
 import sys 
+
 from .run import *
 
 def run_shapelets():
     r""" 
-    
+
     Main function that runs shapelets.
     This is only invoked via the entry point "shapelets CONFIG" where
-        'filename' is the name of the configuration plaintext file via the CLI (command line interface).        
+        CONFIG is the name of the configuration plaintext file.      
 
     """
-    
     # Arguments for command line use
-    if len(sys.argv) == 1: # if user did not provide any configuration path (which is required)
-        raise RuntimeError("ERROR: Please provide configuration file.")
 
-    elif len(sys.argv) == 2: # if user did provide a configuration path
+    if len(sys.argv) == 1: # if user did not provide any configuration path (which is required)
+        raise RuntimeError('Please provide name of config file, i.e. "shapelets config".')
+
+    elif len(sys.argv) == 2: # if user did provide a configuration filename/path
         config_file = sys.argv[1]
         run(config_file)
 
     else: # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
-        raise RuntimeError("Improper use of shapelets module. Try 'shapelets config' with config file present.")
+        raise RuntimeError('shapelets entry point only supports the config file name. I.e. "shapelets config".')
 
 def run_tests():
     r"""
@@ -56,7 +57,7 @@ def run_tests():
         Temporarily create a working directory to execute CLI commands without actually
         changing the root of the global directory.
 
-        From stackoverflow here:
+        From stackoverflow:
         https://stackoverflow.com/questions/75048986/way-to-temporarily-change-the-directory-in-python-to-execute-code-without-affect
         
         """
@@ -67,6 +68,7 @@ def run_tests():
 
     # get platform and then assume entry point "shapelets-test" executed from top-level directory
     user_os = str(platform.system())
+
     if user_os == 'Windows':
         os.chdir("tests\\")
         runcom = "python -B -m"
@@ -80,5 +82,7 @@ def run_tests():
             if file.endswith('.py'):
                 with tempWorkingDir(root):
                     print(f"\n\nRunning tests in {file}")
-                    if user_os == 'Windows': os.system(f"{runcom} {file}")
-                    else: os.system(f"{runcom} {file[:-3]}")                    
+                    if user_os == 'Windows': 
+                        os.system(f"{runcom} {file}")
+                    else: 
+                        os.system(f"{runcom} {file[:-3]}")                    
