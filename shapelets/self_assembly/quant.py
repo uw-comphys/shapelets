@@ -44,9 +44,9 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
     * image: np.ndarray
         * The image to be convolved with shapelet kernels
     * l: float
-        * The characteristic wavelength of the image [1]_
+        * The characteristic wavelength of the image[1]_
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets [3]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets[3]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * normresponse: str, optional
         * Normalize magnitude of response (omega) in terms of response vectors = "Vector" (default). Normalize each m-fold response w.r.t itself on [0, 1) = "Individual"
     * verbose: bool, optional
@@ -61,7 +61,7 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition [2]_ (see ``shapelets.functions.orthonormalpolar2D``).
+    This function uses the orthonormal polar shapelet definition[2]_ (see shapelets.functions.orthonormalpolar2D).
 
     References
     ----------
@@ -194,22 +194,22 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
     Parameters
     ----------
     * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from ``shapelets.self_assembly.quant.convresponse``
+        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * l: float
         * The characteristic wavelength of the image
     * pattern_order: str
         * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
     * num_clusters: str or int
-        * The number of clusters as input to k-means clustering [2]_. Use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively
+        * The number of clusters as input to k-means clustering[2]_. Use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively
     
     Returns
     -------
     * centroids: np.ndarray
-        * The centroids from k-means clustering [2]_. Each centroid is a row vector
+        * The centroids from k-means clustering[2]_. Each centroid is a row vector
     * clusterMembers2D: np.ndarray
         * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is centroids[1]
     * defects: np.ndarray
-        The result of the defect response distance method [1]_
+        The result of the defect response distance method[1]_
 
     References
     ----------
@@ -310,9 +310,9 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
     * l: float
         * The characteristic wavelength of the image
     * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from ``shapelets.self_assembly.quant.convresponse``
+        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * orients: np.ndarray
-        * The optimal shapelet filter orientation at maximum response as a 3D array, obtained from ``shapelets.self_assembly.quant.convresponse``
+        * The optimal shapelet filter orientation at maximum response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * verbose: bool, optional
         * True (default) to print out results of orientation algorithm to console
 
@@ -329,7 +329,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
     
     Notes
     -----
-    This function uses ``shapelets.self_assembly.misc.trim_image`` during iteration to converge on an acceptable orientation result. Therefore, the orientation result will **not** have the same shape as the original image.
+    This function uses shapelets.self_assembly.misc.trim_image during iteration to converge on an acceptable orientation result. Therefore, the orientation result will **not** have the same shape as the original image.
 
     References
     ----------
@@ -403,9 +403,9 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,i
     * image: numpy.ndarray
         * The image loaded as a numpy array
     * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from ``shapelets.self_assembly.quant.convresponse``
+        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * num_clusters: Union[str,int]
-        * The number of clusters as input to k-means clustering [3]_. If str, acceptable value is "default" (which uses 20 clusters[2]_)
+        * The number of clusters as input to k-means clustering[3]_. If str, acceptable value is "default" (which uses 20 clusters[2]_)
     * ux: Union[str,list]
         * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
     * uy: Union[str,list]

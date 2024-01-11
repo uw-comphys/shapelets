@@ -109,13 +109,13 @@ def read_image(image_name: str, image_path: str, verbose: bool = True):
 def process_output(image: np.ndarray, image_name: str, save_path: str, output_from: str, **kwargs) -> None:
     r""" 
     Processes and saves output from any of the functions below,
-    * ``shapelets.self_assembly.quant.rdistance``
-    * ``shapelets.self_assembly.quant.orientation``
-    * ``shapelets.self_assembly.quant.defectid``
+    * shapelets.self_assembly.quant.rdistance
+    * shapelets.self_assembly.quant.orientation
+    * shapelets.self_assembly.quant.defectid
     
-    It was used to generate Figures 6, 7, 8, and 9 from ref [1]_.
+    It was used to generate Figures 6, 7, 8, and 9 from ref.[1]_.
 
-    NOTE: any image saved from the **kwargs argument is trimmed using ``shapelets.self_assembly.misc.trim_image``. This is because the convolution with shapelet kernels is padded on the edges, producing a fuzzy convolutional response. The ``shapelets.self_assembly.misc.trim_image`` function removes this fuzzy response.
+    NOTE: any image saved from the **kwargs argument is trimmed using shapelets.self_assembly.misc.trim_image. This is because the convolution with shapelet kernels is padded on the edges, producing a fuzzy convolutional response. The shapelets.self_assembly.misc.trim_image function removes this fuzzy response.
 
     Parameters
     ----------
@@ -131,9 +131,9 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     Notes
     -----
     Required kwargs are,
-    * output_from = 'response_distance'   -->     d, num_clusters (see ``shapelets.self_assembly.quant.rdistance``)
-    * output_from = 'orientation'         -->     mask, dilate, orientation, maxval (see ``shapelets.self_assembly.quant.orientation``)
-    * output_from = 'identify_defects'    -->     defects, centroids, clusterMembers (see ``shapelets.self_assembly.quant.defectid``)
+    * output_from = 'response_distance'   -->     d, num_clusters (see shapelets.self_assembly.quant.rdistance)
+    * output_from = 'orientation'         -->     mask, dilate, orientation, maxval (see shapelets.self_assembly.quant.orientation)
+    * output_from = 'identify_defects'    -->     defects, centroids, clusterMembers (see shapelets.self_assembly.quant.defectid)
 
     References
     ----------

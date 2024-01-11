@@ -213,7 +213,7 @@ def orthonormalpolar2D(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.n
 
     Notes
     -----
-    The orthonormal shapelet framework[1]_ only supports $n = 0$. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of that found in ``shapelets.functions.polar2D``.
+    The orthonormal shapelet framework[1]_ only supports $n = 0$. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of that found in shapelets.functions.polar2D.
 
     References
     ----------
@@ -287,13 +287,13 @@ def exponential1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Unio
 
 def exponential2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
     r"""
-    2D exponential shapelet function defined as [1]_,
+    2D exponential shapelet function defined as[1]_,
 
     $$ S_{n,m}(r, \theta; \beta) = \alpha (2r)^{|m|} L^{2|m|}_{n-|m|}\left( \frac{2r}{\beta(2n+1)} \right) exp\left( -\frac{r}{\beta(2n+1)} \right) exp(-im\theta) $$
 
     with $$ \alpha = \frac{(-1)^n}{(\beta(2n+1))^{|m|}} \sqrt{ \frac{2}{\beta\pi(2n+1)^3} \frac{(n-|m|)!}{(n+|m|)!} } $$
 
-    where $\beta$ is the shapelet length scale, $L$ is the generalized (associated) laguerre polynomial [2]_, $n$ is the shapelet order, and $m$ is also the shapelet order.
+    where $\beta$ is the shapelet length scale, $L$ is the generalized (associated) laguerre polynomial[2]_, $n$ is the shapelet order, and $m$ is also the shapelet order.
 
     Parameters
     ----------

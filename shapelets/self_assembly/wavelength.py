@@ -26,7 +26,7 @@ __all__ = [
 
 def lambda_to_beta(m: int, l: float):
     r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[3]_ (see ``shapelets.functions.orthonormalpolar2D``).
+    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ (see shapelets.functions.orthonormalpolar2D).
     
     Parameters
     ----------
@@ -38,13 +38,12 @@ def lambda_to_beta(m: int, l: float):
     Returns
     -------
     * beta: float
-        * The characteristic shapelet length scale parameter based on ref.[3]_
+        * The characteristic shapelet length scale parameter based on ref.[2]_
 
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] http://hdl.handle.net/10012/8922
-    .. [3] https://doi.org/10.1088/1361-6528/aaf353
+    .. [2] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if m == 4:   
@@ -63,7 +62,7 @@ def lambda_to_beta(m: int, l: float):
 
 def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True):
     r""" 
-    Find characteristic wavelength of an image. Computed from refs[1,2]_.
+    Find characteristic wavelength of an image. Computed from ref.[1]_.
 
     mpt@mpt: The rng needs to be optimized better. For example, if the wavelength is bigger than 50 need to fix this. But, if we just let rng = None (i.e., all wavelengths) then it will find way too big of a wavelength as the scale...
     
@@ -82,7 +81,6 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] http://hdl.handle.net/10012/8922
     
     """
     if type(image) != np.ndarray:
@@ -124,7 +122,7 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True)
 
 def radialavg(image: np.ndarray):
     r""" 
-    Calculates the radially averaged intensity of an image. Based on work from[1,2]_.
+    Calculates the radially averaged intensity of an image. Based on work from ref.[1]_.
     
     Parameters
     ----------
@@ -139,7 +137,6 @@ def radialavg(image: np.ndarray):
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] http://hdl.handle.net/10012/8922
     
     """
     # Determine two arrays, x and y, which contain the indices of the image.
