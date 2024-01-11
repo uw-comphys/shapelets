@@ -27,18 +27,16 @@ from .self_assembly.wavelength import *
 
 def run(config_file: str) -> None:
     r""" 
-    
     Main run function that handles input configuration file.
     
     Parameters
     ----------
-    config_file : str
-        The name of the config file.
+    * config_file : str
+        * The name of the configuration file
     
     Notes
     -----
-    Differentiation between submodule use is based on image_name or fits_name provided in config file
-        ...this may need to be changed in the future if more astronomy functionality is added.
+    Differentiation between submodule use is based on image_name or fits_name provided in config file. Note that this may need to be changed in the future if more astronomy functionality is added.
 
     """
     ## configparser setup and input/output path organization ##
@@ -86,16 +84,14 @@ def run(config_file: str) -> None:
 
             response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
             rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
-            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance',
-                           d = rd_field, num_clusters = num_clusters)
+            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
 
         elif method == 'orientation':
             pattern_order = config.get('orientation', 'pattern_order')
 
             response, orients = convresponse(image = image, l = char_wavelength, shapelet_order = 6, normresponse = 'Individual')
             mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, response = response, orients = orients)
-            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation',
-                           mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
+            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
     
         elif method == 'identify_defects':
             pattern_order = config.get('identify_defects', 'pattern_order')
@@ -107,12 +103,10 @@ def run(config_file: str) -> None:
             response = convresponse(image = image, l = char_wavelength, shapelet_order = 'default', normresponse = 'Vector')[0]
             centroids, clusterMembers, defects = defectid(response = response, l = char_wavelength,
                                                           pattern_order = pattern_order, num_clusters = num_clusters)
-            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects',
-                           centroids = centroids, clusterMembers = clusterMembers, defects = defects)
+            process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
         
         else:
             raise ValueError('"method" parameter from configuration file not recognized by shapelets.')
-
 
     ## astronomy submodule use ##
         
