@@ -39,11 +39,11 @@ class Stamp:
     Parameters
     ----------
     * x1: np.ndarray (dtype=int)
-        * coordinate representing the corner of postage stamp closest to origin (inclusive)
+        * Coordinate representing the corner of postage stamp closest to origin (inclusive)
     * x2: np.ndarray (dtype=int)
-        * coordinate representing the corner of postage stamp farthest to origin (inclusive)
+        * Coordinate representing the corner of postage stamp furthest from origin (inclusive)
     * xc: np.ndarray (dtype=float)
-        * representing middle of celestial object in postage stamp
+        * Representing middle of celestial object in postage stamp
     * beta: float
         * The characteristic shapelet scale that the celestial object will be decomposed at
 
@@ -110,17 +110,20 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
     Parameters
     ----------
     * data: np.ndarray
-        * $n\times m$ ndarray of astronomical image data
+        * $n\times m$ array of astronomical image data
+    * output_path: str, optional
+        * Folder to store output images. If set to None (default), no images are saved
     * SHOW_STAMPS: bool, optional
         * If set to True (default) displays astronomical image data with stamps identified
         
     Returns
     -------
-    * galaxy_stamp_list: [Stamp]
-        * list of stamps for the galaxies found in the astronomical image data
-    * star_stamp_list: [Stamp]
-        * list of stamps for the stars found in the astronomical image data
-    * data: 
+    * galaxy_stamp_list: list[Stamp]
+        * List of stamps for the galaxies found in the astronomical image data
+    * star_stamp_list: list[Stamp]
+        * List of stamps for the stars found in the astronomical image data
+    * data: np.ndarray
+        * $n\times m$ array of astronomical image data, minus the background determined by the ``sep`` python package 
 
     """
     if output_path == None:
@@ -208,21 +211,21 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
 
 def load_fits_data(filename: str) -> np.ndarray:
     r"""
-    Loads data as ndarray from provided .fits file.
+    Loads data as numpy.ndarray from provided .fits file.
 
     Parameters
     ----------
     * filename: str
-        * absolute or relative filepath to .fits file
+        * Absolute or relative filepath to .fits file
         
     Returns
     -------
     * data: np.ndarray
-        * returns nxm ndarray of the astronomical image data
+        * $n \times m$ array of astronomical image data
     
     Notes
     -----
-    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories [1]_. FITS provide a method to transport arrays and tables of data alongside its related metadata. 
+    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories[1]_. FITS provides a method to transport arrays and tables of data alongside its related metadata. 
     
     References
     ----------
@@ -241,15 +244,15 @@ def create_plots(data: np.ndarray, reconstructed: np.ndarray, reconstructed_comp
     Parameters
     ----------
     * data: np.ndarray
-        * original astronomical data
+        * Original astronomical data
     * reconstructed: np.ndarray
-        * reconstruction of astronomical data using calculated shapelet coefficients
+        * Reconstruction of astronomical data using calculated shapelet coefficients
     * reconstructed_compressed: np.ndarray
-        * reconstruction of astronomical data using truncated list of shapelet coefficients
+        * Reconstruction of astronomical data using truncated list of shapelet coefficients
     * compression_factor: int
-        * length of truncated list of shapelet coefficients used to reconstruct astronomical data
+        * Length of truncated list of shapelet coefficients used to reconstruct astronomical data
     * output_path: str, optional
-        * file_path to save images to. If set to None (default), then fig is not saved
+        * File_path to save images to. If set to None (default), then fig is not saved
         
     """
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)

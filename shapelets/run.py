@@ -31,12 +31,12 @@ def run(config_file: str) -> None:
     
     Parameters
     ----------
-    config_file : str
-        The name of the config file.
+    * config_file : str
+        * The name of the configuration file
     
     Notes
     -----
-    Differentiation between submodule use is based on image_name or fits_name provided in config file this may need to be changed in the future if more astronomy functionality is added.
+    Differentiation between submodule use is based on image_name or fits_name provided in config file. Note that this may need to be changed in the future if more astronomy functionality is added.
 
     """
     ## configparser setup and input/output path organization ##

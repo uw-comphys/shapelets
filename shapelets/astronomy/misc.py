@@ -31,20 +31,20 @@ def decompose_analytic(image: np.ndarray, n_max: int, beta: float, centroid: np.
     Parameters
     ----------
     * image: np.ndarray
-        * data to be decomposed into shapelet functions
+        * Data to be decomposed into shapelet functions
     * n_max: int
-        * maximum order of shapelets
+        * Maximum order of shapelets
     * beta: float
-        * characteristic shapelet scale that the object was decomposed at
+        * Characteristic shapelet scale that the object was decomposed at
     * centroid: np.ndarray (dtype=float)
-        * center of shapelet reconstruction (relative to image dimensions)
-    * nspace: [(int, int)], optional
-        * list of shapelet coefficients to be used in the reconstruction. Default is None
+        * Center of shapelet reconstruction (relative to image dimensions)
+    * nspace: list[tuple[int, int]], optional
+        * List of shapelet coefficients to be used in the reconstruction. Default is None
 
     Returns
     -------
     * coefficients: np.ndarray (dtype=float)
-        * matrix of shapelet coefficients representing the decomposition of the image
+        * Matrix of shapelet coefficients representing the decomposition of the image
     
     Notes
     -----
@@ -85,20 +85,20 @@ def decompose_kernel(image: np.ndarray, n_max: int, beta: float, centroid: np.nd
     Parameters
     ----------
     * image: np.ndarray
-        * data to be decomposed into shapelet functions
+        * Data to be decomposed into shapelet functions
     * n_max: int
-        * maximum order of shapelets
+        * Maximum order of shapelets
     * beta: float
-        * characteristic shapelet scale that the object was decomposed at
+        * Characteristic shapelet scale that the object was decomposed at
     * centroid: np.ndarray (dtype=float)
-        * center of shapelet reconstruction (relative to image dimensions)
-    * nspace: [(int, int)], optional
-       * list of shapelet coefficients to be used in the reconstruction. Default is None
+        * Center of shapelet reconstruction (relative to image dimensions)
+    * nspace: list[tuple[int, int]], optional
+        * List of shapelet coefficients to be used in the reconstruction. Default is None
 
     Returns
     -------
     * coefficients : np.ndarray (dtype=float)
-        * matrix of shapelet coefficients representing the decomposition of the image
+        * Matrix of shapelet coefficients representing the decomposition of the image
 
     """
     coefficients = np.zeros([n_max+1]*2)
@@ -126,22 +126,22 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
     Parameters
     ----------
     * s_coeff: np.ndarray (dtype=float)
-        * matrix of shapelet coefficients
+        * Matrix of shapelet coefficients
     * n_max: int
-        maximum order of shapelets
+        * Maximum order of shapelets
     * beta: float
-        * characteristic shapelet scale that the object was decomposed at
+        * Characteristic shapelet scale that the object was decomposed at
     * centroid: np.ndarray (dtype=float)
-        * center of shapelet reconstruction (relative to image dimensions)
+        * Center of shapelet reconstruction (relative to image dimensions)
     * dimensions: (int, int)
-        * the resolution of the image
-    * nspace: [(int, int)], optional
-        * list of shapelet coefficients to be used in the reconstruction. Default is None
+        * The resolution of the image
+    * nspace: list[tuple], optional
+        * List of shapelet coefficients to be used in the reconstruction. Default is None
     
     Returns
     -------
     * image: np.ndarray (dtype=float)
-        * the reconstructed image
+        * The reconstructed image
     
     """
     if nspace == None:
@@ -167,22 +167,22 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
     Parameters
     ----------
     * coeff: np.ndarray
-        * data to be decomposed into shapelet functions
+        * Data to be decomposed into shapelet functions
     * n_max: int
-        * maximum order of shapelets
+        * Maximum order of shapelets
     * beta: float
-        * characteristic shapelet scale that the object was decomposed at
+        * Characteristic shapelet scale that the object was decomposed at
     * centroid: np.ndarray (dtype=float)
-        * center of shapelet reconstruction (relative to image dimensions)
-    * nspace: [(int, int)] (optional)
-        * list of shapelet coefficients to be used in the reconstruction. Default is None
+        * Center of shapelet reconstruction (relative to image dimensions)
+    * nspace: list[tuple], optional
+        * List of shapelet coefficients to be used in the reconstruction. Default is None
     
     Returns
     -------
     * new_beta: float
-        * updated shapelet scale for future decomposition
+        * Updated shapelet scale for future decomposition
     * new_centroid: np.ndarray
-        * updated image center for future decomposition
+        * Updated image center for future decomposition
 
     References
     ----------
@@ -204,17 +204,17 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
 
 def get_nspace(n_max: int) -> np.ndarray:
     r"""
-    Returns a set of (n1, n2) combinations such that the sum of the elements of n is less than n_max, i.e. $||n||_1 \leq n_max$.
+    Returns a set of (n1, n2) combinations such that the sum of the elements of n is less than n_max, i.e. $||n||_1 \leq n_{max}$.
 
     Parameters
     ----------
     * n_max: int
-        * maximum order of shapelet
+        * Maximum order of shapelet
         
     Returns
     -------
     * nspace: np.ndarray (dtype=tuple)
-        * list of valid (n1, n2) combinations such that $n1 + n2 <= n_max$
+        * List of valid (n1, n2) combinations such that $n1 + n2 <= n_{max}$
 
     """
     nspace = np.ndarray(int(binom(n_max+2, 2)), dtype=tuple)
@@ -229,23 +229,23 @@ def get_nspace(n_max: int) -> np.ndarray:
 
 def get_compressed_nspace(s_coeff: np.ndarray, n_compress: int) -> np.ndarray:
     r"""
-    Trims shapelet coefficient to include only the n_compress largest coefficients.
+    Trims shapelet coefficient to include only the $n_{compress}$ largest coefficients.
 
     Parameters
     ----------
     * s_coeff: np.ndarray (dtype=float)
-        * matrix of coefficient values
+        * Matrix of coefficient values
     * n_compress: int
-        * number of shapelet coefficients to preserve
+        * Number of shapelet coefficients to preserve
         
     Returns
     -------
     * nspace: np.ndarray (dtype=tuple)
-        * list of tuples of largest valid (n1, n2) combinations
+        * List of tuples of largest valid (n1, n2) combinations
 
     Notes
     -----
-    Often an image can be accurately reconstructed using only several of the shapelet functions with the largest coefficients. Ignoring smaller coefficient functions helps to avoid overfitting to the image noise.
+    Often an image can be accurately reconstructed using only several of the shapelet functions with the largest coefficients. Ignoring smaller coefficients helps to avoid overfitting to the image noise.
 
     Examples
     -----
