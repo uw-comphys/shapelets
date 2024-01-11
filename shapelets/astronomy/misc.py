@@ -119,7 +119,7 @@ def decompose_kernel(image: np.ndarray, n_max: int, beta: float, centroid: np.nd
     
     return coefficients
 
-def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, dimensions: tuple[int, int], nspace: list[tuple]=None) -> np.ndarray:
+def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, dimensions: tuple[int, int], nspace: list[tuple[int, int]]=None) -> np.ndarray:
     r"""
     Given a matrix of shapelet coefficients, constructs image.
 
@@ -135,7 +135,7 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
         * Center of shapelet reconstruction (relative to image dimensions)
     * dimensions: (int, int)
         * The resolution of the image
-    * nspace: list[tuple], optional
+    * nspace: list[tuple[int, int]], optional
         * List of shapelet coefficients to be used in the reconstruction. Default is None
     
     Returns
@@ -160,7 +160,7 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
     return image
 
 # calculate improved parameters to optimize shapelet coeffcients
-def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, nspace: list[tuple]=None) -> tuple[float, np.ndarray]:
+def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, nspace: list[tuple[int, int]]=None) -> tuple[float, np.ndarray]:
     r"""
     Calculates an object's characteristic scale and centroid using its calculated shapelet coefficients. These new parameters can be used to decompose the image again with lower error.
 
@@ -174,7 +174,7 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
         * Characteristic shapelet scale that the object was decomposed at
     * centroid: np.ndarray (dtype=float)
         * Center of shapelet reconstruction (relative to image dimensions)
-    * nspace: list[tuple], optional
+    * nspace: list[tuple[int, int]], optional
         * List of shapelet coefficients to be used in the reconstruction. Default is None
     
     Returns
