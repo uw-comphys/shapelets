@@ -1,6 +1,6 @@
 # Example 3 - Local Pattern Orientation
 
-This example goes through the process of computing the local pattern orientation ([M.P. Tino (2023)](REFTINO)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
+This example goes through the process of computing the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
 
 The files for this example can be found [here](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_3).
 
@@ -13,7 +13,7 @@ The files for this example can be found [here](https://github.com/mptino/shapele
 
 Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains.
 
-The method to compute the local pattern orientation ([M.P. Tino (2023)](REFTINO)) contains three (3) main steps:
+The method to compute the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
 
 * (1) **Masking**: Masking is performed for well-defined features using a specific response threshold. This threshold is found via an interative scheme. Only the orientation values from these well-defined features included in the mask are used.
 * (2) **Dilation**: Dilation (via morphological greyscale dilation) is used to expand the orientation from well-defined features and ultimately define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
@@ -45,7 +45,7 @@ The *general* section of the configuration file contains two parameters.
 
 The "image_name" and "method" parameters are required.
 
-Here the "method" parameter is chosen to be "orientation" to indicate computation of local pattern orientation ([M.P. Tino (2023)](REFTINO)).
+Here the "method" parameter is chosen to be "orientation" to indicate computation of local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
 
 The *orientation* section of the configuration file contains one parameter.
 

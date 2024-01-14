@@ -137,7 +137,7 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
 
     References
     ----------
-    .. [1] TODO: REFTINO
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     os.chdir(save_path)
@@ -320,7 +320,7 @@ def image_difference(im1: np.ndarray, im2: np.ndarray):
     
     References
     ----------
-    .. [1] TODO: REFTINO
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if im1.shape != im2.shape:
