@@ -67,7 +67,7 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] https://doi.org/10.1088/1361-6528/aaf353
-    .. [3] TODO: REFTINO
+    .. [3] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if not isinstance(image, np.ndarray):
@@ -213,7 +213,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
 
     References
     ----------
-    .. [1] TODO: REFTINO
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
     .. [2] https://doi.org/10.1007/978-3-642-29807-3
 
     """
@@ -333,7 +333,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
 
     References
     ----------
-    .. [1] TODO: REFTINO
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
     .. [2] https://doi.org/10.1109/34.93808
     .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
     

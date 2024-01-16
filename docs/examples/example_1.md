@@ -64,7 +64,7 @@ These parameters are explained below, note that *default* refers to default beha
 * **shapelet_order** 
 
 	* int - integer, compute convolution for maximum shapelet order $m'$, i.e. $m \in [1, m']$
-	* default = $m'$ computed by the higher-order shapelet algorithm ([M.P. Tino (2023)](REFTINO))
+	* default = $m'$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
 * **num_clusters**
 

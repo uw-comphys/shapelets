@@ -1,6 +1,6 @@
 # Example 2 - Defect Identification Method
 
-This example goes through the process of computing the defect identification method ([M.P. Tino (2023)](REFTINO)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
+This example goes through the process of computing the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
 
 The files for this example can be found [here](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_2).
 
@@ -11,11 +11,11 @@ The files for this example can be found [here](https://github.com/mptino/shapele
 
 ## Technical overview
 
-The defect identification method ([M.P. Tino (2023)](REFTINO)) is a modification of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
+The defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is a modification of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
 
-The user is required to manually select the clusters associated with defects or defect structures, and the *defect response distance* ([M.P. Tino (2023)](REFTINO)) is computed for each cluster. 
+The user is required to manually select the clusters associated with defects or defect structures, and the *defect response distance* ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is computed for each cluster. 
 
-The *defect response distance* ([M.P. Tino (2023)](REFTINO)) is similar to the response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)), but the reference subdomain is the centroid response vector of each cluster (and not a set of reference response vectors). 
+The *defect response distance* ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is similar to the response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)), but the reference subdomain is the centroid response vector of each cluster (and not a set of reference response vectors). 
 
 I.e., for a given cluster $C$ with centroid $C_c$, the defect response distance is computed as:
 
@@ -23,7 +23,7 @@ $$ d_i = \| C_c - c_i \|_2 $$
 
 where $c_i$ is a cluster response vector belonging to cluster $C$ and is computed for all response vectors in each cluster.
 
-The key observation is that cluster response vectors with larger defect response distances are more "defect-like", allowing use of the defect response distance as a quantitative measure of "defect intensity" ([M.P. Tino (2023)](REFTINO)).
+The key observation is that cluster response vectors with larger defect response distances are more "defect-like", allowing use of the defect response distance as a quantitative measure of "defect intensity" ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
 
 
 ## Directory overview
@@ -49,7 +49,7 @@ The *general* section of the configuration file contains two parameters.
 
 The "image_name" and "method" parameters are required.
 
-Here the "method" parameter is chosen to be "identify_defects" to indicate computation of the defect identification method ([M.P. Tino (2023)](REFTINO)).
+Here the "method" parameter is chosen to be "identify_defects" to indicate computation of the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
 
 The *identify_defects* section of the configuration file contains two parameters.
 
