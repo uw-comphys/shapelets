@@ -37,9 +37,9 @@ bibliography: paper.bib
 
 # Summary
 
-`Shapelets` is a Python-based software package that implements several shapelet functions [@Refregier2003] and some of their significant applications in science and astronomy. Shapelet functions are a complete and orthogonal set of localized basis functions with mathematical properties convenient for manipulation and analysis of images from a broad range of applications. Over the past few decades, there have been several different shapelet function formulations developed and applied in the areas of astronomy/astrophysics [@Refregier2003; @Massey2005; @Lentati2015; @Birrer2015; @Desvignes2016; @Berge2019], self-assembly nanomaterials [@Suderman2015; @Akdeniz2018; @Tino2023], computational neuroscience [@Victor2006; @Sharpee2009], and medical imaging [@Weissman2004].
+`Shapelets` is a Python-based software package that implements several shapelet functions [@Refregier2003] and some of their significant applications in science and astronomy. Shapelet functions are a complete and orthogonal set of localized basis functions with mathematical properties convenient for manipulation and analysis of images from a broad range of applications. Over the past few decades, there have been several different shapelet function formulations developed and applied in the areas of astronomy/astrophysics [@Refregier2003; @Massey2005; @Lentati2015; @Birrer2015; @Desvignes2016; @Berge2019], self-assembly nanomaterials [@Suderman2015; @Akdeniz2018; @Tino2024], computational neuroscience [@Victor2006; @Sharpee2009], and medical imaging [@Weissman2004].
 
-The `shapelets` software package provides reference implementations and documentation for four different shapelet formulations: cartesian [@Refregier2003], polar [@Massey2005], orthonormal polar with constant radial scale [@Akdeniz2018], and exponential [@Berge2019]. Additionally, the `shapelets` package provides reference implementations of several applications of shapelet functions in astronomy (galactic image decomposition and reconstruction [@Refregier2003; @Massey2005]) and self-assembly (quantification of nanostructure order [@Suderman2015; @Akdeniz2018; @Tino2023]). The coding style of `shapelets` is based on that of [`scipy.special`](https://docs.scipy.org/doc/scipy/reference/special.html) [@scipy].
+The `shapelets` software package provides reference implementations and documentation for four different shapelet formulations: cartesian [@Refregier2003], polar [@Massey2005], orthonormal polar with constant radial scale [@Akdeniz2018], and exponential [@Berge2019]. Additionally, the `shapelets` package provides reference implementations of several applications of shapelet functions in astronomy (galactic image decomposition and reconstruction [@Refregier2003; @Massey2005]) and self-assembly (quantification of nanostructure order [@Suderman2015; @Akdeniz2018; @Tino2024]). The coding style of `shapelets` is based on that of [`scipy.special`](https://docs.scipy.org/doc/scipy/reference/special.html) [@scipy].
 
 For ease of use, `shapelets` also provides a text configuration-based user interface and Python [entry points](https://packaging.python.org/en/latest/specifications/entry-points/) (custom terminal commands) to improve accessibility for a broad range of potential users in science and engineering, including those without a strong Python programming background. For example, the configuration-file based interface can be invoked via `shapelets config`, and running the unit tests associated with the package can be invoked via `shapelets-test`.
 
@@ -47,7 +47,7 @@ Lastly, the `shapelets` package includes a set of detailed examples which demons
 
 # Statement of Need
 
-Shapelets are a class of complete localized orthogonal basis functions with a broad range of applications in image processing and reconstruction [@Refregier2003; @Massey2005; @Suderman2015; @Akdeniz2018; @Tino2023]. Despite their increasingly widespread use, there currently is no single software package that is both broadly accessible (e.g. written in Python or other high-level programming language) and implements several useful applications. Currently, there exists an open-source astronomy-focused [shapelet software package](https://www.astro.dur.ac.uk/~rjm/shapelets/code/index.php) [@Massey2005], however, it is written in the [Interactive Data Language (IDL) programming language](https://en.wikipedia.org/wiki/IDL_(programming_language)) which is not widely used in the science and engineering communities. Furthermore, this package has not been updated in over a decade. Given the increasingly broad usage of shapelets in areas outside of astronomy/astrophysics, an open-source Python-based shapelets software package would provide access to these functions and their applications to a larger community, along with facilitating open-source scientific software development through the existence of a centralized software package that allows for contribution and collaboration.
+Shapelets are a class of complete localized orthogonal basis functions with a broad range of applications in image processing and reconstruction [@Refregier2003; @Massey2005; @Suderman2015; @Akdeniz2018; @Tino2024]. Despite their increasingly widespread use, there currently is no single software package that is both broadly accessible (e.g. written in Python or other high-level programming language) and implements several useful applications. Currently, there exists an open-source astronomy-focused [shapelet software package](https://www.astro.dur.ac.uk/~rjm/shapelets/code/index.php) [@Massey2005], however, it is written in the [Interactive Data Language (IDL) programming language](https://en.wikipedia.org/wiki/IDL_(programming_language)) which is not widely used in the science and engineering communities. Furthermore, this package has not been updated in over a decade. Given the increasingly broad usage of shapelets in areas outside of astronomy/astrophysics, an open-source Python-based shapelets software package would provide access to these functions and their applications to a larger community, along with facilitating open-source scientific software development through the existence of a centralized software package that allows for contribution and collaboration.
 
 Similarly, quantification of structure/property relationships for nanomaterials is critical for continued progress in research [@Abukhdeir2016]. This is especially true for nanomaterials with complex spatially-varying patterns, such as self-assembly materials [@Abukhdeir2016]. There are other methods to quantify nanostructure order, such as bond-orientational order analysis [@Brock1992], but these do not provide pixel-scale information and do not have readily available open-source software implementations. Methods to quantify nanostructure order, such as those implemented in the `shapelets` package, would significantly advance (nano)materials research and provide researchers with accessible tools to quantify order for their own material images.
 
@@ -70,8 +70,8 @@ The table below summarizes the specific shapelet applications implemented in thi
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Galaxy decomposition            | Galactic image decomposition & reconstruction [@Refregier2003] via `shapelets.astronomy.decompose_galaxies`                                                |
 | Response distance         | Response distance method for self-assembly microscopy imaging [@Suderman2015; @Akdeniz2018] via `shapelets.self_assembly.rdistance` |
-| Orientation                     | Local pattern orientation for self-assembly microscopy imaging [@Tino2023] via `shapelets.self_assembly.orientation`                    |
-| Defect identification     | Defect identification method for self-assembly microscopy imaging [@Tino2023] via `shapelets.self_assembly.defectid`                    |
+| Orientation                     | Local pattern orientation for self-assembly microscopy imaging [@Tino2024] via `shapelets.self_assembly.orientation`                    |
+| Defect identification     | Defect identification method for self-assembly microscopy imaging [@Tino2024] via `shapelets.self_assembly.defectid`                    |
 
 More information, such as installation instructions and application-specific examples can be found in the package [README](https://github.com/uw-comphys/shapelets) file.
 
@@ -95,7 +95,7 @@ Alternatively, the Python-based software interface of the `shapelets` package ca
 
 For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See [here](https://github.com/uw-comphys/shapelets/tree/main/examples) and [here](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) for examples and their associated documentation, respectively.
 
-Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], local pattern orientation [@Tino2023], and defect identification method [@Tino2023].
+Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], local pattern orientation [@Tino2024], and defect identification method [@Tino2024].
 Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here.
 
 ## Example 1 - Response Distance Method
@@ -124,7 +124,7 @@ The configuration file (`config`) contains the following information,
 
 where
 
-* *shapelet_order* details the maximum shapelet order ($m'$) to use during convolution (i.e., $m = [1, m']) [@Tino2023],
+* *shapelet_order* details the maximum shapelet order ($m'$) to use during convolution (i.e., $m = [1, m']$) [@Tino2024],
 * *num_clusters* details the number of clusters required for k-means clustering [@Wu2012], and
 * [*ux*, *uy*] detail the coordinates of the user-defined reference subdomain required for the response distance method [@Suderman2015].
 
@@ -146,13 +146,13 @@ After executing `example_1.py`, the outputs (\autoref{fig:lamSIM1_RD}) will be a
 
 ## Example 2 - Defect Identification Method
 
-[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2023]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:hexSIM1}.
+[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2024]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:hexSIM1}.
 
 ![Simulated hexagonal self-assembly nanostructure [@Suderman2015].\label{fig:hexSIM1}](images/hexSIM1.png){ width=40% }
 
 ### Defect Identification Method
 
-The defect identification method [@Tino2023] is a modification from the response distance method [@Suderman2015].
+The defect identification method [@Tino2024] is a modification from the response distance method [@Suderman2015].
 
 The user is required to manually select the clusters associated with defects or defect structures, and the *defect response distance* is computed for each cluster.
 
@@ -185,7 +185,7 @@ You will be required to select the clusters associated with defects or defect st
 
 The outputs, shown in \autoref{fig:hexSIM1_defectid}, will be available in "shapelets/examples/example_2/output", containing the following four images corresponding to (1) the locations of each cluster through the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) this scalar field superimposed onto the original image.
 
-![Defect identification method [@Tino2023] applied to \autoref{fig:hexSIM1} (right).\label{fig:hexSIM1_defectid}](images/hexSIM1_defectid.png){ width=80% }
+![Defect identification method [@Tino2024] applied to \autoref{fig:hexSIM1} (right).\label{fig:hexSIM1_defectid}](images/hexSIM1_defectid.png){ width=80% }
 
 ### Scripting Method
 
