@@ -15,6 +15,8 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+from typing import Union
+
 import numpy as np
 from scipy.special import factorial, genlaguerre, hermite
 
@@ -27,46 +29,33 @@ __all__ = [
     'exponential2D'
 ]
 
-def cartesian1D(n, x1, beta = 1):
-    r""" 1D cartesian shapelet function from [1].
+def cartesian1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    1D cartesian shapelet function defined as[1]_,
 
-    Defined in 1D as [1]_,
+    $$ S_{n}(x; \beta) = \beta^{-\frac{1}{2}}  \phi_{n}(\frac{x}{\beta}) $$
 
-    .. math:: S_{n}(x; \beta) = \beta^{-\frac{1}{2}}  \phi_{n}(\frac{x}{\beta})
+    with $$ \phi_n(x) = \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} H_n(x) exp(-\frac{x^2}{2}) $$
 
-    with
-    .. math:: \phi_n(x) = \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} H_n(x) exp(-\frac{x^2}{2})
-
-    where :math:`\phi_n` is the dimensionless [shapelet] basis function,
-          :math:`\beta` is the characteristic shapelet scale,
-          :math:`H_n` is a hermite polynomial of order n, and
-          :math:`n` is the shapelet order.
+    where $\phi_n$ is the dimensionless basis function, $\beta$ is the shapelet length scale, $H_n$ is a hermite polynomial of order $n$, and $n$ is the shapelet order parameter.
 
     Parameters
     ----------
-    n : int
-        Shapelet order. Acceptable values :math:`n \geq 0`.
-    x1: float or np.ndarray
-        The input to the shapelet function.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * n: int
+        * Shapelet order. Acceptable values are $n \geq 0$
+    * x1: Union[float,np.ndarray]
+        * The input to the shapelet function
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1) : float or np.ndarray
-        Shapelet function evaluated with S(x1).
-
-    Notes
-    -----
-    Notes go here
+    * Sc(x1): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1)
 
     References
     ----------
     .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
-    Examples
-    --------
-    Example goes here
 
     """
     if n < 0:
@@ -83,49 +72,37 @@ def cartesian1D(n, x1, beta = 1):
 
     return Sc(x1)
 
+def cartesian2D(n1: int, n2: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    2D cartesian shapelet function defined as[1]_,
 
-def cartesian2D(n1, n2, x1, x2, beta = 1):
-    r""" Cartesian shapelet function from [1].
+    $$ S_{n_1,n_2}(x_1, x_2; \beta) = \beta^{-1} \phi_{n_1}(\frac{x_1}{\beta}) \phi_{n_2}(\frac{x_2}{\beta}) $$
 
-    Defined in 2D as [1]_,
+    with $$ \phi_n(x) = \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} H_n(x) exp(-\frac{x^2}{2}) $$
 
-    .. math:: S_{n_1,n_2}(x_1, x_2; \beta) = \beta^{-1} \phi_{n_1}(\frac{x_1}{\beta}) \phi_{n_2}(\frac{x_2}{\beta})
-
-    with
-    .. math:: \phi_n(x) = \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} H_n(x) exp(-\frac{x^2}{2})
-
-    where :math:`\phi_n` is the dimensionless [shapelet] basis function,
-          :math:`\beta` is the characteristic shapelet scale,
-          :math:`H_n` is a hermite polynomial of order n, and
-          :math:`n_1` and :math:`n_2` are the shapelet orders.
+    where $\phi_n$ is the dimensionless basis function, $\beta$ is the shapelet length scale, $H_n$ is a hermite polynomial of order $n$, and $n_1$ and $n_2$ are the shapelet orders.
 
     Parameters
     ----------
-    n1 : int
-        Shapelet order in x direction. Acceptable values :math:`n1 \geq 0`.
-    n2 : int
-        Shapelet order in y direction. Acceptable values :math:`n2 \geq 0`.
-    x1 : float or np.ndarray
-        First input to shapelet function.
-    x2 : float or np.ndarray
-        Second input to shapelet function.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * n1: int
+        * Shapelet order in x direction. Acceptable values are $n1 \geq 0$
+    * n2: int
+        * Shapelet order in y direction. Acceptable values are $n2 \geq 0$
+    * x1: Union[float,np.ndarray]
+        * First input to shapelet function
+    * x2: Union[float,np.ndarray]
+        * Second input to shapelet function
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1, x2) : float or np.ndarray
-        Returns continuous shapelet evaluated with (x1, x2).
-
-    Notes
-    -----
+    * Sc(x1, x2): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1, x2)
 
     References
     ----------
     .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
-    Examples
-    --------
 
     """
     if n1 < 0 or n2 < 0:
@@ -145,56 +122,40 @@ def cartesian2D(n1, n2, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
+def polar2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    2D polar shapelet function defined as[1]_,
 
-def polar2D(n, m, x1, x2, beta = 1):
-    r""" 2D polar shapelet function from [1].
+    $$ S_{n, m}(r, \theta; \beta) = \alpha_1 \alpha_2 r^{|m|} L_{(n-|m|)/2}^{|m|} \left(\frac{r^2}{\beta^2}\right) exp\left( -\frac{r^2}{2\beta^2} \right) exp(-im\theta) $$
 
-    Defined as [1]_,
+    with 
+    $$ \alpha_1 = \frac{(-1)^{(n-|m|)/2}}{\beta^{|m|+1}} $$
+    $$ \alpha_2 = \left[ \frac{[(n-|m|)/2]!} {\pi[(n+|m|)/2]!} \right]^{\frac{1}{2}}  $$
 
-    .. math:: S_{n, m}(r, \theta; \beta) = \alpha_1 \alpha_2 r^{|m|} L_{(n-|m|)/2}^{|m|}
-                                           \left(\frac{r^2}{\beta^2}\right)
-                                           exp\left( -\frac{r^2}{2\beta^2} \right)
-                                           exp(-im\theta)
-
-    with
-    .. math:: \alpha_1 = \frac{(-1)^{(n-|m|)/2}}{\beta^{|m|+1}}
-    .. math:: \alpha_2 = \left\{ \frac{[(n-|m|)/2]!} {\pi[(n+|m|)/2]!} \right\}^{\frac{1}{2}}
-
-    where :math:`\beta` is the characteristic shapelet scale,
-          :math:`L` is the generalized (associated) laguerre polynomial [2],
-          :math:`n` is the shapelet order, and
-          :math:`m` is also the shapelet order.
+    where $\beta$ is the shapelet length scale, $L$ is the generalized (associated) laguerre polynomial[2]_, $n$ is the shapelet order, and $m$ is also the shapelet order.
 
     Parameters
     ----------
-    n : int
-        Shapelet order. Acceptable values :math:`n \geq 0`.
-    m : int
-        Also describes shapelet order. Acceptable values :math:`m \in [-n, n]`.
-        However, if n is odd/even, m must be odd/even respectively.
-    x1 : float or np.ndarray
-        First input to shapelet function.
-    x2 : float or np.ndarray
-        Second input to shapelet function.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * n: int
+        * Shapelet order. Acceptable values are $n \geq 0$
+    * m: int
+        * Also describes shapelet order. Acceptable values $m \in [-n, n]$. However, if n is odd/even, m must also be odd/even respectively
+    * x1: Union[float,np.ndarray]
+        * First input to shapelet function
+    * x2: Union[float,np.ndarray]
+        * Second input to shapelet function
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1, x2) : float  or np.ndarray
-        Returns continuous shapelet evaluated with (x1, x2).
-
-    Notes
-    -----
+    * Sc(x1, x2): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1, x2)
 
     References
     ----------
     .. [1] https://doi.org/10.1111/j.1365-2966.2005.09453.x
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 0:
@@ -224,52 +185,40 @@ def polar2D(n, m, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
+def orthonormalpolar2D(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    Orthonormal 2D polar shapelet function defined as[1]_,
 
-def orthonormalpolar2D(m, x1, x2, beta = 1):
-    r""" Orthonormal 2D polar shapelet function from [1].
+    $$ S_{m}(r, \theta; \beta) = \frac{1}{\beta \sqrt{\pi m!}} \left( \frac{r}{\beta} \right)^m exp \left( -\frac{r^2}{2\beta^2}-im\theta \right) $$
 
-    Defined as [1]_,
+    with $$ \beta = \frac{fl}{\sqrt{m}} $$
 
-    .. math:: S_{m}(r, \theta; \beta) = \frac{1}{\beta \sqrt{\pi m!}}
-                                        \left( \frac{r}{\beta} \right)^m exp
-                                        \left( -\frac{r^2}{2\beta^2}-im\theta \right)
-
-    with
-    .. math:: \beta = \frac{fl}{\sqrt{m}}
-
-    where :math:`\beta` is the shapelet length scale,
-          :math:`f` is a geometric scale factor,
-          :math:`l` is the characteristic wavelength of the image, and
-          :math:`m` is the shapelet degree of rotational symmetry.
+    where $\beta$ is the shapelet length scale, $f$ is a geometric scale factor[1]_, $l$ is the characteristic wavelength of the image[2]_, and $m$ is the shapelet degree of rotational symmetry.
 
     Parameters
     ----------
-    m : int
-        Shapelet degree of rotational symmetry. Acceptable values :math:`m > 1`.
-    x1 : float or np.ndarray
-        First input to shapelet function.
-    x2 : float or np.ndarray
-        Second input to shapelet function.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * m: int
+        * Shapelet degree of rotational symmetry. Acceptable values are $m > 1$
+    * x1: Union[float,np.ndarray]
+        * First input to shapelet function
+    * x2: Union[float,np.ndarray]
+        * Second input to shapelet function
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1, x2) : float or np.ndarray
-        Returns continuous shapelet evaluated with (x1, x2).
+    * Sc(x1, x2): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1, x2)
 
     Notes
     -----
-    The orthonormal shapelet framework from [1] only supports n = 0.
-    See [2] for computing the characteristic wavelength.
+    The orthonormal shapelet framework[1]_ only supports $n = 0$. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of that found in shapelets.functions.polar2D.
 
     References
     ----------
     .. [1] https://doi.org/10.1088/1361-6528/aaf353
     .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
-
-    Examples
-    --------
 
     """
     if m < 1:
@@ -289,47 +238,34 @@ def orthonormalpolar2D(m, x1, x2, beta = 1):
 
     return Sc(x1, x2)
 
+def exponential1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    1D exponential shapelet function defined as[1]_,
 
-def exponential1D(n, x1, beta = 1):
-    r""" 1D exponential shapelet function from [1].
+    $$ S_n(x; \beta) = \alpha \frac{2x}{n\beta} L^{1}_{n-1} \left( \frac{2x}{n\beta} \right) exp\left( -\frac{x}{n\beta} \right) \forall x \geq 0 $$
 
-    Defined in 1D as [1]_,
+    with $$ \alpha = \frac{(-1)^{n-1}}{\sqrt{n^3\beta}} $$
 
-    .. math:: S_n(x; \beta) = \alpha \frac{2x}{n\beta} L^{1}_{n-1} \left( \frac{2x}{n\beta} \right)
-                              exp\left( -\frac{x}{n\beta} \right) \forall x \geq 0
-
-    with
-    .. math:: \alpha = \frac{(-1)^{n-1}}{\sqrt{n^3\beta}}
-
-    where :math:`\beta` is the characteristic shapelet scale,
-          :math:`L` is the generalized (associated) laguerre polynomial [2],
-          :math:`n` is the shapelet order.
+    where $\beta$ is the shapelet length scale, $L$ is the generalized (associated) laguerre polynomial[2]_, and $n$ is the shapelet order.
 
     Parameters
     ----------
-    n : int
-        Shapelet order. Must be non-negative. Acceptable values :math:`n \geq 1`.
-    x1 : float or np.ndarray
-        The input to the shapelet function. Acceptable values :math:`x1 \geq 0`.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * n: int
+        * Shapelet order. Must be non-negative. Acceptable values are $n \geq 1$
+    * x1: Union[float,np.ndarray]
+        * The input to the shapelet function. Acceptable values are $x1 \geq 0$
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1) : float or numpy.ndarray
-        Shapelet function evaluated with Sc(x1).
-
-    Notes
-    -----
-
+    * Sc(x1): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1)
+        
     References
     ----------
     .. [1] https://doi.org/10.1093/mnras/stz787
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 1:
@@ -349,53 +285,38 @@ def exponential1D(n, x1, beta = 1):
 
     return Sc(x1)
 
+def exponential2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r"""
+    2D exponential shapelet function defined as[1]_,
 
-def exponential2D(n, m, x1, x2, beta = 1):
-    r""" 2D exponential shapelet function from [1].
+    $$ S_{n,m}(r, \theta; \beta) = \alpha (2r)^{|m|} L^{2|m|}_{n-|m|}\left( \frac{2r}{\beta(2n+1)} \right) exp\left( -\frac{r}{\beta(2n+1)} \right) exp(-im\theta) $$
 
-    Defined in 2D as [1]_,
+    with $$ \alpha = \frac{(-1)^n}{(\beta(2n+1))^{|m|}} \sqrt{ \frac{2}{\beta\pi(2n+1)^3} \frac{(n-|m|)!}{(n+|m|)!} } $$
 
-    ..math:: S_{n,m}(r, \theta; \beta) = \alpha (2r)^{|m|} L^{2|m|}_{n-|m|}\left( \frac{2r}{\beta(2n+1)} \right)
-                                         exp\left( -\frac{r}{\beta(2n+1)} \right) exp(-im\theta)
-
-    with
-    .. math:: \alpha = \frac{(-1)^n}{(\beta(2n+1))^{|m|}} \sqrt{ \frac{2}{\beta\pi(2n+1)^3}
-                       \frac{(n-|m|)!}{(n+|m|)!} }
-
-    where :math:`\beta` is the characteristic shapelet scale,
-          :math:`L` is the generalized (associated) laguerre polynomial [2],
-          :math:`n` is the shapelet order, and
-          :math:`m` is also the shapelet order.
+    where $\beta$ is the shapelet length scale, $L$ is the generalized (associated) laguerre polynomial[2]_, $n$ is the shapelet order, and $m$ is also the shapelet order.
 
     Parameters
     ----------
-    n : int
-        Shapelet order. Must be non-negative. Acceptable values :math:`n \geq 0`.
-    m : int
-        Also describes shapelet order. Acceptable values :math:`m \in [-n, n]`.
-    x1 : float or np.ndarray
-        First input to shapelet function.
-    x2 : float or np.ndarray
-        Second input to shapelet function.
-    beta : float
-        The characteristic shapelet length scale parameter.
+    * n: int
+        * Shapelet order. Must be non-negative. Acceptable values are $n \geq 0$
+    * m: int
+        * Also describes shapelet order. Acceptable values are $m \in [-n, n]$
+    * x1: Union[float,np.ndarray]
+        * First input to shapelet function
+    * x2: Union[float,np.ndarray]
+        * Second input to shapelet function
+    * beta: float
+        * The shapelet length scale parameter
 
     Returns
     -------
-    Sc(x1, x2) : float or numpy.ndarray
-        Returns continuous shapelet evaluated with (x1, x2).
-
-    Notes
-    -----
+    * Sc(x1, x2): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1, x2)
 
     References
     ----------
     .. [1] https://doi.org/10.1093/mnras/stz787
     .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
-
-    Examples
-    --------
 
     """
     if n < 0:

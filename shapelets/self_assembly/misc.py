@@ -29,33 +29,34 @@ __all__ = [
     'make_grid',
     'read_image',
     'process_output',
-    'trimage'
+    'image_difference',
+    'trim_image'
 ]
 
 def make_grid(N: int):
-    r""" Make discretized grid based on width (N).
+    r""" 
+    Make discretized grid based on width (N).
     
     Parameters
     ----------
-    N : int
-        The width of the kernel (odd numbers only)
+    * N: int
+        * The width of the kernel (odd numbers only)
 
     Returns
     -------
-    grid_x : np.ndarray
-        The grid's x coordinate space
-    grid_y : np.ndarray
-        The grid's y coordinate space
+    * grid_x: np.ndarray
+        * The grid's x coordinate space
+    * grid_y: np.ndarray
+        * The grid's y coordinate space
     
     Notes
     -----
-    As per convention, N should only be an odd number.
-    Additionally, note that grid_x == grid_y (identical for obvious
-        reasons).
+    As per convention, N should only be an odd number. Additionally, note that grid_x = grid_y.
 
     """
     if N % 2 == 0:
-        raise ValueError('N must be an odd number, not even.')
+        print('Detected even grid size, adding 1 to enforce odd rule See self_assembly.misc.make_grid() docs.')
+        N += 1
     if N < 3:
         raise ValueError('N must be at least 3 or greater.')
     
@@ -65,34 +66,27 @@ def make_grid(N: int):
 
     return grid_x, grid_y
 
-
-def read_image(image_name, image_path, verbose = True):
-    r""" Read an image using cv2 (OpenCV) with some extra handling.
+def read_image(image_name: str, image_path: str, verbose: bool = True):
+    r""" 
+    Read an image using OpenCV, with some extra handling. By default, re-scales images as greyscale on [-1, 1].
     
     Parameters
     ----------
-    image_name : str
-        The filename of the image (including extension).
-    image_path : str
-        The path holding the image.
-    verbose : bool
-        True to print image-related information.
+    * image_name: str
+        * The filename of the image (including extension)
+    * image_path: str
+        * The path holding the image
+    * verbose: bool, optional
+        * True (default) to print image-related information
     
     Returns
     -------
-    f : np.ndarray
-        The image as a numpy array.
+    * f: np.ndarray
+        * The image as a numpy.ndarray.
 
     Notes
     -----
-    The bounds for either threshold (-1, 1) are intentional to align with 
-    the minimum and maximum of shapelet function intensity.
-
-    References
-    ----------
-
-    Examples
-    --------
+    Re-scaling of image to greyscale on [-1, 1] is intentional to align with the minimum and maximum of shapelet function values.
     
     """
     if os.path.exists(image_path):
@@ -112,33 +106,39 @@ def read_image(image_name, image_path, verbose = True):
     else: 
         raise RuntimeError('Image path does not exist.')
 
+def process_output(image: np.ndarray, image_name: str, save_path: str, output_from: str, **kwargs) -> None:
+    r""" 
+    Processes and saves output from any of the functions below,
+    * shapelets.self_assembly.quant.rdistance
+    * shapelets.self_assembly.quant.orientation
+    * shapelets.self_assembly.quant.defectid
+    
+    It was used to generate Figures 6, 7, 8, and 9 from ref.[1]_.
 
-def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
-    r""" Processes and saves output from any of the functions below,
-        * shapelets.self_assembly.quant.rdistance()
-        * shapelets.self_assembly.quant.orientation()
-        * shapelets.self_assembly.quant.defectid()
+    NOTE: any image saved from the **kwargs argument is trimmed using shapelets.self_assembly.misc.trim_image. This is because the convolution with shapelet kernels is padded on the edges, producing a fuzzy convolutional response. The shapelets.self_assembly.misc.trim_image function removes this fuzzy response.
 
     Parameters
     ----------
-    image : numpy.ndarray
-        The image loaded as a numpy array.
-    image_name : str
-        The name of the loaded image.
-    output_from : str
-        The name of the method for which we will process and save the output/results.
-        Options are: 'response_distance', 'orientation', or 'identify_defects'
+    * image: numpy.ndarray
+        * The image loaded as a numpy array
+    * image_name: str
+        * The name of the loaded image
+    * save_path: str
+        * The path to save results
+    * output_from: str
+        * The name of the method for which we will process and save the output/results. Options are: 'response_distance', 'orientation', or 'identify_defects'
 
     Notes
     -----
     Required kwargs are,
-    * output_from = 'response_distance'   -->     d, num_clusters
-    * output_from = 'orientation'         -->     mask, dilate, orientation, maxval
-    * output_from = 'identify_defects'    -->     defects, centroids, clusterMembers
+    * output_from = 'response_distance'   -->     d, num_clusters (see shapelets.self_assembly.quant.rdistance)
+    * output_from = 'orientation'         -->     mask, dilate, orientation, maxval (see shapelets.self_assembly.quant.orientation)
+    * output_from = 'identify_defects'    -->     defects, centroids, clusterMembers (see shapelets.self_assembly.quant.defectid)
 
-    Examples
-    --------
-    
+    References
+    ----------
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+
     """
     os.chdir(save_path)
 
@@ -152,7 +152,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # final image processing for response distance scalar field
         d = (d-d.min()) / (d.max()-d.min())
         d = 1-d
-        d = trimage(im=d, l=char_wavelength)
+        d = trim_image(im=d, l=char_wavelength)
 
         # plot and save
         plt.figure()
@@ -162,7 +162,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname1, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.imshow(d,alpha=0.7, cmap='summer')
         plt.axis('off')
         plotname2 = f"{image_name[:-4]}_response_distance_overlay_k{num_clusters}.png"
@@ -178,7 +178,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         
         # plot and save
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray', alpha = 0.5)
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray', alpha = 0.5)
         mask[mask == 0.0] = np.nan
         plt.imshow(mask, cmap='hsv', vmin=0, vmax=maxval)
         plt.axis('off')
@@ -186,7 +186,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname1, dpi=600, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.imshow(dilate, cmap='hsv', alpha = 0.7, vmin=0, vmax=maxval)
         plt.axis('off')
         plotname2 = f"{image_name[:-4]}_orientation_dilate.png"
@@ -199,7 +199,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         plt.savefig(fname=plotname3, dpi=600, bbox_inches='tight', pad_inches=0)
         
         plt.figure()
-        plt.imshow(trimage(image,char_wavelength), cmap='gray')
+        plt.imshow(trim_image(image,char_wavelength), cmap='gray')
         plt.axis('off')
         im = plt.imshow(orientation, cmap='hsv', alpha = 0.7, vmin=0, vmax=maxval)
         ax = plt.gca()
@@ -219,12 +219,12 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # apply some smoothing on scale of half lambda
         kernelsize = int(np.round(char_wavelength/2, 0))
         defects = median_filter(defects, size = kernelsize)
-        defects = trimage(defects, char_wavelength) 
+        defects = trim_image(defects, char_wavelength) 
 
         # cluster location image
         plt.close()
         num_clusters = centroids.shape[0]
-        clusterMembersTrim = trimage(clusterMembers, char_wavelength)
+        clusterMembersTrim = trim_image(clusterMembers, char_wavelength)
         im = plt.imshow(clusterMembersTrim, cmap='jet')
         # get the unique colours of this plot
         values = np.unique(clusterMembersTrim.ravel())
@@ -253,18 +253,17 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         for plot in range(num_clusters):
             label_placement = np.linspace(start=0, stop=2*np.pi, num=len(categories))
         
-            # handle subplots
-            if num_clusters == 4: ax[plot] = plt.subplot(2, 2, plot+1, polar=True)
-            elif num_clusters == 8: ax[plot] = plt.subplot(2, 4, plot+1, polar=True)
-            elif num_clusters == 10: ax[plot] = plt.subplot(3, 4, plot+1, polar=True)
-            else: ax[plot] = plt.subplot(6, 4, plot+1, polar=True)
-            
-            # plot parameters to reproduce publication
-            if num_clusters == 4: xtickpos = 0.4; fsize = 12
-            elif num_clusters == 8: xtickpos = 0.48; fsize = 11
-            elif num_clusters == 10: xtickpos = 0.58; fsize = 10
-            else: xtickpos = 0.45; fsize = 11
-                
+            # handle subplot specifications
+            numrows = (num_clusters // 4) + (num_clusters % 4)
+            ax[plot] = plt.subplot(numrows, 4, plot+1, polar=True)
+
+            if numrows <= 3:
+                xtickpos = 0.55
+                fsize = 10
+            else:
+                xtickpos = 0.66
+                fsize = 9    
+
             ax[plot].set_title(label='Centroid {}'.format(plot), fontsize=fsize)
             ax[plot].set_xticks(label_placement, labels=categories, position=(0,xtickpos), fontsize=fsize)
             ax[plot].set_yticklabels([])
@@ -288,7 +287,7 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
         # overlay
         plt.figure()
         image_norm = (image-image.min()) / (image.max()-image.min())
-        image_trim = trimage(image_norm, char_wavelength)
+        image_trim = trim_image(image_norm, char_wavelength)
         plt.imshow(image_trim, cmap='gray')
         plt.imshow(defects, cmap = 'gray', alpha = 0.6)
         plt.axis('off')
@@ -299,21 +298,21 @@ def process_output(image, image_name, save_path, output_from, **kwargs) -> None:
     else: 
         raise ValueError(f"output_from parameter as {output_from} not recognized by process_output().")
 
-
-def imdiff(im1, im2):
-    r""" This function computes the normalized difference between two images.
+def image_difference(im1: np.ndarray, im2: np.ndarray):
+    r""" 
+    This function computes the normalized difference between two images. It was used to generate Figure 5 from ref.[1]_.
 
     Parameters
     ----------
-    im1 : np.ndarray
-        The first image.
-    im2 : np.ndarray
-        The second image.
+    * im1: np.ndarray
+        * The first image
+    * im2: np.ndarray
+        * The second image
         
     Returns
     -------
-    diff : np.ndarray
-        The normalized difference in the input images.
+    * diff: np.ndarray
+        * The normalized difference in the input images
 
     Notes
     -----
@@ -321,12 +320,9 @@ def imdiff(im1, im2):
     
     References
     ----------
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
-    Examples
-    --------
-    
     """
-    
     if im1.shape != im2.shape:
         raise RuntimeError("Must ensure both images are of same dimensions!")
     
@@ -339,32 +335,29 @@ def imdiff(im1, im2):
     
     return diff
 
-
-def trimage(im, l):
-    r""" Trim image based on characteristic wavelength (l). 
-        Useful for images post convolution.
+def trim_image(im: np.ndarray, l: float):
+    r""" 
+    Trim image edges based on characteristic wavelength (l). Useful for images post convolution, as edges can present distortions because of padded convolution.
 
     Parameters
     ----------
-    im : np.ndarray
-        The image to trim.
-    l : scalar
-        The characteristic wavelength
+    * im: np.ndarray
+        * The image to trim
+    * l: float
+        * The characteristic wavelength of the image[1]_
     
     Returns
     -------
-    The trimmed image.
+    The trimmed image
 
     Notes
     -----
+    The characteristic wavelength[1]_ is roughly the distance between feature centers, thus making it an appropriate size for image trim or truncation after convolution.
 
     References
     ----------
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
 
-    Examples
-    --------
-    
     """
-
     trim = int(l)
     return im[trim:-trim, trim:-trim]

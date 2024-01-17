@@ -15,7 +15,7 @@
 Due to these properties, they have seen extensive use in recent years, with several different formulations and applications:
 
 * Astronomy/astrophysics ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), [R. Massey (2005)](https://doi.org/10.48550/arXiv.astro-ph/0408445), [J. Berge (2019)](https://doi.org/10.48550/arXiv.1903.05837))
-* Nanomaterials ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307), [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353), [M. P. Tino (accepted)](https://github.com/uw-comphys/shapelets))
+* Nanomaterials ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307), [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353), [M. P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 * Computational neuroscience ([J. D. Victor (2006)](https://doi.org/10.1152/jn.00498.2005), [T. O. Sharpee (2009)](https://doi.org/10.1007%2Fs10827-008-0107-5))
 * Medical imaging ([J. Weissman (2004)](https://doi.org/10.1364/OPEX.12.005760))
 
@@ -29,7 +29,8 @@ The `shapelets` package provides reference documentation and code for four (4) s
 
 ## Installation
 
-Installing `shapelets` is highly dependent on the operating system of your machine. Package is currently compatible with Python 3.10.
+`shapelets` requires Python 3.10 or greater.
+Installing `shapelets` is highly dependent on the operating system of your machine. 
 
 ### Mac OS
 
@@ -95,8 +96,8 @@ They are summarized here:
 
 * Examples 1-3 use the `shapelets.self_assembly` sub-module to quantify order from microscopy images of materials (namely those from self-assembly):
     * The response distance method ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307))
-    * Local pattern orientation ([M. P. Tino (accepted)](https://github.com/uw-comphys/shapelets))
-    * Defect identification method ([M. P. Tino (accepted)](https://github.com/uw-comphys/shapelets))
+    * Local pattern orientation ([M. P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+    * Defect identification method ([M. P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 * Example 4 uses the `shapelets.astronomy` sub-module:
     * Galaxy decomposition and reconstruction ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))
 
