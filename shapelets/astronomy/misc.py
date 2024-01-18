@@ -102,7 +102,7 @@ def decompose_kernel(image: np.ndarray, n_max: int, beta: float, centroid: np.nd
     Returns
     -------
     * coefficients : np.ndarray (dtype=float)
-       * Matrix of shapelet coefficients representing the decomposition of the image
+        * Matrix of shapelet coefficients representing the decomposition of the image
 
     """
 

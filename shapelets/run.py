@@ -65,8 +65,6 @@ def run(config_file: str) -> None:
 
         # obtain characteristic wavelength, needed for all self-assembly applications
         char_wavelength = get_wavelength(image = image)
-        # obtain characteristic wavelength, needed for all self-assembly applications
-        char_wavelength = get_wavelength(image = image)
 
         if method == 'response_distance':
             shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
