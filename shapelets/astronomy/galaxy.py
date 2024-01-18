@@ -73,6 +73,13 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
         * Folder to store output images. If set to None (default), no images are saved
         
     """
+
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
+    if n_compress < 1:
+        raise ValueError('n_compress must be a non-negative, non-zero integer.')
+
     if output_path == None:
         print("No output path provided, galaxy decomposition comparisons will not be saved.")
 
@@ -201,10 +208,9 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
     if output_path != None:
         plt.savefig(f"{output_path}_map.png", format="png")
 
-    fig.text(0.5, 0.05, 'Close figure to Continue', horizontalalignment='center',
-             verticalalignment='center', fontsize=8)
-    
     if SHOW_STAMPS: 
+        fig.text(0.5, 0.05, 'Close figure to Continue', horizontalalignment='center',
+             verticalalignment='center', fontsize=8)
         plt.show()
 
     return galaxy_stamp_list, star_stamp_list, data
