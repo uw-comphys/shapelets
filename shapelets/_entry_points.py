@@ -20,10 +20,10 @@ import os
 import platform
 import sys 
 
-from .run import *
+from . import _run
 
-def run_shapelets():
-    r""" @private
+def _run_shapelets():
+    r"""
     Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file.      
 
     """
@@ -34,13 +34,13 @@ def run_shapelets():
 
     elif len(sys.argv) == 2: # if user did provide a configuration filename/path
         config_file = sys.argv[1]
-        run(config_file)
+        _run._run(config_file)
 
     else: # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
         raise RuntimeError('shapelets entry point only supports the config file name. I.e. "shapelets config".')
 
-def run_tests():
-    r""" @private
+def _run_tests():
+    r"""
     Main function that runs all the unit tests from shapelets/tests/ via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from the top-most shapelets directory.
     
     """

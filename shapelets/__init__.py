@@ -39,9 +39,9 @@ The shapelets package provides reference documentation and code for four (4) sha
 
 New users should kindly follow these instructions to use the shapelets package here:
 
-1. Consult the [installation instructions](https://mptino.github.io/shapelets/shapelets/docs/installation.html) page to install the shapelets package.
-2. Checkout the [custom commands and methods of usage](https://mptino.github.io/shapelets/shapelets/docs/usage.html) to see some important command-line features and how to interact with the shapelets package properly.
-3. Checkout the [examples](https://mptino.github.io/shapelets/shapelets/docs/examples.html) page for descriptive examples of specific applications implemented for the shapelets package.
+1. Consult the [installation instructions](https://uw-comphys.github.io/shapelets/shapelets/docs/installation.html) page to install the shapelets package.
+2. Checkout the [custom commands and methods of usage](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) to see some important command-line features and how to interact with the shapelets package properly.
+3. Checkout the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs/examples.html) page for descriptive examples of specific applications implemented for the shapelets package.
 
 If you wish to contribute to the shapelets package, see the [contribution guidelines](#contribute).  
 

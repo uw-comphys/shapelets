@@ -18,7 +18,7 @@ The shapelets package provides reference documentation and code for four (4) sha
 
 # Getting Started
 
-Users are directed to the shapelets [official website](https://mptino.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
+Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
 
 # Contribute
 

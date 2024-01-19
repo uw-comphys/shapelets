@@ -17,13 +17,13 @@
 
 r"""
 
-## [Installation](https://mptino.github.io/shapelets/shapelets/docs/installation.html)
+## [Installation](https://uw-comphys.github.io/shapelets/shapelets/docs/installation.html)
 
-## [Examples](https://mptino.github.io/shapelets/shapelets/docs/examples.html)
+## [Examples](https://uw-comphys.github.io/shapelets/shapelets/docs/examples.html)
 
-## [Custom Commands & Methods of Usage](https://mptino.github.io/shapelets/shapelets/docs/usage.html)
+## [Custom Commands & Methods of Usage](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html)
 
-## [Additional WSL Instructions](https://mptino.github.io/shapelets/shapelets/docs/WSL.html)
+## [Additional WSL Instructions](https://uw-comphys.github.io/shapelets/shapelets/docs/WSL.html)
 
 """
 
