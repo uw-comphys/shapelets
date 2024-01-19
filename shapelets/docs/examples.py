@@ -22,20 +22,12 @@ r"""
 The example files and scripts can be found in the [github example directory](https://github.com/uw-comphys/shapelets/tree/main/examples).
 Associated documentation can be found below and should be explored by all new users. 
 
-[**Example 1 - The Response Distance Method**](#example-1---response-distance-method)
 
-[**Example 2 - The Defect Identification Method**](#example-2---defect-identification-method)
-
-[**Example 3 - Local Pattern Orientation**](#example-3---local-pattern-orientation)
-
-[**Example 4 - Astronomical Image Decomposition**](#example-4---astronomical-image-decomposition)
-
-
-## Example 1 - Response Distance Method
+## Example 1 - Response Distance
 
 This example goes through the process of computing the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/3c49c36c5e88330389c87328e7babc92702ae07e/examples/example_1).
+The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
@@ -51,7 +43,7 @@ where $\vec{r_{i,j}}$ denotes the given response vector at pixel location $\{i, 
 
 ### Directory overview
 
-The example [directory](https://github.com/uw-comphys/shapelets/tree/3c49c36c5e88330389c87328e7babc92702ae07e/examples/example_1) should contain the following.
+The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) should contain the following.
 
 ![](images/example_1_dir.png)
 
@@ -186,11 +178,11 @@ After performing ``shapelets config`` (config method) or ``python3 -m example_1`
 * Failure to choose 4 points/corners (i.e., choosing less or more than 4) will restart the process automatically
 * It is critical to choose a region of the pattern that is appears to contain zero observable defects to maximize the response distance results
 
-## Example 2 - Defect Identification Method
+## Example 2 - Defect Identification
 
 This example goes through the process of computing the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_2).
+The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
@@ -214,7 +206,7 @@ The key observation is that cluster response vectors with larger defect response
 
 ### Directory overview
 
-The example [directory](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_2) should contain the following.
+The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) should contain the following.
 
 ![](images/example_2_dir.png)
 
@@ -348,7 +340,7 @@ To see the expected output, see the config method section [here](#config-method-
 
 This example goes through the process of computing the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_3).
+The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
@@ -368,7 +360,7 @@ The method to compute the local pattern orientation ([M.P. Tino (2024)](http://d
 
 ### Directory overview
 
-The example [directory](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_3) should contain the following.
+The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) should contain the following.
 
 ![](images/example_3_dir.png)
 
@@ -467,11 +459,11 @@ The output will be available in "shapelets/examples/example_3/output".
 
 To see the expected output, see the config method section [here](#config-method---running-config).
 
-## Example 4 - Astronomical Image Decomposition
+## Example 4 - Galactic Image Decomposition
 
 This example goes through the process of computing shapelet representations for a collection of galaxies using ``shapelets.astronomy`` submodule.
 
-The files for this example can be found [here](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_4).
+The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
@@ -497,7 +489,7 @@ Steps 2-3 are repeated for all galaxies identified by Source Extractor
 
 ### Directory overview
 
-The example [directory](https://github.com/mptino/shapelets/tree/742a88022330a6e18dc91b6a0dfe119c2d41da89/examples/example_4) should contain the following.
+The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) should contain the following.
 
 ![](images/example_4_dir.png)
 

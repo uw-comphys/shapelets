@@ -46,7 +46,7 @@ The instructions for Windows use WSL (Windows Subsystem for Linux).
 5. Install `git`, `python3.10`, `pip`, and a graphics library: `sudo apt-get install git python3.10 python3-pip libgl1-mesa-glx`
 6. Clone the repository: `git clone https://github.com/uw-comphys/shapelets.git`
 7. Navigate to the top-most directory (i.e. ./shapelets) and install this package: `pip3 install .`
-8. Follow the [enable custom commands](https://mptino.github.io/shapelets/shapelets/docs/wsl.html) instructions to be able to use the package's [custom commands](https://mptino.github.io/shapelets/shapelets/docs/usage.html) 
+8. Follow the [enable custom commands](https://mptino.github.io/shapelets/shapelets/docs/WSL.html) instructions to be able to use the package's [custom commands](https://mptino.github.io/shapelets/shapelets/docs/usage.html) 
 9. Ensure correct installation by running the unit tests [custom command](https://mptino.github.io/shapelets/shapelets/docs/usage.html) on the CLI: `shapelets-test`
 
 **Note** - if this is your first time installing Ubuntu on WSL, you may also need to follow the [enable graphics](https://mptino.github.io/shapelets/shapelets/docs/wsl.html) instructions to allow graphics support (i.e. figures from `matplotlib`).
