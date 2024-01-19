@@ -51,6 +51,10 @@ def decompose_analytic(image: np.ndarray, n_max: int, beta: float, centroid: np.
     Expands f into smallest square matrix that can contain f.
 
     """
+
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
     if nspace == None:
         nspace = get_nspace(n_max)
 
@@ -101,6 +105,10 @@ def decompose_kernel(image: np.ndarray, n_max: int, beta: float, centroid: np.nd
         * Matrix of shapelet coefficients representing the decomposition of the image
 
     """
+
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
     coefficients = np.zeros([n_max+1]*2)
     x = np.arange(0, image.shape[0]) - centroid[0]
     y = np.arange(0, image.shape[1]) - centroid[1]
@@ -144,6 +152,10 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
         * The reconstructed image
     
     """
+
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
     if nspace == None:
         nspace = get_nspace(n_max)
 
@@ -189,6 +201,10 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
     .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
 
     """
+
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
     if nspace == None:
         nspace = get_nspace(n_max)
 
@@ -217,6 +233,9 @@ def get_nspace(n_max: int) -> np.ndarray:
         * List of valid (n1, n2) combinations such that $n1 + n2 <= n_{max}$
 
     """
+    if n_max < 1:
+        raise ValueError('n_max must be a non-negative, non-zero integer.')
+
     nspace = np.ndarray(int(binom(n_max+2, 2)), dtype=tuple)
     
     k = 0
@@ -258,6 +277,10 @@ def get_compressed_nspace(s_coeff: np.ndarray, n_compress: int) -> np.ndarray:
     ```
 
     """
+
+    if n_compress < 1:
+        raise ValueError('n_compress must be a non-negative, non-zero integer.')
+
     if n_compress >= binom(s_coeff.shape[0]+2, 2):
         print('compression factor larger than availible coefficients')
         return get_nspace(s_coeff.shape[0])
