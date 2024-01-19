@@ -17,7 +17,6 @@
 
 import numbers
 import os
-import platform
 import unittest
 
 import numpy as np
@@ -40,11 +39,7 @@ class TestBasic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        if platform.system() == 'Windows':
-            cls.dir = __file__.replace(os.path.basename(__file__), 'images\\')
-        else:
-            cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
-
+        cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
         cls.lamSIM = read_image(image_name = "lamSIM1.png", image_path = cls.dir, verbose = False)
         cls.hexSIM = read_image(image_name = "hexSIM1.png", image_path = cls.dir, verbose = False)
 

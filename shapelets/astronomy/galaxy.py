@@ -53,7 +53,7 @@ class Stamp:
     xc: np.ndarray
     beta: float
 
-def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], data: np.ndarray, n_max: int, n_compress: int, output_path: str=None) -> None:
+def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], data: np.ndarray, n_max: int, n_compress: int, output_path: str=None, verbose: bool=True) -> None:
     r"""
     Decomposes a series of galaxies into a reduced shapelet representation.
 
@@ -71,6 +71,8 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
         * Length of truncated list of shapelet coefficients used to reconstruct astronomical data
     * output_path: str, optional
         * Folder to store output images. If set to None (default), no images are saved
+    * verbose: bool, optional
+        * True (default) to print out information to console
         
     """
 
@@ -80,7 +82,7 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
     if n_compress < 1:
         raise ValueError('n_compress must be a non-negative, non-zero integer.')
 
-    if output_path == None:
+    if output_path == None and verbose:
         print("No output path provided, galaxy decomposition comparisons will not be saved.")
 
     # run shapelet deconvolution on each galaxy stamp
@@ -110,7 +112,7 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
         else:
             create_plots(image, img1, img2, n_compress)
 
-def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: bool=True) -> tuple[list[Stamp], list[Stamp]]:
+def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: bool=True, verbose: bool=True) -> tuple[list[Stamp], list[Stamp]]:
     r"""
     Extracts a list of galaxy image stamps and star image stamps from the provided astronomical image data.
 
@@ -122,6 +124,8 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
         * Folder to store output images. If set to None (default), no images are saved
     * SHOW_STAMPS: bool, optional
         * If set to True (default) displays astronomical image data with stamps identified
+    * verbose: bool, optional
+        * True (default) to print out information to console
         
     Returns
     -------
@@ -133,7 +137,7 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
         * $n\times m$ array of astronomical image data, minus the background determined by the ``sep`` python package 
 
     """
-    if output_path == None:
+    if (output_path == None) and verbose:
         print("No output path provided, galaxy map image will not be saved")
 
     size = data.shape
@@ -142,7 +146,8 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
     bkg = sep.Background(data)
     data = data - bkg
 
-    print('searching for galaxies')
+    if verbose:
+        print('searching for galaxies')
     (objects, segments) = sep.extract(data, 1.5, err=bkg.globalrms, segmentation_map=True)
 
     if SHOW_STAMPS or output_path != None:
@@ -203,7 +208,8 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
             e2.set_edgecolor(colour)
             ax2.add_artist(e2)
 
-    print(f"\n found {len(galaxy_stamp_list)} Galaxies, {len(star_stamp_list)} Stars\n")
+    if verbose:
+        print(f"\n found {len(galaxy_stamp_list)} Galaxies, {len(star_stamp_list)} Stars\n")
     
     if output_path != None:
         plt.savefig(f"{output_path}_map.png", format="png")

@@ -16,7 +16,6 @@
 ########################################################################################################################
 
 import os
-import platform
 import unittest
 
 import numpy as np
@@ -49,12 +48,11 @@ class TestBasic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        if platform.system() == 'Windows':
-            cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
-        
+        cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
         cls.raw_data = load_fits_data(cls.dir+'galaxies.fits')
+
         assert(type(cls.raw_data) == np.ndarray) # raw_data type must be verified before calling get_postage_stamps
-        (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(cls.raw_data, SHOW_STAMPS=False)
+        (galaxy_stamps, _, noiseless_data) = get_postage_stamps(cls.raw_data, SHOW_STAMPS=False, verbose=False)
         assert(type(galaxy_stamps) == list) # must verify that function returns list. type of list elements will be verified in further tests
 
         cls.galaxy_stamps = galaxy_stamps

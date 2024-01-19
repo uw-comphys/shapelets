@@ -17,7 +17,6 @@
 
 import numbers 
 import os
-import platform
 import unittest
 
 import numpy as np
@@ -40,10 +39,7 @@ class TestMethods(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        if platform.system() == 'Windows':
-            cls.dir = __file__.replace(os.path.basename(__file__), 'images\\')
-        else:
-            cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
+        cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
 
         # Ensure core functions have appropriate outputs before proceeding.
         # Note that read_image and get_wavelength are not tested here, so inline asserts
