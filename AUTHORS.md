@@ -1,4 +1,4 @@
-## `Shapelets` Authors
+## shapelets Authors
 
 Matthew Peres Tino
 Abbas Yusuf Abdulaziz

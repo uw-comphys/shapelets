@@ -17,8 +17,6 @@
 
 r"""
 
-# Package Documentation
-
 ## [Installation](https://mptino.github.io/shapelets/shapelets/docs/installation.html)
 
 ## [Examples](https://mptino.github.io/shapelets/shapelets/docs/examples.html)

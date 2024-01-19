@@ -49,7 +49,7 @@ The instructions for Windows use WSL (Windows Subsystem for Linux).
 8. Follow the [enable custom commands](https://mptino.github.io/shapelets/shapelets/docs/WSL.html) instructions to be able to use the package's [custom commands](https://mptino.github.io/shapelets/shapelets/docs/usage.html) 
 9. Ensure correct installation by running the unit tests [custom command](https://mptino.github.io/shapelets/shapelets/docs/usage.html) on the CLI: `shapelets-test`
 
-**Note** - if this is your first time installing Ubuntu on WSL, you may also need to follow the [enable graphics](https://mptino.github.io/shapelets/shapelets/docs/wsl.html) instructions to allow graphics support (i.e. figures from `matplotlib`).
+**Note** - if this is your first time installing Ubuntu on WSL, you may also need to follow the [enable graphics](https://mptino.github.io/shapelets/shapelets/docs/WSL.html) instructions to allow graphics support (i.e. figures from `matplotlib`).
 
 ## Linux
 

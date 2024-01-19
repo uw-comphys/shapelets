@@ -31,7 +31,7 @@ The files for this example can be found [here](https://github.com/uw-comphys/sha
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary `shapelets` submodules and methods in a script-based format [here](#scripting-method---example_1py-breakdown)
+* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_1py-breakdown)
 
 ### Technical overview
 
@@ -130,7 +130,7 @@ This method is presented as an alternative to the configuration-file based user 
 
 The code breakdown is as follows,
 
-* Section 1: importing modules - imports the necessary modules from the `shapelets` package
+* Section 1: importing modules - imports the necessary modules from the shapelets package
 * Section 2: parameters - this contains the required parameters needed for the methods required to compute the response distance method (see [method parameters](#method-parameters) for details)
 * Section 3: code - this contains the code to compute the response distance method which involves the following steps:
 
@@ -186,7 +186,7 @@ The files for this example can be found [here](https://github.com/uw-comphys/sha
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary `shapelets` submodules and methods in a script-based format [here](#scripting-method---example_2py-breakdown)
+* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_2py-breakdown)
 
 ### Technical overview
 
@@ -303,7 +303,7 @@ This method is presented as an alternative to the configuration-file based user 
 
 The code breakdown is as follows,
 
-* Section 1: importing modules - imports the necessary modules from the `shapelets` package
+* Section 1: importing modules - imports the necessary modules from the shapelets package
 * Section 2: parameters - this contains the required parameters needed for the methods required to compute the defect identification method (see [method parameters](#method-parameters) for details)
 * Section 3: code - this contains the code to compute the defect identification method which involves the following steps:
 
@@ -344,7 +344,7 @@ The files for this example can be found [here](https://github.com/uw-comphys/sha
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary `shapelets` submodules and methods in a script-based format [here](#scripting-method---example_3py-breakdown)
+* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_3py-breakdown)
 
 ### Technical overview
 
@@ -437,7 +437,7 @@ This method is presented as an alternative to the configuration-file based user 
 
 The code breakdown is as follows,
 
-* Section 1: importing modules - imports the necessary modules from the `shapelets` package
+* Section 1: importing modules - imports the necessary modules from the shapelets package
 * Section 2: parameters - this contains the required parameters needed for the methods required to compute the local pattern orientation method (see [method parameters](#method-parameters) for details)
 * Section 3: code - this contains the code to compute the local pattern orientation which involves the following steps:
 
@@ -467,7 +467,7 @@ The files for this example can be found [here](https://github.com/uw-comphys/sha
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
 * (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary `shapelets` submodules and methods in a script-based format [here](#scripting-method---example_4py-breakdown)
+* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_4py-breakdown)
 
 ### Technical overview
 
@@ -570,7 +570,7 @@ This method is presented as an alternative to the configuration-file based user 
 
 The code breakdown is as follows,
 
-* Section 1: importing modules - imports the necessary modules from the `shapelets` package
+* Section 1: importing modules - imports the necessary modules from the shapelets package
 * Section 2: parameters - this contains the required parameters needed for the methods required to decompose an image containing multiple galaxies and reconstruct in terms of shapelet functions (see [method parameters](#method-parameters) for details)
 * Section 3: code - this contains the code for the decomposition which involves the following steps:
 

@@ -23,7 +23,7 @@ import sys
 from .run import *
 
 def run_shapelets():
-    r""" 
+    r""" @private
     Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file.      
 
     """
@@ -40,7 +40,7 @@ def run_shapelets():
         raise RuntimeError('shapelets entry point only supports the config file name. I.e. "shapelets config".')
 
 def run_tests():
-    r"""
+    r""" @private
     Main function that runs all the unit tests from shapelets/tests/ via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from the top-most shapelets directory.
     
     """

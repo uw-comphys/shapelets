@@ -62,8 +62,6 @@ If you encounter any **bugs** or **problems** with shapelets, please create a po
 
 # Authors
 
-shapelets package authors:
-
 * Matthew Peres Tino
 * Abbas Yusuf Abdulaziz 
 * Nasser Mohieddin Abukhdeir
