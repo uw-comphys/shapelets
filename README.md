@@ -1,4 +1,12 @@
-# What is shapelets? 
+# shapelets
+
+[**Summary**](#what-is-shapelets?)
+| [**Getting Started**](#getting-started)
+| [**Contribute**](#contribute)
+| [**Issues**](#issues)
+| [**Authors**](#authors)
+
+## What is shapelets? 
 
 shapelets is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
 
@@ -16,11 +24,11 @@ The shapelets package provides reference documentation and code for four (4) sha
 * Orthonormal polar shapelets with constant radial scale ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353)), and 
 * Exponential shapelets ([J. Berge (2019)](https://doi.org/10.48550/arXiv.1903.05837))
 
-# Getting Started
+## Getting Started
 
 Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
 
-# Contribute
+## Contribute
 
 The authors of the shapelets package welcome external contributions to the source code. This process will be easiest if users adhere to the contribution policy:
 
@@ -29,11 +37,11 @@ The authors of the shapelets package welcome external contributions to the sourc
 * Test your modifications to ensure that the core functionality of the package has not been altered by running the unit tests via the custom command: `shapelets-test`
 * Once the issue has been discussed with a package author, you may open a pull request containing your modifications
 
-# Issues
+## Issues
 
 If you encounter any **bugs** or **problems** with shapelets, please create a post using our package [issue tracker](https://github.com/uw-comphys/shapelets/issues). Please provide a clear and concise description of the problem, with images or code-snippets where appropriate. We will do our best to address these problems as fast and efficiently as possible.
 
-# Authors
+## Authors
 
 * Matthew Peres Tino
 * Abbas Yusuf Abdulaziz 
