@@ -73,7 +73,7 @@ The table below summarizes the specific shapelet applications implemented in thi
 | Orientation                     | Local pattern orientation for self-assembly microscopy imaging [@Tino2024] via `shapelets.self_assembly.orientation`                    |
 | Defect identification     | Defect identification method for self-assembly microscopy imaging [@Tino2024] via `shapelets.self_assembly.defectid`                    |
 
-More information, such as installation instructions and application-specific examples can be found in the package [README](https://github.com/uw-comphys/shapelets) file.
+More information, such as installation instructions and application-specific examples can be found on the package [website](https://uw-comphys.github.io/shapelets) file.
 
 # User Interface Methods
 
@@ -85,7 +85,7 @@ The text-based user interface for `shapelets` is centered around configuration f
 
 ![Sample directory hierarchy.\label{fig:sample_dir}](images/user_interface.png){ width=40% }
 
-The main (shapelets_example) directory contains the main configuration file (e.g., `config`) which is a plain-text file specifying specific parameters or methods to be used. Acceptable parameters and options for the configuration file can be found throughout the [examples](https://github.com/uw-comphys/shapelets/tree/main/examples), depending on the shapelet-based method being applied.
+The main (shapelets_example) directory contains the main configuration file (e.g., `config`) which is a plain-text file specifying specific parameters or methods to be used. Acceptable parameters and options for the configuration file can be found throughout the examples, depending on the shapelet-based method being applied.
 
 The `images/` subdirectory contains the data for image analysis and must be present. The `output/` subdirectory is created by the `shapelets` software and contains output data/images based on the analysis directed in the `config`.
 
@@ -93,14 +93,14 @@ Alternatively, the Python-based software interface of the `shapelets` package ca
 
 # Examples of Usage
 
-For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See [here](https://github.com/uw-comphys/shapelets/tree/main/examples) and [here](https://github.com/uw-comphys/shapelets/tree/main/docs/examples) for examples and their associated documentation, respectively.
+For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See the package [website](https://uw-comphys.github.io/shapelets) for more example details and documentation, and the package [code](https://github.com/uw-comphys/shapelets) for related files.
 
-Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], local pattern orientation [@Tino2024], and defect identification method [@Tino2024].
+Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], defect identification method [@Tino2024], and local pattern orientation [@Tino2024] (respectively).
 Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images. All examples have instructions to use the `shapelets` package via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here.
 
 ## Example 1 - Response Distance Method
 
-[Example 1](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:lamSIM1}.
+Example 1 demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example will use a simulated stripe self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:lamSIM1}.
 
 ![Simulated stripe self-assembly nanostructure [@Suderman2015].\label{fig:lamSIM1}](images/lamSIM1.png){ width=40% }
 
@@ -128,15 +128,15 @@ where
 * *num_clusters* details the number of clusters required for k-means clustering [@Wu2012], and
 * [*ux*, *uy*] detail the coordinates of the user-defined reference subdomain required for the response distance method [@Suderman2015].
 
-*Note - the shapelet_order parameter in this example is based on the definition from [Akdeniz et al. (2018)](https://doi.org/10.1088/1361-6528/aaf353). This is different from the definition used in astronomy methods in this package.*
+*Note - the shapelet_order parameter in this example is based on the definition from [Akdeniz et al. (2018)](https://doi.org/10.1088/1361-6528/aaf353). This is different from the definition used in `shapelet.astronomy` methods/examples.
 
-Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst) under the section "Method parameters".
+Possible values for each parameter, including default values where applicable, are available in the example's documentation on the package [website](https://uw-comphys.github.io/shapelets).
 
 To run this example, navigate the terminal directory to "shapelets/examples/example_1". Then, type `shapelets config` into the command line. The outputs, shown in \autoref{fig:lamSIM1_RD}, will be available in "shapelets/examples/example_1/output", containing the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
 
 ![Response distance (left) with superimposition onto \autoref{fig:lamSIM1} (right).\label{fig:lamSIM1_RD}](images/lamSIM1_response_distance_k20.png){ width=80% }
 
-**Note** - typically, you may not know the **ux** and **uy** parameters for the image when computing the response distance for the first time. If this is the case, please see the section "Selecting subdomain bounds during runtime" in the [Example 1 documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_1.rst).
+**Note** - typically, you may not know the **ux** and **uy** parameters for the image when computing the response distance for the first time. If this is the case, please see the section "Selecting subdomain bounds during runtime" in the Example 1 documentation.
 
 ### Scripting Method
 
@@ -146,7 +146,7 @@ After executing `example_1.py`, the outputs (\autoref{fig:lamSIM1_RD}) will be a
 
 ## Example 2 - Defect Identification Method
 
-[Example 2](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2024]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:hexSIM1}.
+Example 2 demonstrates use of the `shapelets.self_assembly` submodule to compute the defect identification method [@Tino2024]. This example will use a simulated hexagonal self-assembly microscopy image [@Suderman2015], shown in \autoref{fig:hexSIM1}.
 
 ![Simulated hexagonal self-assembly nanostructure [@Suderman2015].\label{fig:hexSIM1}](images/hexSIM1.png){ width=40% }
 
@@ -177,11 +177,11 @@ where
 * *pattern_order* details the dominant pattern symmetry in the image *image_name*, and
 * *num_clusters* details the number of clusters desired for k-means clustering [@Wu2012].
 
-Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_2.rst) under section "Method parameters".
+Possible values for each parameter, including default values where applicable, are available in the example's documentation on the package [website](https://uw-comphys.github.io/shapelets).
 
 To run this example, navigate the terminal directory to "shapelets/examples/example_2". Then, type `shapelets config` into the command line.
 
-You will be required to select the clusters associated with defects or defect structures during runtime. Details for this specific process can be found in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_2.rst) under section "Config method - running config" or "Scripting method - executing example_2.py", depending on the preferred package interface method.
+You will be required to select the clusters associated with defects or defect structures during runtime. Details for this specific process can be found in the example's documentation on the package [website](https://uw-comphys.github.io/shapelets).
 
 The outputs, shown in \autoref{fig:hexSIM1_defectid}, will be available in "shapelets/examples/example_2/output", containing the following four images corresponding to (1) the locations of each cluster through the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) this scalar field superimposed onto the original image.
 
@@ -195,7 +195,7 @@ After executing `example_2.py`, the outputs (\autoref{fig:hexSIM1_defectid}) wil
 
 ## Example 4 - Galactic Image Decomposition & Reconstruction
 
-[Example 4](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) demonstrates use of the `shapelets.astronomy` submodule to decompose a collection of galaxies into a linear combination of shapelet functions. This example will use a subset of galaxies from the Hubble Deep Field North [@Refregier2003], shown in \autoref{fig:galaxies}.
+Example 4 demonstrates use of the `shapelets.astronomy` submodule to decompose a collection of galaxies into a linear combination of shapelet functions. This example will use a subset of galaxies from the Hubble Deep Field North [@Refregier2003], shown in \autoref{fig:galaxies}.
 
 ![Galaxy image subset for analysis: linear (left) and mean normalized (right) greyscale images.\label{fig:galaxies}](images/galaxies.png){ width=80% }
 
@@ -224,9 +224,9 @@ where
 * *shapelet_order* details the maximum order of shapelets used in the decomposition, and
 * *compression_order* details the number of significant shapelet coefficients used in the final reconstruction.
 
-*Note - the shapelet_order parameter in this example is based on the definition from [Refregier et al. (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x). This is different from the definition used in self-assembly methods in this package.*
+*Note - the shapelet_order parameter in this example is based on the definition from [Refregier et al. (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x). This is different from the definition used in `shapelet.self_assembly` methods/examples.*
 
-Possible values for each parameter, including default values where applicable, are available in the [documentation](https://github.com/uw-comphys/shapelets/blob/main/docs/examples/example_4.rst) under section "Method parameters".
+Possible values for each parameter, including default values where applicable, are available in the example's documentation on the package [website](https://uw-comphys.github.io/shapelets).
 
 To run this example, navigate the terminal directory to "shapelets/examples/example_4". Then, type `shapelets config` into the command line.
 
