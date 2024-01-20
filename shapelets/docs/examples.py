@@ -30,8 +30,8 @@ This example goes through the process of computing the response distance method 
 The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_1py-breakdown)
+* (1) the configuration-file based user interface 
+* (2) importing neccessary shapelets submodules and methods in a script-based format
 
 ### Technical overview
 
@@ -73,7 +73,7 @@ The *response_distance* section of the configuration file contains four paramete
 	ux = [50, 80]
 	uy = [150, 180]
 		
-These parameters are explained in detail in the [next section](#method-parameters).
+These parameters are explained in detail in the next section.
 
 ### Method parameters
 
@@ -83,25 +83,25 @@ Note these parameters are the same if using the configuration-file based method 
 
 These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
 
-* **shapelet_order** 
+**shapelet_order** 
 
-	* int - integer, compute convolution for maximum shapelet order $m'$, i.e. $m \in [1, m']$
-	* default = $m'$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+* int - integer, compute convolution for maximum shapelet order $m'$, i.e. $m \in [1, m']$
+* default = $m'$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
-* **num_clusters**
+**num_clusters**
 
-	* int - integer (including 0, which will not perform k-means clustering and use all response vectors in subdomain)
-	* default = 20 (see [T. Akdeniz (2018](https://doi.org/10.1088/1361-6528/aaf353]))
+* int - integer (including 0, which will not perform k-means clustering and use all response vectors in subdomain)
+* default = 20 (see [T. Akdeniz (2018](https://doi.org/10.1088/1361-6528/aaf353]))
 
-* **ux**
+**ux**
 
-	* list - I.e., [10, 20], this would represent the lower and upper bound for the user-defined subdomain in x-direction respectively
-	* default = 'default', user select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
+* list - I.e., [10, 20], this would represent the lower and upper bound for the user-defined subdomain in x-direction respectively
+* default = 'default', user select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
 
-* **uy** 
+**uy** 
 
-	* list - I.e., [30, 40], this would represent the lower and upper bound for the user-defined subdomain in y-direction respectively
-	* default = 'default', user select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
+* list - I.e., [30, 40], this would represent the lower and upper bound for the user-defined subdomain in y-direction respectively
+* default = 'default', user select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
 
 **NOTE**
 
@@ -131,14 +131,14 @@ This method is presented as an alternative to the configuration-file based user 
 The code breakdown is as follows,
 
 * Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the response distance method (see [method parameters](#method-parameters) for details)
+* Section 2: parameters - this contains the required parameters needed for the methods required to compute the response distance method (see Method parameters section for details)
 * Section 3: code - this contains the code to compute the response distance method which involves the following steps:
 
-	* 3.1: image and output directory handling
-	* 3.2: get the characteristic wavelength of the pattern
-	* 3.3: get the convolutional response 
-	* 3.4: compute the response distance 
-	* 3.5: processing and saving the results to the **output/** directory 
+	3.1: image and output directory handling
+	3.2: get the characteristic wavelength of the pattern
+	3.3: get the convolutional response 
+	3.4: compute the response distance 
+	3.5: processing and saving the results to the **output/** directory 
 
 ### Scripting method - executing example_1.py
 
@@ -149,8 +149,6 @@ When you are ready, type ``python3 -m example_1`` (for MAC OS and LINUX users).
 For WINDOWS users, please use ``python -m example_1`` .
 
 The output will be available in "shapelets/examples/example_1/output".
-
-To see the expected output, see the config method section [here](#config-method---running-config).
 
 ### Selecting subdomain bounds during runtime
 
@@ -185,8 +183,8 @@ This example goes through the process of computing the defect identification met
 The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_2py-breakdown)
+* (1) the configuration-file based user interface 
+* (2) importing neccessary shapelets submodules and methods in a script-based format
 
 ### Technical overview
 
@@ -234,7 +232,7 @@ The *identify_defects* section of the configuration file contains two parameters
 	pattern_order = hexagonal
 	num_clusters = 10
 	
-These parameters are explained in detail in the [next section](#method-parameters).
+These parameters are explained in detail in the next section.
 
 ### Method parameters
 
@@ -244,19 +242,19 @@ Note these parameters are the same if using the configuration-file based method 
 
 These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
 
-* **pattern_order**
+**pattern_order**
 
-	* stripe - used when image contains a stripe self-assembly pattern
-	* square - used when image contains a square self-assembly pattern
-	* hexagonal - used when image contains a hexagonal self-assembly pattern
-	* default = not applicable
+* stripe - used when image contains a stripe self-assembly pattern
+* square - used when image contains a square self-assembly pattern
+* hexagonal - used when image contains a hexagonal self-assembly pattern
+* default = not applicable
 
-* **num_clusters** 
+**num_clusters** 
 
-	* int - integer (0 not accepted)
-	* default (if pattern_order = stripe) = 4
-	* default (if pattern_order = square) = 8
-	* default (if pattern_order = hexagonal) = 10
+* int - integer (0 not accepted)
+* default (if pattern_order = stripe) = 4
+* default (if pattern_order = square) = 8
+* default (if pattern_order = hexagonal) = 10
 
 **NOTE**
 
@@ -304,14 +302,14 @@ This method is presented as an alternative to the configuration-file based user 
 The code breakdown is as follows,
 
 * Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the defect identification method (see [method parameters](#method-parameters) for details)
+* Section 2: parameters - this contains the required parameters needed for the methods required to compute the defect identification method (see Method parameters section for details)
 * Section 3: code - this contains the code to compute the defect identification method which involves the following steps:
 
-	* 3.1: image and output directory handling
-	* 3.2: get the characteristic wavelength of the pattern
-	* 3.3: get the convolutional response 
-	* 3.4: compute the defect identification method
-	* 3.5: processing and saving the results to the **output/** directory 
+	3.1: image and output directory handling
+	3.2: get the characteristic wavelength of the pattern
+	3.3: get the convolutional response 
+	3.4: compute the defect identification method
+	3.5: processing and saving the results to the **output/** directory 
 
 ### Scripting method - executing example_2.py
 
@@ -334,8 +332,6 @@ You will then be prompted to select the clusters you wish to identify as associa
 
 The output will be available in "shapelets/examples/example_2/output".
 
-To see the expected output, see the config method section [here](#config-method---running-config).
-
 ## Example 3 - Local Pattern Orientation
 
 This example goes through the process of computing the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
@@ -343,8 +339,8 @@ This example goes through the process of computing the local pattern orientation
 The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_3py-breakdown)
+* (1) the configuration-file based user interface 
+* (2) importing neccessary shapelets submodules and methods in a script-based format
 
 ### Technical overview
 
@@ -387,7 +383,7 @@ The *orientation* section of the configuration file contains one parameter.
 	[orientation]
 	pattern_order = square
 
-These parameters are explained in detail in the [next section](#method-parameters).
+These parameters are explained in detail in the next section.
 
 ### Method parameters
 
@@ -397,12 +393,12 @@ Note these parameters are the same if using the configuration-file based method 
 
 These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
 
-* **pattern_order**
+**pattern_order**
 
-	* stripe - used when image contains a stripe self-assembly pattern
-	* square - used when image contains a square self-assembly pattern
-	* hexagonal - used when image contains a hexagonal self-assembly pattern
-	* default = not applicable
+* stripe - used when image contains a stripe self-assembly pattern
+* square - used when image contains a square self-assembly pattern
+* hexagonal - used when image contains a hexagonal self-assembly pattern
+* default = not applicable
 
 **Note**
 
@@ -438,14 +434,14 @@ This method is presented as an alternative to the configuration-file based user 
 The code breakdown is as follows,
 
 * Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the local pattern orientation method (see [method parameters](#method-parameters) for details)
+* Section 2: parameters - this contains the required parameters needed for the methods required to compute the local pattern orientation method (see Method parameters section for details)
 * Section 3: code - this contains the code to compute the local pattern orientation which involves the following steps:
 
-	* 3.1: image and output directory handling
-	* 3.2: get the characteristic wavelength of the pattern
-	* 3.3: get the convolutional response 
-	* 3.4: compute the local pattern orientation
-	* 3.5: processing and saving the results to the **output/** directory 
+	3.1: image and output directory handling
+	3.2: get the characteristic wavelength of the pattern
+	3.3: get the convolutional response 
+	3.4: compute the local pattern orientation
+	3.5: processing and saving the results to the **output/** directory 
 
 ### Scripting method - executing example_3.py
 
@@ -457,8 +453,6 @@ For WINDOWS users, please use ``python -m example_3`` .
 
 The output will be available in "shapelets/examples/example_3/output".
 
-To see the expected output, see the config method section [here](#config-method---running-config).
-
 ## Example 4 - Galactic Image Decomposition
 
 This example goes through the process of computing shapelet representations for a collection of galaxies using ``shapelets.astronomy`` submodule.
@@ -466,8 +460,8 @@ This example goes through the process of computing shapelet representations for 
 The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4).
 
 **NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface [here](#config-method---config-setup)
-* (2) importing neccessary shapelets submodules and methods in a script-based format [here](#scripting-method---example_4py-breakdown)
+* (1) the configuration-file based user interface 
+* (2) importing neccessary shapelets submodules and methods in a script-based format
 
 ### Technical overview
 
@@ -517,7 +511,7 @@ The *galaxy_decompose* section of the configuration file contains two parameters
 	shapelet_order = default 
 	compression_order = 20 
 
-These parameters are explained in detail in the [next section](#method-parameters).
+These parameters are explained in detail in the next section.
 
 ### Method parameters
 
@@ -527,19 +521,19 @@ Note these parameters are the same if using the configuration-file based method 
 
 These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
 
-* **fits_name** 
+**fits_name** 
 
-	* str - string, path to the .fits data file containing the astronomical data
+* str - string, path to the .fits data file containing the astronomical data
 
-* **shapelet_order** 
+**shapelet_order** 
 
-	* int - integer, maximum shapelet order to calculate coefficients such that $n_1 + n_2 \leq n_{max}$
-	* default = 10
+* int - integer, maximum shapelet order to calculate coefficients such that $n_1 + n_2 \leq n_{max}$
+* default = 10
 
-* **compression_order** 
+**compression_order** 
 
-	* int - integer,  number of shapelet coefficients to use for final image reconstruction
-	* default = 25
+* int - integer,  number of shapelet coefficients to use for final image reconstruction
+* default = 25
 
 **Note**
 
@@ -571,12 +565,12 @@ This method is presented as an alternative to the configuration-file based user 
 The code breakdown is as follows,
 
 * Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to decompose an image containing multiple galaxies and reconstruct in terms of shapelet functions (see [method parameters](#method-parameters) for details)
+* Section 2: parameters - this contains the required parameters needed for the methods required to decompose an image containing multiple galaxies and reconstruct in terms of shapelet functions (see Method parameters section for details)
 * Section 3: code - this contains the code for the decomposition which involves the following steps:
 
-	* 3.1: loading .fits data and output directory handling
-	* 3.2: identifying areas in the image that contain decomposable galaxies
-	* 3.3: starting with the biggest galaxy, decomposes subdomain into a collection of shapelet coefficients
+	3.1: loading .fits data and output directory handling
+	3.2: identifying areas in the image that contain decomposable galaxies
+	3.3: starting with the biggest galaxy, decomposes subdomain into a collection of shapelet coefficients
 
 ### Scripting method - executing example_4.py
 
@@ -587,7 +581,5 @@ When you are ready, type :code:`python3 -m example_4` (for MAC OS and LINUX user
 For WINDOWS users, please use ``python -m example_4`` .
 
 The output will be available in "shapelets/examples/example_4/output".
-
-To see the expected output, see the config method section [here](#config-method---running-config).
 
 """
