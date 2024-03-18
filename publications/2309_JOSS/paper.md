@@ -47,9 +47,9 @@ Lastly, the `shapelets` package includes a set of detailed examples which demons
 
 # Statement of Need
 
-Shapelets are a class of complete localized orthogonal basis functions with a broad range of applications in image processing and reconstruction [@Refregier2003; @Massey2005; @Suderman2015; @Akdeniz2018; @Tino2024]. Despite their increasingly widespread use, there is currently no single software package that is both broadly accessible (e.g. written in Python or other high-level programming language) and implements several useful applications. Currently, there exists an open source astronomy-focused [shapelet software package](https://www.astro.dur.ac.uk/~rjm/shapelets/code/index.php) [@Massey2005], however, it is written in the Interactive Data Language (IDL) programming language which is not widely used in the science and engineering communities. Furthermore, this package has not been updated in over a decade. Given the increasingly broad usage of shapelets in areas outside of astronomy/astrophysics, an open source Python-based shapelets software package would provide access to these functions and their applications for a larger community, along with facilitating open-source scientific software development through the existence of a centralized software package that allows for contribution and collaboration.
+Shapelets are a class of complete localized orthogonal basis functions with a broad range of applications in image processing and reconstruction [@Refregier2003; @Massey2005; @Suderman2015; @Akdeniz2018; @Tino2024]. Despite their increasingly widespread use, there is currently no single software package that is both broadly accessible (e.g. written in Python or other high-level programming language) and implements several useful applications. Currently, there exists an open-source astronomy-focused [shapelet software package](https://www.astro.dur.ac.uk/~rjm/shapelets/code/index.php) [@Massey2005], however, it is written in the Interactive Data Language (IDL) programming language which is not widely used in the science and engineering communities. Furthermore, this package has not been updated in over a decade. Given the increasingly broad usage of shapelets in areas outside of astronomy/astrophysics, an open-source Python-based shapelets software package would provide access to these functions and their applications for a larger community, along with facilitating open-source scientific software development through the existence of a centralized software package that allows for contribution and collaboration.
 
-Similarly, quantification of structure/property relationships for nanomaterials is critical for continued progress in materials research [@Abukhdeir2016]. This is especially true for nanomaterials with complex spatially-varying patterns, such as self-assembled materials [@Abukhdeir2016]. There are other methods to quantify nanostructure order, such as bond-orientational order analysis [@Brock1992], but these methods do not provide pixel-scale information and do not have readily available open-source software implementations. Methods to quantify nanostructure order, such as those implemented in the `shapelets` package, would significantly advance (nano)materials research and provide researchers with accessible tools to quantify order for their own material images.
+Similarly, quantification of structure-property relationships for nanomaterials is critical for continued progress in materials research [@Abukhdeir2016; @Tino2024]. This is especially true for nanomaterials with complex spatially-varying patterns, such as self-assembled materials [@Abukhdeir2016]. There are other methods to quantify nanostructure order, such as bond-orientational order analysis [@Brock1992], but these methods do not provide pixel-scale information and do not have readily available open-source software implementations. Methods to quantify nanostructure order, such as those implemented in the `shapelets` package, would significantly advance (nano)materials research and provide researchers with accessible tools to quantify order for their own material images.
 
 The overall aim of the `shapelets` package is to address these needs through (1) providing well-documented and accessible code for researchers interested in using these shapelet functions and existing applications and (2) promoting open-source collaboration for future development of shapelet-related research.
 
@@ -81,7 +81,7 @@ The `shapelets` Python package can be used in two different ways: text-based con
 
 ## Understanding the Configuration File Method
 
-The text-based user interface for `shapelets` is centered around configuration files and the CLI (command line interface). Each use of the shapelets package (via configuration files) should have a main directory (here called "shapelets_example") with standard sub-directories and required files as shown in \autoref{fig:sample_dir}.
+The text-based user interface for `shapelets` is centered around configuration files and the CLI (command line interface). Each use of the shapelets package (via configuration files) should have a main directory (here called "shapelets_example") with standard subdirectories and required files as shown in \autoref{fig:sample_dir}.
 
 ![Sample directory hierarchy.\label{fig:sample_dir}](images/user_interface.png){ width=40% }
 
@@ -93,7 +93,7 @@ Alternatively, the Python-based software interface of the `shapelets` package ca
 
 For each example included in the package, implementations using both the configuration file and programming-based interfaces are demonstrated. Several detailed image processing examples were developed that demonstrate the use and capabilities of the shapelets package for both astronomy and self-assembly related applications. See the package [website](https://uw-comphys.github.io/shapelets) for more example details and documentation, and the package [code](https://github.com/uw-comphys/shapelets) for related files.
 
-Examples 1-3 demonstrate use of the `shapelets.self_assembly` module, with specific applications for the response distance method [@Suderman2015], defect identification method [@Tino2024], and local pattern orientation [@Tino2024] (respectively).
+Examples 1-3 demonstrate use of the `shapelets.self_assembly` submodule, with specific applications for the response distance method [@Suderman2015], defect identification method [@Tino2024], and local pattern orientation [@Tino2024] (respectively).
 
 Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomposition and reconstruction of galactic images [@Refregier2003]. All examples have instructions to use the `shapelets` package either via configuration files or importing relevant submodules in pre-configured `.py` files (scripting). Examples 1, 2, and 4 are shown here.
 
@@ -101,7 +101,7 @@ Example 4 demonstrates use of the `shapelets.astronomy` submodule for the decomp
 
 Example 1 demonstrates use of the `shapelets.self_assembly` submodule to compute the response distance method [@Suderman2015]. This example uses a simulated stripe self-assembled surface microscopy image [@Suderman2015], shown in \autoref{fig:lamSIM1}.
 
-![Simulated stripe self-assembly nanostructure [@Suderman2015].\label{fig:lamSIM1}](images/lamSIM1.png){ width=40% }
+![Simulated stripe self-assembled nanostructured surface [@Suderman2015].\label{fig:lamSIM1}](images/lamSIM1.png){ width=40% }
 
 ### Response Distance
 
@@ -127,9 +127,9 @@ where
 * *num_clusters* specifies the number of clusters required for k-means clustering [@Wu2012], and
 * [*ux*, *uy*] specifies the coordinates of the user-defined reference subdomain required for the response distance method [@Suderman2015].
 
-*Note - the shapelet_order parameter in this example is based on the definition from [Akdeniz et al. (2018)](https://doi.org/10.1088/1361-6528/aaf353). This is different from the definition used in `shapelet.astronomy` methods/examples.*
+*Note - the shapelet_order parameter in this example is based on the orthonormal polar shapelet definition from [Akdeniz et al. (2018)](https://doi.org/10.1088/1361-6528/aaf353).*
 
-Possible values for each parameter, including default values where applicable, are available in the example documentation in the package [website](https://uw-comphys.github.io/shapelets). To run this example, navigate to the directory `shapelets/examples/example_1`. Then, execute `shapelets config` via the command line. The output, shown in \autoref{fig:lamSIM1_RD}, will be available in `shapelets/examples/example_1/output`, and contains the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
+Possible values for each parameter, including default values where applicable, are available in the example documentation in the package [website](https://uw-comphys.github.io/shapelets). To run this example, navigate to the directory `shapelets/examples/example_1`. Then, execute `shapelets config` via the command line. The output, shown in \autoref{fig:lamSIM1_RD}, is created in `shapelets/examples/example_1/output`, and contains the following two images corresponding to the response distance scalar field and the superimposed field on the original image.
 
 ![Response distance (left) superimposed onto \autoref{fig:lamSIM1} (right).\label{fig:lamSIM1_RD}](images/lamSIM1_response_distance_k20.png){ width=80% }
 
@@ -137,7 +137,7 @@ Possible values for each parameter, including default values where applicable, a
 
 ### Scripting Method
 
-For users wishing to interact with the `shapelets` package programmatically, the `example_1.py` file is provided and yields the same output as seen above without any code modifications needed. After executing `example_1.py`, the output (\autoref{fig:lamSIM1_RD}) will be available in "shapelets/examples/example_1/output".
+For users wishing to interact with the `shapelets` package programmatically, the `example_1.py` file is provided and yields the same output as seen above without any code modifications needed. After executing `example_1.py`, the output (\autoref{fig:lamSIM1_RD}) is created in `shapelets/examples/example_1/output`.
 
 ## Example 2 - Defect Identification Method
 
@@ -168,13 +168,13 @@ where
 
 Possible values for each parameter, including default values where applicable, are available in the example documentation in the package [website](https://uw-comphys.github.io/shapelets). To execute this example, navigate the terminal directory to "shapelets/examples/example_2". Then, execute `shapelets config` via the command line interface. The user will be required to select the clusters associated with defects or defect structures during runtime. Details for this specific process can be found in the example documentation in the package [website](https://uw-comphys.github.io/shapelets).
 
-The output, shown in \autoref{fig:hexSIM1_defectid}, is created in `shapelets/examples/example_2/output`, containing the following four images corresponding to (1) the locations of each cluster within the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) the defect response distance scalar field superimposed onto the original image.
+The output, shown in \autoref{fig:hexSIM1_defectid}, is created in `shapelets/examples/example_2/output`, containing four images corresponding to (1) the locations of each cluster within the image, (2) radar chart representations of the centroid response vectors from k-means clustering [@Wu2012], (3) the defect response distance scalar field, and (4) the defect response distance scalar field superimposed onto the original image.
 
 ![Defect identification method [@Tino2024] applied to \autoref{fig:hexSIM1}.\label{fig:hexSIM1_defectid}](images/hexSIM1_defectid.png){ width=80% }
 
 ### Scripting Method
 
-For users wishing to interact with the `shapelets` package programmatically, the `example_2.py` file is provided and yields the same output as seen above without any code modifications needed. After executing `example_2.py`, the outputs (\autoref{fig:hexSIM1_defectid}) will be available in `shapelets/examples/example_2/output`.
+For users wishing to interact with the `shapelets` package programmatically, the `example_2.py` file is provided and yields the same output as seen above without any code modifications needed. After executing `example_2.py`, the output (\autoref{fig:hexSIM1_defectid}) is created in `shapelets/examples/example_2/output`.
 
 ## Example 4 - Galactic Image Decomposition & Reconstruction
 
@@ -203,17 +203,17 @@ where
 * *shapelet_order* specifies the maximum order of shapelets used in the decomposition, and
 * *compression_order* specifies the number of significant shapelet coefficients used in the final reconstruction.
 
-*Note - the shapelet_order parameter in this example is based on the definition from [Refregier et al. (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x). This is different from the definition used in `shapelet.self_assembly` methods/examples.*
+*Note - the shapelet_order parameter in this example is based on the cartesian shapelet definition from [Refregier et al. (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x).*
 
 Possible values for each parameter, including default values where applicable, are available in the example documentation in the package [website](https://uw-comphys.github.io/shapelets). To execute this example, navigate to the directory `shapelets/examples/example_4`. Then, execute `shapelets config` via the command line interface.
 
-The output, shown in \autoref{fig:galaxies_output}, are created in `shapelets/examples/example_4/output`, containing two types of images corresponding to (1) the locations of galaxies highlighted on the linear and mean normalized image, and (2) images containing information about each decomposed galaxy. These images include: the subdomain of the original image, reconstructions of the galaxy using all calculated coefficients and a compressed set of coefficients, and the compressed reconstruction relative error.
+The output, shown in \autoref{fig:galaxies_output}, is created in `shapelets/examples/example_4/output`, containing two types of images corresponding to (1) the locations of galaxies highlighted on the linear and mean normalized image, and (2) images containing information about each decomposed galaxy. These images include: the subdomain of the original image, reconstructions of the galaxy using all calculated coefficients and a compressed set of coefficients, and the compressed reconstruction relative error.
 
 ![Galaxy map (left) and decomposed galaxy example (right).\label{fig:galaxies_output}](images/galaxies_output.png){ width=100% }
 
 ### Scripting Method
 
-For users wishing to interact with the `shapelets` package programmatically, the `example_4.py` file is provided to yield the same output as seen above without any code modifications needed. After executing `example_4.py`, the outputs (\autoref{fig:galaxies_output}) will be available in "shapelets/examples/example_4/output".
+For users wishing to interact with the `shapelets` package programmatically, the `example_4.py` file is provided to yield the same output as seen above without any code modifications needed. After executing `example_4.py`, the output (\autoref{fig:galaxies_output}) is created in `shapelets/examples/example_4/output`.
 
 # Acknowledgements
 
