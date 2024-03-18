@@ -91,7 +91,7 @@ These parameters are explained below, note that *default* refers to default beha
 **num_clusters**
 
 * int - integer (including 0, which will not perform k-means clustering and use all response vectors in subdomain)
-* default = 20 (see [T. Akdeniz (2018](https://doi.org/10.1088/1361-6528/aaf353]))
+* default = 20 (see [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
 
 **ux**
 
@@ -114,7 +114,7 @@ This config file is setup to compute the response distance for images/lamSIM1.pn
 
 Navigate your terminal to "shapelets/examples/example_1". 
 
-When you are ready, type ``shapelets config``.
+When you are ready, execute ``shapelets config`` on the command line.
 
 The output (shown below) will be available in "shapelets/examples/example_1/output" containing the response distance scalar field (top) as well as this field superimposed onto the original pattern (bottom).
 
@@ -144,9 +144,9 @@ The code breakdown is as follows,
 
 Navigate your terminal to "shapelets/examples/example_1". 
 
-When you are ready, type ``python3 -m example_1`` (for MAC OS and LINUX users).
+When you are ready, execute ``python3 -m example_1`` on the command line (for MAC OS and LINUX users).
 
-For WINDOWS users, please use ``python -m example_1`` .
+For WINDOWS users, please use ``python -m example_1``.
 
 The output will be available in "shapelets/examples/example_1/output".
 
@@ -268,7 +268,7 @@ This config file is setup for the defect identification method for images/hexSIM
 
 Navigate your terminal to "shapelets/examples/example_2". 
 
-When you are ready, type ``shapelets config``.
+When you are ready, execute ``shapelets config`` on the command line.
 
 You will then be prompted to select the clusters you wish to identify as associated with defects or defect structures, follow these instructions:
 
@@ -315,7 +315,7 @@ The code breakdown is as follows,
 
 Navigate your terminal to "shapelets/examples/example_2". 
 
-When you are ready, type :code:`python3 -m example_2` (for MAC OS and LINUX users).
+When you are ready, execute ``python3 -m example_2`` on the command line (for MAC OS and LINUX users).
 
 For WINDOWS users, please use ``python -m example_2`` .
 
@@ -411,7 +411,7 @@ This config file is setup to compute the local pattern orientation for images/sq
 
 Navigate your terminal to "shapelets/examples/example_3". 
 
-When you are ready, type ``shapelets config``.
+When you are ready, execute ``shapelets config`` on the command line.
 
 Depending on your computer resources, the convergence scheme may take a couple of minutes.
 
@@ -447,7 +447,7 @@ The code breakdown is as follows,
 
 Navigate your terminal to "shapelets/examples/example_3". 
 
-When you are ready, type :code:`python3 -m example_3` (for MAC OS and LINUX users).
+When you are ready, execute ``python3 -m example_3`` on the command line (for MAC OS and LINUX users).
 
 For WINDOWS users, please use ``python -m example_3`` .
 
@@ -545,7 +545,7 @@ This config file is setup to perform galaxy decomposition for images/galaxies.fi
 
 Navigate your terminal to "shapelets/examples/example_4". 
 
-When you are ready, type ``shapelets config``.
+When you are ready, execute ``shapelets config`` on the command line.
 
 The output (first 2 images shown below) will be available in "shapelets/examples/example_4/output" . The first shows ellipses enclosing locations of galaxies superimposed on the linear and mean normalized image. The remaining images contain information about the first decomposed galaxy, including:
 	* the subdomain of the original image containing the galaxy,
@@ -576,7 +576,7 @@ The code breakdown is as follows,
 
 Navigate your terminal to "shapelets/examples/example_4". 
 
-When you are ready, type :code:`python3 -m example_4` (for MAC OS and LINUX users).
+When you are ready, execute ``python3 -m example_4`` on the command line (for MAC OS and LINUX users).
 
 For WINDOWS users, please use ``python -m example_4`` .
 
