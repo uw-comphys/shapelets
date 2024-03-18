@@ -20,6 +20,7 @@ doi: 10.5281/zenodo.10819578
 message: If you use this software, please cite our article in the
   Journal of Open Source Software.
 preferred-citation:
+  type: article
   authors:
   - family-names: Tino
     given-names: Matthew Peres
@@ -43,8 +44,5 @@ preferred-citation:
   start: 6058
   title: "Shapelets: A Python package implementing shapelet functions
     and their applications"
-  type: article
   url: "https://joss.theoj.org/papers/10.21105/joss.06058"
   volume: 9
-title: "Shapelets: A Python package implementing shapelet functions and
-  their applications"

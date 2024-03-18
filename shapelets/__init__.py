@@ -17,7 +17,11 @@
 
 r"""
 
-# What is shapelets? 
+# shapelets
+
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06058/status.svg)](https://doi.org/10.21105/joss.06058)
+
+## What is shapelets? 
 
 shapelets is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
 
@@ -35,19 +39,16 @@ The shapelets package provides reference documentation and code for four (4) sha
 * Orthonormal polar shapelets with constant radial scale ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353)), and 
 * Exponential shapelets ([J. Berge (2019)](https://doi.org/10.48550/arXiv.1903.05837))
 
-# Getting Started
+## Getting Started
 
-New users should kindly follow these instructions to use the shapelets package here:
+Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
+If you plan to use the shapelets package for your own work, please cite appropriately using the [citation](#citation) below.
 
-1. Consult the [installation instructions](https://uw-comphys.github.io/shapelets/shapelets/docs/installation.html) page to install the shapelets package.
-2. Checkout the [custom commands and methods of usage](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) to see some important command-line features and how to interact with the shapelets package properly.
-3. Checkout the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs/examples.html) page for descriptive examples of specific applications implemented for the shapelets package.
+## Issues
 
-If you wish to contribute to the shapelets package, see the [contribution guidelines](#contribute).  
+If you encounter any **bugs** or **problems** with shapelets, please create a post using our package [issue tracker](https://github.com/uw-comphys/shapelets/issues). Please provide a clear and concise description of the problem, with images or code-snippets where appropriate. We will do our best to address these problems as fast and efficiently as possible.
 
-If you find an issue or bug while using the shapelets package? See the [issues](#issues) section for further details.
-
-# Contribute
+## Contribute
 
 The authors of the shapelets package welcome external contributions to the source code. This process will be easiest if users adhere to the contribution policy:
 
@@ -56,11 +57,25 @@ The authors of the shapelets package welcome external contributions to the sourc
 * Test your modifications to ensure that the core functionality of the package has not been altered by running the unit tests via the custom command: `shapelets-test`
 * Once the issue has been discussed with a package author, you may open a pull request containing your modifications
 
-# Issues
+## Citation
 
-If you encounter any **bugs** or **problems** with shapelets, please create a post using our package [issue tracker](https://github.com/uw-comphys/shapelets/issues). Please provide a clear and concise description of the problem, with images or code-snippets where appropriate. We will do our best to address these problems as fast and efficiently as possible.
+If you plan to use shapelets in your own work, please cite using the following Bibtex citation:
 
-# Authors
+```
+@article{TinoShapelets2024,
+author = {Tino, Matthew Peres and Abdulaziz, Abbas Yusuf and Suderman, Robert and Akdeniz, Thomas and Abukhdeir, Nasser Mohieddin},
+title = {Shapelets: A Python package implementing shapelet functions and their applications},
+doi = {10.21105/joss.06058},
+journal = {Journal of Open Source Software},
+number = {95},
+pages = {6058},
+volume = {9},
+year = {2024},
+url = {https://joss.theoj.org/papers/10.21105/joss.06058}
+}
+```
+
+## Authors
 
 * Matthew Peres Tino
 * Abbas Yusuf Abdulaziz 
