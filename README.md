@@ -1,9 +1,11 @@
 # shapelets
 
-[**Summary**](#what-is-shapelets?)
-| [**Getting Started**](#getting-started)
-| [**Contribute**](#contribute)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06058/status.svg)](https://doi.org/10.21105/joss.06058)
+
+[**Getting Started**](#getting-started)
 | [**Issues**](#issues)
+| [**Contribute**](#contribute)
+| [**Citation**](#citation)
 | [**Authors**](#authors)
 
 ## What is shapelets? 
@@ -27,6 +29,11 @@ The shapelets package provides reference documentation and code for four (4) sha
 ## Getting Started
 
 Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
+If you plan to use the shapelets package for your own work, please cite appropriately using the [citation](#citation) below or the "Cite this repository" dropdown on the right sidebar.
+
+## Issues
+
+If you encounter any **bugs** or **problems** with shapelets, please create a post using our package [issue tracker](https://github.com/uw-comphys/shapelets/issues). Please provide a clear and concise description of the problem, with images or code-snippets where appropriate. We will do our best to address these problems as fast and efficiently as possible.
 
 ## Contribute
 
@@ -37,9 +44,23 @@ The authors of the shapelets package welcome external contributions to the sourc
 * Test your modifications to ensure that the core functionality of the package has not been altered by running the unit tests via the custom command: `shapelets-test`
 * Once the issue has been discussed with a package author, you may open a pull request containing your modifications
 
-## Issues
+## Citation
 
-If you encounter any **bugs** or **problems** with shapelets, please create a post using our package [issue tracker](https://github.com/uw-comphys/shapelets/issues). Please provide a clear and concise description of the problem, with images or code-snippets where appropriate. We will do our best to address these problems as fast and efficiently as possible.
+If you plan to use shapelets in your own work, please cite using the following Bibtex citation:
+
+```
+@article{TinoShapelets2024,
+author = {Tino, Matthew Peres and Abdulaziz, Abbas Yusuf and Suderman, Robert and Akdeniz, Thomas and Abukhdeir, Nasser Mohieddin},
+title = {Shapelets: A Python package implementing shapelet functions and their applications},
+doi = {10.21105/joss.06058},
+journal = {Journal of Open Source Software},
+number = {95},
+pages = {6058},
+volume = {9},
+year = {2024},
+url = {https://joss.theoj.org/papers/10.21105/joss.06058}
+}
+```
 
 ## Authors
 
