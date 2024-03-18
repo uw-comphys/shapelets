@@ -1,0 +1,50 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Tino
+  given-names: Matthew Peres
+  orcid: "https://orcid.org/0009-0005-6832-1761"
+- family-names: Abdulaziz
+  given-names: Abbas Yusuf
+- family-names: Suderman
+  given-names: Robert
+- family-names: Akdeniz
+  given-names: Thomas
+- family-names: Abukhdeir
+  given-names: Nasser Mohieddin
+  orcid: "https://orcid.org/0000-0002-1772-0376"
+contact:
+- family-names: Abukhdeir
+  given-names: Nasser Mohieddin
+  orcid: "https://orcid.org/0000-0002-1772-0376"
+doi: 10.5281/zenodo.10819578
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Tino
+    given-names: Matthew Peres
+    orcid: "https://orcid.org/0009-0005-6832-1761"
+  - family-names: Abdulaziz
+    given-names: Abbas Yusuf
+  - family-names: Suderman
+    given-names: Robert
+  - family-names: Akdeniz
+    given-names: Thomas
+  - family-names: Abukhdeir
+    given-names: Nasser Mohieddin
+    orcid: "https://orcid.org/0000-0002-1772-0376"
+  date-published: 2024-03-18
+  doi: 10.21105/joss.06058
+  issn: 2475-9066
+  issue: 95
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 6058
+  title: "Shapelets: A Python package implementing shapelet functions
+    and their applications"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.06058"
+  volume: 9
+title: "Shapelets: A Python package implementing shapelet functions and
+  their applications"
