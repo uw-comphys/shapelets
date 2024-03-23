@@ -17,10 +17,18 @@
 
 r"""
 
-# Installation Instructions
+# Installation Instruction Guide
 
 shapelets requires Python 3.10 or greater.
 Installing shapelets is highly dependent on the operating system of your machine, be sure to follow the appropriate guidelines.
+
+## Linux
+
+1. Update your Ubuntu system: `sudo apt-get update`
+2. Install `git`, `python3.10`, and `pip`: `sudo apt-get install git python3.10 python3-pip`
+3. Clone the repository: `git clone https://github.com/uw-comphys/shapelets.git`
+4. Navigate to the top-most directory (i.e. ./shapelets) and install this package: `pip3 install .`
+5. Ensure correct installation by running the unit test via `shapelets-test` in the command line
 
 ## Mac OS
 
@@ -30,7 +38,7 @@ Please ensure your macOS is at least macOS 12 Monterey (released 2021).
 2. Install `git`, `python3.10`, and `pip` in the terminal: `brew install git python@3.10` (automatically installs pip) 
 3. Clone this repository: `git clone https://github.com/uw-comphys/shapelets.git`
 4. Navigate to the top-most directory (i.e. ./shapelets) and install this package: `pip3.10 install .`
-5. Ensure correct installation by running the unit tests [custom command](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) on the CLI: `shapelets-test`
+5. Ensure correct installation by running the unit test via `shapelets-test` in the command line
 
 ## Windows
 
@@ -46,17 +54,9 @@ The instructions for Windows use WSL (Windows Subsystem for Linux).
 5. Install `git`, `python3.10`, `pip`, and a graphics library: `sudo apt-get install git python3.10 python3-pip libgl1-mesa-glx`
 6. Clone the repository: `git clone https://github.com/uw-comphys/shapelets.git`
 7. Navigate to the top-most directory (i.e. ./shapelets) and install this package: `pip3 install .`
-8. Follow the [enable custom commands](https://uw-comphys.github.io/shapelets/shapelets/docs/WSL.html) instructions to be able to use the package's [custom commands](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) 
-9. Ensure correct installation by running the unit tests [custom command](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) on the CLI: `shapelets-test`
+8. Follow the [enable custom commands](https://uw-comphys.github.io/shapelets/shapelets/docs/WSL_support.html) instructions
+9. Ensure correct installation by running the unit test via `shapelets-test` in the command line
 
-**Note** - if this is your first time installing Ubuntu on WSL, you may also need to follow the [enable graphics](https://uw-comphys.github.io/shapelets/shapelets/docs/WSL.html) instructions to allow graphics support (i.e. figures from `matplotlib`).
-
-## Linux
-
-1. Update your Ubuntu system: `sudo apt-get update`
-2. Install `git`, `python3.10`, and `pip`: `sudo apt-get install git python3.10 python3-pip`
-3. Clone the repository: `git clone https://github.com/uw-comphys/shapelets.git`
-4. Navigate to the top-most directory (i.e. ./shapelets) and install this package: `pip3 install .`
-5. Ensure correct installation by running the unit tests [custom command](https://uw-comphys.github.io/shapelets/shapelets/docs/usage.html) on the CLI: `shapelets-test`
+**Note** - if this is your first time installing Ubuntu on WSL, you likely need to follow the [enable graphics](https://uw-comphys.github.io/shapelets/shapelets/docs/WSL_support.html) instructions to allow graphics support (i.e. figures from `matplotlib`).
 
 """
