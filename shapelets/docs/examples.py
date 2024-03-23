@@ -86,7 +86,7 @@ The method outlined in the configuration file will also have its own header with
 
 ### Configuration File Method - Run
 
-Please ensure that shapelets is properly installed before proceeding.
+Please ensure that `shapelets` is properly installed before proceeding.
 
 Navigate your terminal to "shapelets/examples/example_1". When you are ready, execute ``shapelets config`` in the command line.
 
@@ -176,7 +176,7 @@ The method outlined in the configuration file will also have its own header with
 
 ### Configuration File Method - Run
 
-Please ensure that shapelets is properly installed before proceeding.
+Please ensure that `shapelets` is properly installed before proceeding.
 
 Navigate your terminal to "shapelets/examples/example_2". When you are ready, execute ``shapelets config`` in the command line.
 
@@ -216,237 +216,142 @@ This example can be run in two different ways:
 Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains. The local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
 
 * (1) **Masking**: Performed for well-defined features using a specific response threshold. This threshold is found via an interative scheme. Only the orientation values from these well-defined features are retained after masking.
-* (2) **Dilation**: Performed via morphological greyscale dilation to expand the orientation from well-defined features and define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
-* (3) **Blending**: Performed via a median filter to allow for effective transition in orientations between neighbouring well-defined features and across orientational boundaries. The blending kernel size is chosen to be $4\lambda$ so that the orientation is averaged from two layers of surrounding neighbouring features.
+* (2) **Dilation**: Performed via morphological greyscale dilation from ``scipy.ndimage.grey_dilation`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)) to expand the orientation from well-defined features and define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
+* (3) **Blending**: Performed via a median filter from `scipy.ndimage.median_filter`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)) to allow for effective transition in orientations between neighbouring well-defined features and across orientational boundaries. The blending kernel size is chosen to be $4\lambda$ so that the orientation is averaged from two layers of surrounding neighbouring features.
 
-Dilation and blending operations are achieved through the ``scipy.ndimage.grey_dilation`` and ``scipy.ndimage.median_filter`` methods respectively. They are available from ``scipy.ndimage`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)).
-
-### Directory overview
+It is also important to note that this pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is only applicable to images with **one** dominant pattern type. I.e., images with mixed patterns are invalid. 
 
 The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) should contain the following.
 
 ![](images/example_3_dir.png)
 
-* **config** contains the configuration file to run example 3 via config method
-* **example_3.py** contains the script to run example 3 via scripting method
-* **images/** contains the square self-assembly AFM image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950)) used in this example, shown below
+where **config** is the text-based configuration file, **example_3.py** is the Python script file, and **images/** holds the experimental square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950)) for analysis.
 
 ![](images/sqrAFM2.png)
 
-### Config method - config setup
+### Configuration File Method - Setup
 
-The *general* section of the configuration file contains two parameters. 
+The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) contains the following information:
 
 	[general]
 	image_name = sqrAFM2.png
 	method = orientation
 
-The "image_name" and "method" parameters are required.
-
-Here the "method" parameter is chosen to be "orientation" to indicate computation of local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
-
-The *orientation* section of the configuration file contains one parameter.
-
 	[orientation]
 	pattern_order = square
 
-These parameters are explained in detail in the next section.
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-### Method parameters
+The method outlined in the configuration file will also have its own header with specific parameters. The orientation method may contain up to one parameter. Note that default refers to the default value if the parameter is excluded from the configuration file.
 
-The parameters for the local pattern orientation method are outlined below.
+**pattern_order** `str`
 
-Note these parameters are the same if using the configuration-file based method or the scripting method (example_3.py). 
+* The pattern order (symmetry) observed in the image. Options are `stripe`, `square`, `hexagonal`
+* This parameter does not have a default value
 
-These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
+### Configuration File Method - Run
 
-**pattern_order**
+Please ensure that `shapelets` is properly installed before proceeding. 
 
-* stripe - used when image contains a stripe self-assembly pattern
-* square - used when image contains a square self-assembly pattern
-* hexagonal - used when image contains a hexagonal self-assembly pattern
-* default = not applicable
+Navigate your terminal to "shapelets/examples/example_3". When you are ready, execute ``shapelets config`` in the command line.
 
-**Note**
+Depending on your computer hardware, the iterative convergence scheme may take a couple of minutes.
 
-* The "pattern_order" parameter does not have a default value; failure to provide a value will throw an error
-* The image you intend to analyze **should not** contain a mix of pattern orders; i.e., it should only contain one pattern order throughout the entire image
-
-### Config method - running config
-
-This config file is setup to compute the local pattern orientation for images/sqrAFM2.png.
-
-Navigate your terminal to "shapelets/examples/example_3". 
-
-When you are ready, execute ``shapelets config`` on the command line.
-
-Depending on your computer resources, the convergence scheme may take a couple of minutes.
-
-The outputs (shown below) will then be available in "shapelets/examples/example_3/output" containing the mask, dilated feature orientation, smoothed orientation result, and the smoothed orientation result superimposed onto the original pattern (shown below, respectively).
+The output (shown below) will then be available in "shapelets/examples/example_3/output" containing the mask (top left), dilated feature orientation (top right), smoothed orientation result, and the smoothed orientation result superimposed onto the original pattern (shown below, respectively).
 
 ![](images/sqrAFM2_orientation_maskedresp.png)
-
 ![](images/sqrAFM2_orientation_dilate.png)
 
 ![](images/sqrAFM2_orientation_blend.png)
-
 ![](images/sqrAFM2_orientation_overlay.png)
 
-### Scripting method - example_3.py breakdown
+### Scripting Method 
 
-This method is presented as an alternative to the configuration-file based user interface (config method).
-
-**example_3.py** is pre-configured and requires **no additional modifications**.
-
-The code breakdown is as follows,
-
-* Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the local pattern orientation method (see Method parameters section for details)
-* Section 3: code - this contains the code to compute the local pattern orientation which involves the following steps:
-
-	3.1: image and output directory handling
-	3.2: get the characteristic wavelength of the pattern
-	3.3: get the convolutional response 
-	3.4: compute the local pattern orientation
-	3.5: processing and saving the results to the **output/** directory 
-
-### Scripting method - executing example_3.py
-
-Navigate your terminal to "shapelets/examples/example_3". 
-
-When you are ready, execute ``python3 -m example_3`` on the command line (for MAC OS and LINUX users).
-
-For WINDOWS users, please use ``python -m example_3`` .
-
-The output will be available in "shapelets/examples/example_3/output".
+For users comfortable with Python programming, the example_3.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
 
 ## Example 4 - Galactic Image Decomposition
 
-This example goes through the process of computing shapelet representations for a collection of galaxies using ``shapelets.astronomy`` submodule.
+This example demonstrates the decomposition and reconstruction of images of galaxies ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)) using the ``shapelets.astronomy`` submodule.
 
-The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4).
+This example can be run in two different ways:
+* (1) text-based configuration files (shown here), and 
+* (2) programmatically via script-based Python programming (`example_4.py`)
 
-**NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface 
-* (2) importing neccessary shapelets submodules and methods in a script-based format
-
-### Technical overview
+### Overview
 
 The astronomical intensity/pixel data collected from the Hubble telecsope is is stored in a .fits file.
 Flexible Image Transport System (or FITS) ([S. Allen (2005)](https://fits.gsfc.nasa.gov/rfc4047.txt)) were designed to standarize the exchange of astronomical image data between observatories.
 FITS provides a method to transport arrays and tables of data alongside its related metadata. 
 
-These intesities represent localized celestial objects (such as galaxies) that, once seperated from the original image, can be decomposed into a linear combination of shapelet functions. The method contains three (4) main steps:
+These intesities represent localized celestial objects (such as galaxies) that, once seperated from the original image, can be decomposed into a linear combination of shapelet functions. The method contains four (4) main steps:
 
-* (1) **Source Extractor**: using Source Extractor ([E. Bertin (1996)](https://ui.adsabs.harvard.edu/link_gateway/1996A&AS..117..393B/doi:10.1051/aas:1996164)), subdomains containing localized intensities are selected from the intensity data, and catergorized as galaxies or stars by pixel cluster size.
+* (1) **Source Extractor**: using Source Extractor ([E. Bertin (1996)](https://ui.adsabs.harvard.edu/link_gateway/1996A&AS..117..393B/doi:10.1051/aas:1996164)), subdomains containing localized intensities are selected from the intensity data, and categorized as galaxies or stars by pixel cluster size.
 
 * (2) **Shapelet Projection**: the subdomain is projected onto a collection of 2D cartesian shapelets using a beta and centroid initially estimated by Source Extracter and $n$ such that $n_1 + n_2 \leq n_{max}$.
 
-* (3) **Shapelet Parameter Optimization**: using formulae from [A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), the object's centroid and characteristic size are estimated from the decomposed shapelet coefficients and used as an updated beta and centroid for more optimized decomposition.
+* (3) **Shapelet Parameter Optimization**: using formulae from ref. [A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), the object's centroid and characteristic size are estimated from the decomposed shapelet coefficients and used as an updated beta and centroid for a more optimized decomposition.
 
-* (4) **Shapelet State Compression**: the shapelet coefficients are truncated to a limited number of coefficients, removing insignificant contributions to the shapelet representation. This truncated representation is then used to reconstruct the original image and its respective error is calculated.
+* (4) **Shapelet State Compression**: the shapelet coefficients are truncated, removing insignificant contributions to the shapelet representation. This truncated representation is then used to reconstruct the original image and the error associated with this reconstruction (i.e. from truncation) is computed.
 
-Steps 2-3 are repeated for all galaxies identified by Source Extractor
-
-### Directory overview
+Steps 2-3 are repeated for all galaxies identified by the **Source Extractor**.
 
 The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) should contain the following.
 
 ![](images/example_4_dir.png)
 
-* **config** contains the configuration file to run example 4 via config method
-* **example_4.py** contains the script to run example 4 via scripting method
-* **images/** contains the fits used in this example, show below is the data with a linear colour scale scale and an image scaled from the mean and standard deviation (respectively)
+where **config** is the text-based configuration file, **example_4.py** is the Python script file, and **images/** holds the FITS file used in this example which contains a subset of images of galaxies from the Hubble Deep Field North ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)). This data is shown below as the linear (left) and mean normalized (right) greyscale images. 
 
 ![](images/galaxies_linear.png)
-
 ![](images/galaxies_std.png)
 
-### Config method - config setup
+### Configuration File Method - Setup
 
-The *general* section of the configuration file contains two parameters. 
+The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) contains the following information:
 
 	[general] 
 	method = galaxy_decompose
 	fits_name = galaxies.fits 
 
-The "method" and "fits_name" parameter is required.
-
-The *galaxy_decompose* section of the configuration file contains two parameters. 
-
 	[galaxy_decompose] 
 	shapelet_order = default 
 	compression_order = 20 
 
-These parameters are explained in detail in the next section.
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-### Method parameters
+The method outlined in the configuration file will also have its own header with specific parameters. The **galaxy_decompose** method may contain up to two parameters. Note that default refers to the default value if the parameter is excluded from the configuration file.
 
-The parameters for the galaxy decomposition are outlined below.
+**shapelet_order** `int`
 
-Note these parameters are the same if using the configuration-file based method or the scripting method (example_4.py). 
-
-These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
-
-**fits_name** 
-
-* str - string, path to the .fits data file containing the astronomical data
-
-**shapelet_order** 
-
-* int - integer, maximum shapelet order to calculate coefficients such that $n_1 + n_2 \leq n_{max}$
+* The maximum shapelet order (i.e. cartesian shapelets ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))) to calculate coefficients such that $n_1 + n_2 \leq n_{max}$.
 * default = 10
 
-**compression_order** 
+**compression_order** `int`
 
-* int - integer,  number of shapelet coefficients to use for final image reconstruction
+* The number of shapelet coefficients to use for final image reconstruction
 * default = 25
 
 **Note**
 
 * You may only exclude parameters that have defaults
 
-### Config method - running config
+### Configuration File Method - Run
 
-This config file is setup to perform galaxy decomposition for images/galaxies.fits.
+Please ensure that `shapelets` is properly installed before proceeding.
 
-Navigate your terminal to "shapelets/examples/example_4". 
+Navigate your terminal to "shapelets/examples/example_4". When you are ready, execute ``shapelets config`` in the command line.
 
-When you are ready, execute ``shapelets config`` on the command line.
+The output (shown below) will be available in "shapelets/examples/example_4/output" containing the ellipses enclosing the locations of galaxies superimposed on the linear and mean normalized image (left). 
 
-The output (first 2 images shown below) will be available in "shapelets/examples/example_4/output" . The first shows ellipses enclosing locations of galaxies superimposed on the linear and mean normalized image. The remaining images contain information about the first decomposed galaxy, including:
-	* the subdomain of the original image containing the galaxy,
-	* a reconstruction of the galaxy using the all calculated coefficients and a compressed set coefficients, and
-	* the compressed reconstruction's relative error.
+The second image contains information about the first decomposed galaxy, such as:
+* the subdomain of the original image containing the galaxy,
+* a reconstruction of the galaxy using the all calculated coefficients and a compressed set coefficients, and
+* the compressed reconstruction's relative error
 
 ![](images/galaxies_map.png)
-
 ![](images/galaxies_decomposed.png)
 
-### Scripting method - example_4.py breakdown
+### Scripting Method 
 
-This method is presented as an alternative to the configuration-file based user interface (config method).
-
-**example_4.py** is pre-configured and requires **no additional modifications**.
-
-The code breakdown is as follows,
-
-* Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to decompose an image containing multiple galaxies and reconstruct in terms of shapelet functions (see Method parameters section for details)
-* Section 3: code - this contains the code for the decomposition which involves the following steps:
-
-	3.1: loading .fits data and output directory handling
-	3.2: identifying areas in the image that contain decomposable galaxies
-	3.3: starting with the biggest galaxy, decomposes subdomain into a collection of shapelet coefficients
-
-### Scripting method - executing example_4.py
-
-Navigate your terminal to "shapelets/examples/example_4". 
-
-When you are ready, execute ``python3 -m example_4`` on the command line (for MAC OS and LINUX users).
-
-For WINDOWS users, please use ``python -m example_4`` .
-
-The output will be available in "shapelets/examples/example_4/output".
+For users comfortable with Python programming, the example_4.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
 
 """
