@@ -19,21 +19,17 @@ r"""
 
 # Examples Overview
 
-The example files and scripts can be found in the [github example directory](https://github.com/uw-comphys/shapelets/tree/main/examples).
-Associated documentation can be found below and should be explored by all new users. 
-
+The files and code associated with these examples can be found in the [github example directory](https://github.com/uw-comphys/shapelets/tree/main/examples). 
 
 ## Example 1 - Response Distance
 
-This example goes through the process of computing the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
+This example goes demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1).
+This example can be run in two different ways:
+* (1) text-based configuration files (shown here), and 
+* (2) programmatically via script-based Python programming (`example_1.py`)
 
-**NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface 
-* (2) importing neccessary shapelets submodules and methods in a script-based format
-
-### Technical overview
+### Overview
 
 The response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) is calculated as:
 
@@ -41,318 +37,189 @@ $$ d_{i, j} = \min \| \vec{R} - \vec{r_{i,j}} \|_2 $$
 
 where $\vec{r_{i,j}}$ denotes the given response vector at pixel location $\{i, j\}$ and $\vec{R}$ is the reference set (or subdomain) of response vectors.
 
-### Directory overview
-
 The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) should contain the following.
 
 ![](images/example_1_dir.png)
 
-* **config** contains the configuration file to run example 1 via config method
-* **example_1.py** contains the script to run example 1 via scripting method
-* **images/** contains the simulated stripe self-assembly microscopy image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) used in this example, shown below
+where **config** is the text-based configuration file, **example_1.py** is the Python script file, and **images/** holds the simulated stripe self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for analysis.
 
 ![](images/lamSIM1.png)
 
-### Config method - config setup
+### Configuration File Method - Setup
 
-The *general* section of the configuration file contains two parameters. 
+The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) contains the following information:
 
 	[general]
 	image_name = lamSIM1.png
 	method = response_distance
-
-The "image_name" and "method" parameters are required.
-
-Here the "method" parameter is chosen to be "response_distance" to indicate computation of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
-
-The *response_distance* section of the configuration file contains four parameters. 
 
 	[response_distance]
 	shapelet_order = default
 	num_clusters = 20
 	ux = [50, 80]
 	uy = [150, 180]
-		
-These parameters are explained in detail in the next section.
 
-### Method parameters
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The parameters for the response distance method are outlined below.
+The method outlined in the configuration file will also have its own header with specific parameters. The **response_distance** method may contain up to four parameters. Note that *default* refers to the default value if the parameter is excluded from the configuration file.
 
-Note these parameters are the same if using the configuration-file based method or the scripting method (example_1.py). 
+**shapelet_order** `int`
 
-These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
+* The maximum shapelet order ($m'$) used for convolution operations, i.e. $m \in [1, m']$ shapelets are used 
+* default = $m'$ $\rightarrow$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
-**shapelet_order** 
+**num_clusters** `int`
 
-* int - integer, compute convolution for maximum shapelet order $m'$, i.e. $m \in [1, m']$
-* default = $m'$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+* The number of clusters for k-means clustering. Note using 0 is acceptable and will use all response vectors in the reference region (subdomain) ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
+* default = 20 $\rightarrow$ as determined by a distortion analysis ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
 
-**num_clusters**
+**ux** `list`
 
-* int - integer (including 0, which will not perform k-means clustering and use all response vectors in subdomain)
-* default = 20 (see [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
+* The lower and upper x-coordinates (respectively) of the reference region (subdomain)
+* default $\rightarrow$ user is required to select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
-**ux**
+**uy** `list`
 
-* list - I.e., [10, 20], this would represent the lower and upper bound for the user-defined subdomain in x-direction respectively
-* default = 'default', user select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
+* The lower and upper y-coordinates (respectively) of the reference region (subdomain)
+* default $\rightarrow$ user is required to select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
-**uy** 
 
-* list - I.e., [30, 40], this would represent the lower and upper bound for the user-defined subdomain in y-direction respectively
-* default = 'default', user select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime)
+### Configuration File Method - Run
 
-**NOTE**
+Please ensure that shapelets is properly installed before proceeding.
 
-* You may only exclude parameters that have defaults (in this case, all 4 parameters have defaults)
-* If you do not know the subdomain bounds (**ux** and **uy**), please see see [here](#selecting-subdomain-bounds-during-runtime).
+Navigate your terminal to "shapelets/examples/example_1". When you are ready, execute ``shapelets config`` in the command line.
 
-### Config method - running config
-
-This config file is setup to compute the response distance for images/lamSIM1.png with a user-defined subdomain already provided in the config.
-
-Navigate your terminal to "shapelets/examples/example_1". 
-
-When you are ready, execute ``shapelets config`` on the command line.
-
-The output (shown below) will be available in "shapelets/examples/example_1/output" containing the response distance scalar field (top) as well as this field superimposed onto the original pattern (bottom).
+The output (shown below) will be available in "shapelets/examples/example_1/output" containing the response distance scalar field (left) as well as this field superimposed onto the original pattern (right).
 
 ![](images/lamSIM1_response_distance_k20.png)
-
 ![](images/lamSIM1_response_distance_overlay_k20.png)
 
-### Scripting method - example_1.py breakdown
+### Scripting Method
 
-This method is presented as an alternative to the configuration-file based user interface (config method).
-
-**example_1.py** is pre-configured and requires **no additional modifications**.
-
-The code breakdown is as follows,
-
-* Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the response distance method (see Method parameters section for details)
-* Section 3: code - this contains the code to compute the response distance method which involves the following steps:
-
-	3.1: image and output directory handling
-	3.2: get the characteristic wavelength of the pattern
-	3.3: get the convolutional response 
-	3.4: compute the response distance 
-	3.5: processing and saving the results to the **output/** directory 
-
-### Scripting method - executing example_1.py
-
-Navigate your terminal to "shapelets/examples/example_1". 
-
-When you are ready, execute ``python3 -m example_1`` on the command line (for MAC OS and LINUX users).
-
-For WINDOWS users, please use ``python -m example_1``.
-
-The output will be available in "shapelets/examples/example_1/output".
+For users comfortable with Python programming, the **example_1.py** file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
 
 ### Selecting subdomain bounds during runtime
 
-If you are computing the response distance method for the first time on a new image, you will typically not know the reference subdomain bounds (i.e., parameters **ux** and **uy**) a priori. 
+If you are computing the response distance method for the first time on a new image, you have the option to omit the **ux** and **uy** parameters so that you can choose the reference region during runtime. 
 
-Adjustments required:
+**Selecting bounds during runtime**
 
-* config method - simply remove the **ux** and **uy** parameters
-* scripting method - comment out the **ux** and **uy** statements in **example_1.py**
+After executing example 1, either via ``shapelets config`` in the command line (Configuration File Method) or programmatically through **example_1.py**, you will be prompted to select four (4) points that represent the corners/bounds of the reference subdomain. At this point, you can use
 
-Follow the same steps for the config or scripting method, depending on your preference.
-
-**Selecting bounds during runtime:**
-
-After performing ``shapelets config`` (config method) or ``python3 -m example_1`` (scripting method), you will immediately be prompted to select four (4) points that represent the four corners/bounds of the reference subdomain
-
-* use ``a`` to select a corner (bound) (in no particular order), 
+* ``a`` to select a corner (bound) in no particular order, 
 * ``backspace/delete`` to remove the most recently selected corner, and 
 * ``enter`` when you have finished selecting 4 points/corners 
 
-**NOTE** 
+**Additional Tips**
 
 * You may use the **magnifying glass** (bottom left) to zoom in on a specific region
 * You may use the **left arrow** (bottom left) to return to original zoom
 * Failure to choose 4 points/corners (i.e., choosing less or more than 4) will restart the process automatically
-* It is critical to choose a region of the pattern that is appears to contain zero observable defects to maximize the response distance results
+* Please choose a region of the pattern that contains zero observable defects in order to maximize the response distance results
 
 ## Example 2 - Defect Identification
 
-This example goes through the process of computing the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
+This example demonstrates the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2).
+This example can be run in two different ways:
+* (1) text-based configuration files (shown here), and 
+* (2) programmatically via script-based Python programming (`example_2.py`)
 
-**NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface 
-* (2) importing neccessary shapelets submodules and methods in a script-based format
+### Overview
 
-### Technical overview
+The defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is a modification of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)), whereby the user is required to manually select clusters associated with defects or defect structures, and the defect response distance is computed for each response vector in each cluster. 
 
-The defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is a modification of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
-
-The user is required to manually select the clusters associated with defects or defect structures, and the *defect response distance* ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is computed for each cluster. 
-
-The *defect response distance* ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is similar to the response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)), but the reference subdomain is the centroid response vector of each cluster (and not a set of reference response vectors). 
-
-I.e., for a given cluster $C$ with centroid $C_c$, the defect response distance is computed as:
+The defect response distance is similar to the response distance, but the reference subdomain is the centroid response vector of each cluster (and not a set of reference response vectors). For example, for a given cluster $C$ with centroid $C_c$, the defect response distance for response vector $c_i$ belonging to cluster $C$ with centroid response vector $C_c$ is computed as:
 
 $$ d_i = \| C_c - c_i \|_2 $$
 
-where $c_i$ is a cluster response vector belonging to cluster $C$ and is computed for all response vectors in each cluster.
-
 The key observation is that cluster response vectors with larger defect response distances are more "defect-like", allowing use of the defect response distance as a quantitative measure of "defect intensity" ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
-
-### Directory overview
 
 The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) should contain the following.
 
 ![](images/example_2_dir.png)
 
-* **config** contains the configuration file to run example 2 via config method
-* **example_2.py** contains the script to run example 2 via scripting method
-* **images/** contains the simulated hexagonal self-assembly microscopy image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) used in this example, shown below
+where **config** is the text-based configuration file, **example_2.py** is the Python script file, and **images/** holds the simulated hexagonal self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for analysis.
 
 ![](images/hexSIM1.png)
 
-### Config method - config setup
+### Configuration File Method - Setup
 
-The *general* section of the configuration file contains two parameters. 
+The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) contains the following information:
 
 	[general]
 	image_name = hexSIM1.png
 	method = identify_defects
 
-The "image_name" and "method" parameters are required.
-
-Here the "method" parameter is chosen to be "identify_defects" to indicate computation of the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)).
-
-The *identify_defects* section of the configuration file contains two parameters.
-
 	[identify_defects]
 	pattern_order = hexagonal
 	num_clusters = 10
-	
-These parameters are explained in detail in the next section.
 
-### Method parameters
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The parameters for the defect identification method are outlined below.
+The method outlined in the configuration file will also have its own header with specific parameters. The **identify_defects** method may contain up to two parameters. Note that default refers to the default value if the parameter is excluded from the configuration file.
 
-Note these parameters are the same if using the configuration-file based method or the scripting method (example_2.py). 
+**pattern_order** `str`
 
-These parameters are explained below, note that *default* refers to default behaviour if the parameter is excluded.
+* The pattern order (symmetry) observed in the image. Options are `stripe`, `square`, `hexagonal`
+* This parameter **does not have a default value**
 
-**pattern_order**
+**num_clusters** `int`
 
-* stripe - used when image contains a stripe self-assembly pattern
-* square - used when image contains a square self-assembly pattern
-* hexagonal - used when image contains a hexagonal self-assembly pattern
-* default = not applicable
+* The number of clusters for k-means clustering. Must be $\geq$ 1.
+* Default values are as follows,
+	* If pattern_order = stripe $\rightarrow$ 4
+	* If pattern_order = square $\rightarrow$ 8
+	* If pattern_order = hexagonal $\rightarrow$ 10
+* If an integer value is provided that is below the above default, the code will defer to the default value
 
-**num_clusters** 
+### Configuration File Method - Run
 
-* int - integer (0 not accepted)
-* default (if pattern_order = stripe) = 4
-* default (if pattern_order = square) = 8
-* default (if pattern_order = hexagonal) = 10
+Please ensure that shapelets is properly installed before proceeding.
 
-**NOTE**
+Navigate your terminal to "shapelets/examples/example_2". When you are ready, execute ``shapelets config`` in the command line.
 
-* The "pattern_order" parameter does not have a default value; failure to provide a value will throw an error
-* The "num_clusters" parameter minimum values are the same as the default values provided above
-* If a value is given for "num_clusters" that is below the minimum (default) value, the code will defer to the minimum value instead of throwing an error
+During runtime you will be prompted to manually select the clusters associated with defects or defect structures. Please follow these instructions and use
 
-### Config method - running config
-
-This config file is setup for the defect identification method for images/hexSIM1.png.
-
-Navigate your terminal to "shapelets/examples/example_2". 
-
-When you are ready, execute ``shapelets config`` on the command line.
-
-You will then be prompted to select the clusters you wish to identify as associated with defects or defect structures, follow these instructions:
-
-* use ``a`` to select a cluster (in no particular order, and duplicates are handled appropriately), 
+* ``a`` to select a cluster in no particular order (duplicates are handled appropriately, 
 * ``backspace/delete`` to remove the most recently selected cluster, and 
-* ``enter`` when you have finished selecting clusters
+* ``enter`` when you have finished selecting defect clusters
 
-**NOTE** 
+**Additional Tips**
 
 * You may use the **magnifying glass** (bottom left) to zoom in on a specific region
 * You may use the **left arrow** (bottom left) to return to original zoom
 
-The outputs (shown below) will then be available in "shapelets/examples/example_2/output" containing the location of each cluster, radar chart of centroid response vectors, the defect response distance scalar field, and this field superimposed onto the original pattern.
-
-For this example, the clusters 2, 5, and 8 were chosen when the user was prompted to select clusters associated with topological defects or defect structures. The first image shows the visual representation of each cluster, followed by the radar chart plots of the cluster centroids and their respective shapelet weights. The last two images contain the defect response distance scalar field, along with this scalar field superimposed onto the original image.
+The output (shown below) will be available in "shapelets/examples/example_2/output" containing the location of each cluster (top left), radar chart of centroid response vectors (top right), the defect response distance scalar field (bottom left), and this field superimposed onto the original pattern (bottom right). In this example, clusters 2, 5, and 8 were chosen by the user as defect clusters. 
 
 ![](images/hexSIM1_defectid_clustloc_k10.png)
-
 ![](images/hexSIM1_defectid_rc_k10.png)
 
 ![](images/hexSIM1_defectid_drd_k10.png)
-
 ![](images/hexSIM1_defectid_drd_overlay_k10.png)
 
-### Scripting method - example_2.py breakdown
+### Scripting Method
 
-This method is presented as an alternative to the configuration-file based user interface (config method).
-
-**example_2.py** is pre-configured and requires **no additional modifications**.
-
-The code breakdown is as follows,
-
-* Section 1: importing modules - imports the necessary modules from the shapelets package
-* Section 2: parameters - this contains the required parameters needed for the methods required to compute the defect identification method (see Method parameters section for details)
-* Section 3: code - this contains the code to compute the defect identification method which involves the following steps:
-
-	3.1: image and output directory handling
-	3.2: get the characteristic wavelength of the pattern
-	3.3: get the convolutional response 
-	3.4: compute the defect identification method
-	3.5: processing and saving the results to the **output/** directory 
-
-### Scripting method - executing example_2.py
-
-Navigate your terminal to "shapelets/examples/example_2". 
-
-When you are ready, execute ``python3 -m example_2`` on the command line (for MAC OS and LINUX users).
-
-For WINDOWS users, please use ``python -m example_2`` .
-
-You will then be prompted to select the clusters you wish to identify as associated with defects or defect structures, follow these instructions:
-
-* use ``a`` to select a cluster (in no particular order, and duplicates are handled appropriately), 
-* ``backspace/delete`` to remove the most recently selected cluster, and 
-* ``enter`` when you have finished selecting clusters
-
-**NOTE** 
-
-* You may use the **magnifying glass** (bottom left) to zoom in on a specific region
-* You may use the **left arrow** (bottom left) to return to original zoom
-
-The output will be available in "shapelets/examples/example_2/output".
+For users comfortable with Python programming, the example_2.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
 
 ## Example 3 - Local Pattern Orientation
 
-This example goes through the process of computing the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy images using the ``shapelets.self_assembly`` submodule.
+This example demonstrates computation of the local pattern orientation  for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
 
-The files for this example can be found [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3).
+This example can be run in two different ways:
+* (1) text-based configuration files (shown here), and 
+* (2) programmatically via script-based Python programming (`example_3.py`)
 
-**NOTE** - this example can be run in two different ways, and both methods are presented here.
-* (1) the configuration-file based user interface 
-* (2) importing neccessary shapelets submodules and methods in a script-based format
+### Overview
 
-### Technical overview
+Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains. The local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
 
-Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains.
+* (1) **Masking**: Performed for well-defined features using a specific response threshold. This threshold is found via an interative scheme. Only the orientation values from these well-defined features are retained after masking.
+* (2) **Dilation**: Performed via morphological greyscale dilation to expand the orientation from well-defined features and define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
+* (3) **Blending**: Performed via a median filter to allow for effective transition in orientations between neighbouring well-defined features and across orientational boundaries. The blending kernel size is chosen to be $4\lambda$ so that the orientation is averaged from two layers of surrounding neighbouring features.
 
-The method to compute the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
-
-* (1) **Masking**: Masking is performed for well-defined features using a specific response threshold. This threshold is found via an interative scheme. Only the orientation values from these well-defined features included in the mask are used.
-* (2) **Dilation**: Dilation (via morphological greyscale dilation) is used to expand the orientation from well-defined features and ultimately define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
-* (3) **Blending**: Blending (or smoothing) is performed via a median filter to allow for effective transition in orientations between neighbouring well-defined features and across orientational boundaries. The blending kernel size is chosen to be $4\lambda$ so that the orientation is averaged from two layers of surrounding neighbouring features.
-
-**NOTE** - dilation and blending are achieved through the ``scipy.ndimage.grey_dilation`` and ``scipy.ndimage.median_filter`` methods respectively. They are available from ``scipy.ndimage`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)).
+Dilation and blending operations are achieved through the ``scipy.ndimage.grey_dilation`` and ``scipy.ndimage.median_filter`` methods respectively. They are available from ``scipy.ndimage`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)).
 
 ### Directory overview
 
