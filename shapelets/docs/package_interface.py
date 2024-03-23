@@ -15,11 +15,21 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-from .example_1 import *
-from .example_2 import *
-from .example_3 import *
-from .example_4 import *
-from .installation_guide import *
-from .package_interface import *
-from .custom_commands import *
-from .WSL_support import *
+r"""
+
+# Package Interfacing
+
+The `shapelets` package can be interfaced in two different ways:
+
+1. Configuration file method (developed for non-programmers)
+    * Parameters are described in a text-based configuration file, and the `shapelets` package then reads this file and runs the appropriate analysis 
+2. Scripting method (intended for those comfortable with Python programming)
+    * A more traditional format where relevant methods are imported in python files, i.e. 
+
+```python 
+from shapelets.functions import cartesian2D
+```
+
+The [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) provide implementation using the text-based configuration file method (#1). 
+
+"""
