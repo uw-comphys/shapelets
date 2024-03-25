@@ -21,7 +21,7 @@ r"""
 
 See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) for example files and code. 
 
-This example goes demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
+This example demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
 
 This example can be run in two different ways:
 * (1) text-based configuration files (shown here), and 
@@ -86,6 +86,7 @@ The method outlined in the configuration file will also have its own header with
 ### Run Example
 
 Please ensure that `shapelets` is properly installed before proceeding.
+See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions.
 
 Navigate your terminal to "shapelets/examples/example_1". When you are ready, execute ``shapelets config`` in the command line.
 

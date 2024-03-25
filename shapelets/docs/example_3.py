@@ -70,6 +70,7 @@ The method outlined in the configuration file will also have its own header with
 ## Run Example
 
 Please ensure that `shapelets` is properly installed before proceeding. 
+See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions.
 
 Navigate your terminal to "shapelets/examples/example_3". When you are ready, execute ``shapelets config`` in the command line.
 
