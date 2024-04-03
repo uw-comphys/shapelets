@@ -18,6 +18,7 @@
 import ast
 import configparser
 import os
+from pathlib import Path
 
 from .astronomy.galaxy import *
 
@@ -25,14 +26,16 @@ from .self_assembly.misc import *
 from .self_assembly.quant import *
 from .self_assembly.wavelength import *
 
-def _run(config_file: str) -> None:
+def _run(config_file: str, working_dir: str) -> None:
     r"""
     Main run function that handles input configuration file.
     
     Parameters
     ----------
     * config_file : str
-        * The name of the configuration file
+        * The name of the configuration file in working_dir
+    * working_dir : str
+        * The absolute path (working directory) where the entry point was invoked from
     
     Notes
     -----
@@ -43,18 +46,22 @@ def _run(config_file: str) -> None:
 
     # instantiate and read
     config = configparser.ConfigParser()
-    config.read(config_file)
+    config_file = os.path.join(working_dir, config_file)
+    if not os.path.exists(config_file):
+        raise RuntimeError(f"Configuration file {config_file} does not exist. Check config filename spelling and ensure that it is located in {working_dir}.")
+    else:
+        config.read(config_file)
 
     # handle method
     method = config.get('general', 'method')
 
     # image and output paths
-    image_path = os.getcwd()+'/images/'
-    save_path = os.getcwd()+'/output/'
+    image_path = os.path.join(working_dir, 'images')
+    save_path = os.path.join(working_dir, 'output')
     if not os.path.exists(image_path): 
         raise RuntimeError(f"Path '{image_path}' does not exist.")
     if not os.path.exists(save_path): 
-        os.mkdir("output")
+        os.mkdir(save_path)
 
     ## self_assembly submodule use ##
         
@@ -112,7 +119,7 @@ def _run(config_file: str) -> None:
         
     # retrieving .fits path (if .fits file is provided)
     elif config.get('general', 'fits_name', fallback=None):
-        fits_path = os.getcwd()+'/images/' + config.get('general', 'fits_name')
+        fits_path = os.path.join(working_dir, 'images', config.get('general', 'fits_name'))
 
         if method == 'galaxy_decompose':
             shapelet_order = config.get('galaxy_decompose', 'shapelet_order', fallback = 'default')

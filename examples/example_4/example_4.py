@@ -16,8 +16,9 @@
 ########################################################################################################################
 
 ## Section 1: importing modules
-
 import os
+from pathlib import Path
+
 from shapelets.astronomy import (
     load_fits_data,
     get_postage_stamps,
@@ -32,9 +33,10 @@ compression_order = 20
 ## Section 3: code
 
 # 3.1: loading .fits data and output directory handling
-save_path = os.getcwd()+'/output/'
-if not os.path.exists(save_path): os.mkdir("output")
-fits_path = os.getcwd()+'/images/' + fits_name
+save_path = os.path.join(Path(__file__).parents[0], 'output')
+if not os.path.exists(save_path): 
+    os.mkdir(save_path)
+fits_path = os.path.join(Path(__file__).parents[0], 'images', fits_name) 
 
 output_base_path = save_path+fits_path[fits_path.rfind('/'):-5]
 fits_data = load_fits_data(fits_path)

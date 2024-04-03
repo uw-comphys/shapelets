@@ -89,22 +89,36 @@ def read_image(image_name: str, image_path: str, verbose: bool = True):
     Re-scaling of image to greyscale on [-1, 1] is intentional to align with the minimum and maximum of shapelet function values.
     
     """
-    if os.path.exists(image_path):
-        if image_path[-1] != '/':
-            f = cv2.imread(image_path+'/'+image_name)
-        else:
-            f = cv2.imread(image_path+image_name)
-        f = cv2.cvtColor(f, cv2.COLOR_BGR2GRAY )
-        if verbose:
-            print('Successfully loaded {}'.format(image_name))
-            print('Shape of image is:', f.shape)
-        
-        f = ( ((f-f.min()) / (f.max()-f.min())) * 2 ) - 1
-        if verbose: 
-            print('Image normalized to greyscale on [-1, 1]')
-        return f
-    else: 
-        raise RuntimeError('Image path does not exist.')
+    # Ensure image_path provided exists
+    if not os.path.exists(image_path):
+        raise RuntimeError(f'Image path: {image_path} does not exist.')
+    
+    # read image then ensure image does exist (by evaluating result of cv2.imread)
+    f = cv2.imread(os.path.join(image_path, image_name))
+    if not isinstance(f, np.ndarray):
+        raise RuntimeError(f"Could not read image: {image_name}. Ensure it is located in {image_path} and is of image format.")
+
+    # convert to grayscale
+    f = cv2.cvtColor(f, cv2.COLOR_BGR2GRAY)
+
+    # check if re-scaling is needed b/c k-means clustering cannot handle very large images
+    init_shape = f.shape
+    resized = False 
+    while any(dim >= 1000 for dim in f.shape):
+        dim0, dim1 = round(f.shape[0]*0.8), round(f.shape[1]*0.8)
+        f = cv2.resize(f, dsize=(dim0, dim1))
+        resized = True
+
+    # rescale to [-1, 1] greyscale 
+    f = ( ((f-f.min()) / (f.max()-f.min())) * 2 ) - 1
+
+    if verbose: 
+        print(f"Successfully loaded image: {image_name}")
+        if resized: print(f"New image dimensions are: {f.shape} as initial size {init_shape} too large")
+        else: print(f"Image dimensions are: {f.shape}")
+        print(f"Image {image_name} normalized to greyscale on [-1, 1] to align with shapelet kernels")
+
+    return f
 
 def process_output(image: np.ndarray, image_name: str, save_path: str, output_from: str, **kwargs) -> None:
     r""" 
@@ -359,5 +373,5 @@ def trim_image(im: np.ndarray, l: float):
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
 
     """
-    trim = int(l)
+    trim = round(l/2)
     return im[trim:-trim, trim:-trim]

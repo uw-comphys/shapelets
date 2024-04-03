@@ -24,20 +24,22 @@ from . import _run
 
 def _run_shapelets():
     r"""
-    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file.      
+    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file in the same directory level as the entry point was called from.      
 
     """
-    # Arguments for command line use
-
-    if len(sys.argv) == 1: # if user did not provide any configuration path (which is required)
+    # if user did not provide any configuration filename (which is required)
+    if len(sys.argv) == 1: 
         raise RuntimeError('Please provide name of config file, i.e. "shapelets config".')
 
-    elif len(sys.argv) == 2: # if user did provide a configuration filename/path
+     # if user did provide a configuration filename/path
+    elif len(sys.argv) == 2:
         config_file = sys.argv[1]
-        _run._run(config_file)
+        working_dir = os.getcwd() 
+        _run._run(config_file, working_dir)
 
-    else: # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
-        raise RuntimeError('shapelets entry point only supports the config file name. I.e. "shapelets config".')
+    # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
+    else: 
+        raise RuntimeError('shapelets entry point only supports the config file name in addition to the module. I.e. "shapelets config".')
 
 def _run_tests():
     r"""
