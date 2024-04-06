@@ -67,6 +67,8 @@ def _run(config_file: str, working_dir: str) -> None:
         
     # parsing input image of nanostructure
     if config.get('general', 'image_name', fallback=None):
+
+        # read image to be analyzed
         image_name = config.get('general', 'image_name')
         image = read_image(image_name = image_name, image_path = image_path)
 
@@ -89,8 +91,7 @@ def _run(config_file: str, working_dir: str) -> None:
             if uy != 'default':
                 uy = ast.literal_eval(uy)
 
-            response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
-            rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
+            rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
 
         elif method == 'orientation':

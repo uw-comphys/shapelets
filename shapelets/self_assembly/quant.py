@@ -25,7 +25,7 @@ from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
 
 from .misc import trim_image, make_grid
-from .wavelength import lambda_to_beta
+from .wavelength import get_wavelength, lambda_to_beta
 from ..functions import orthonormalpolar2D
 
 __all__ = [
@@ -35,16 +35,14 @@ __all__ = [
     'rdistance'
 ]
 
-def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
+def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation. Also computes characteristic wavelength of the image[1]_ using shapelets.self_assembly.wavelength.get_wavelength.
     
     Parameters
     ----------
     * image: np.ndarray
         * The image to be convolved with shapelet kernels
-    * l: float
-        * The characteristic wavelength of the image[1]_
     * shapelet_order: Union[str,int]
         * Set as 'default' to use higher-order shapelets[3]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * normresponse: str, optional
@@ -90,6 +88,9 @@ def convresponse(image: np.ndarray, l: float, shapelet_order: Union[str,int] = '
     
     elif normresponse not in ['Vector', 'Individual']:
         raise ValueError('Valid normresponse parameters are "Vector" or "Individual".')
+
+    # get characteristic wavelength of image 
+    l = get_wavelength(image=image, verbose=verbose)
 
     minRespTol = 0.1
     
@@ -394,7 +395,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
 
     return mask, dilate, orientation_final, maxval
 
-def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,int], ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
+def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
     r""" 
     Compute the response distance method from ref.[1]_ using the methodology from ref.[2]_.
 
@@ -402,10 +403,10 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,i
     ----------
     * image: numpy.ndarray
         * The image loaded as a numpy array
-    * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * num_clusters: Union[str,int]
         * The number of clusters as input to k-means clustering[3]_. If str, acceptable value is "default" (which uses 20 clusters[2]_)
+    * shapelet_order: Union[str,int]
+        * Set as 'default' to use higher-order shapelets[4]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * ux: Union[str,list]
         * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
     * uy: Union[str,list]
@@ -423,20 +424,17 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,i
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] https://doi.org/10.1088/1361-6528/aaf353
     .. [3] https://doi.org/10.1007/978-3-642-29807-3
+    .. [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if not isinstance(image, np.ndarray):
         raise TypeError('image must be a numpy array.')
-    
-    if not isinstance(response, np.ndarray):
-        raise TypeError('response must be a numpy array.')
-
+        
     if isinstance(num_clusters, str):
         if num_clusters == 'default': 
             num_clusters = 20
         else:
             raise ValueError('If num_clusters is str type, must be "default" otherwise use int.')
-        
     elif not isinstance(num_clusters, int):
         raise TypeError('If num_clusters is not str type, must be int.')
 
@@ -491,6 +489,10 @@ def rdistance(image: np.ndarray, response: np.ndarray, num_clusters: Union[str,i
         plt.axis('off')
         plt.show()"""
     
+    # get convolutional response data 
+    # shapelet_order parameter valid input check is enforced in the convresponse() function
+    response = convresponse(image = image, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
+
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]
     uX, uY = np.meshgrid(np.arange(ux[0], ux[1] + 1), np.arange(uy[0], uy[1] + 1))

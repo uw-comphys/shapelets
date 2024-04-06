@@ -162,6 +162,8 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
         # get kwargs
         d = kwargs['d']
         num_clusters = kwargs['num_clusters']
+        if num_clusters == 'default':
+            num_clusters = '20'
 
         # final image processing for response distance scalar field
         d = (d-d.min()) / (d.max()-d.min())
