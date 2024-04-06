@@ -188,29 +188,27 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
 
     return omega, phi
 
-def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: Union[str,int]):
+def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
     Computes the defect identification method[1]_. Also known as the defect response distance method.
 
     Parameters
     ----------
-    * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
-    * l: float
-        * The characteristic wavelength of the image
+    * image: numpy.ndarray
+        * The image loaded as a numpy array
     * pattern_order: str
         * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    * num_clusters: str or int
-        * The number of clusters as input to k-means clustering[2]_. Use "default" to get default value based on pattern_order. For stripe, square, and hexagonal patterns, the minimum value is 4, 8, and 10 respectively
+    * verbose: bool, optional
+        * True (default) to print out information from convolution operation to console
     
     Returns
     -------
     * centroids: np.ndarray
         * The centroids from k-means clustering[2]_. Each centroid is a row vector
     * clusterMembers2D: np.ndarray
-        * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is centroids[1]
+        * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is dedfined by centroids[1]
     * defects: np.ndarray
-        The result of the defect response distance method[1]_
+        * The result of the defect response distance method[1]_
 
     References
     ----------
@@ -218,63 +216,38 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
     .. [2] https://doi.org/10.1007/978-3-642-29807-3
 
     """
-    if not isinstance(response, np.ndarray):
-        raise TypeError('response parameter must be a numpy array.')
-    
-    if isinstance(num_clusters, str):
-        if num_clusters != 'default':
-            raise ValueError('num_clusters as str type must be "default".')
-    elif not isinstance(num_clusters, int):
-        raise TypeError('num_clusters must be integer or "default".')
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image must be a numpy array.')
 
     if not isinstance(pattern_order, str):
         raise TypeError('pattern_order parameter must be of str type.')
+    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
+        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
     
-    if pattern_order == 'stripe': 
-        if num_clusters == 'default':
-            num_clusters = 4
-        elif int(num_clusters) < 4:
-            print("num_clusters parameter too low, defaulting to 4.")
-            num_clusters = 4
-        else:
-            num_clusters = int(num_clusters)
-            
-    elif pattern_order == 'square': 
-        if num_clusters == 'default':
-            num_clusters = 8
-        elif int(num_clusters) < 8:
-            print("num_clusters parameter too low, defaulting to 8.")
-            num_clusters = 8
-        else:
-            num_clusters = int(num_clusters)
-            
-    elif pattern_order == 'hexagonal': 
-        if num_clusters == 'default':
-            num_clusters = 10
-        elif int(num_clusters) < 10:
-            print("num_clusters parameter too low, defaulting to 10.")
-            num_clusters = 10
-        else:
-            num_clusters = int(num_clusters)
-            
-    else: 
-        raise ValueError('Valid pattern_order parameters are "stripe", "square", "hexagonal".')
+    # enforce appropriate number of clusters depending on pattern_order
+    min_clusters = {'stripe': 4, 'square': 8, 'hexagonal': 10}
+    num_clusters = min_clusters[pattern_order]
     
+    # get convolutional response data 
+    # shapelet_order parameter valid input check is enforced in the convresponse() function
+    response = convresponse(image = image, shapelet_order = 'default', normresponse = 'Vector')[0]
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
     t1 = time.time()
-    print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
+    if verbose:
+        print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
     centroids = kmeans(response2D, num_clusters)[0]
     clusterMembers1D, dists1D = vq(response2D, centroids)
     clusterMembers2D = clusterMembers1D.reshape(response.shape[0:2]) 
     
     t2 = time.time() - t1
-    print(f"Clustering runtime = {t2:0.3} s")
+    if verbose:
+        print(f"Clustering runtime = {t2:0.3} s")
 
     # get inputs of selected clusters
-    clusterMembers2DTrim = trim_image(clusterMembers2D, l)
-    plt.imshow(clusterMembers2DTrim, cmap='jet')
+    l = get_wavelength(image = image)
+    plt.imshow(clusterMembers2D, cmap='jet')
     plt.axis('off')
     plt.title('a = add point; del/backspace = remove point; enter = finish')
     win_positions = np.array(plt.ginput(n = -1, timeout = -1, mouse_add=None, mouse_pop=None, mouse_stop=None))
@@ -288,7 +261,7 @@ def defectid(response: np.ndarray, l: float, pattern_order: str, num_clusters: U
     selected_clusters = []
     for i in range(win_positions.shape[0]):
         x, y = win_positions[i][0], win_positions[i][1]
-        cluster = clusterMembers2DTrim[y, x] 
+        cluster = clusterMembers2D[y, x] 
 
         if cluster not in selected_clusters:
             selected_clusters.append(cluster)

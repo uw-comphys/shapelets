@@ -72,9 +72,6 @@ def _run(config_file: str, working_dir: str) -> None:
         image_name = config.get('general', 'image_name')
         image = read_image(image_name = image_name, image_path = image_path)
 
-        # obtain characteristic wavelength, needed for all self-assembly applications
-        char_wavelength = get_wavelength(image = image)
-
         if method == 'response_distance':
             shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
             if shapelet_order != 'default':
@@ -96,7 +93,7 @@ def _run(config_file: str, working_dir: str) -> None:
 
         elif method == 'orientation':
             pattern_order = config.get('orientation', 'pattern_order')
-
+            char_wavelength = get_wavelength(image = image)
             response, orients = convresponse(image = image, l = char_wavelength, shapelet_order = 6, normresponse = 'Individual')
             mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, response = response, orients = orients)
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
@@ -104,13 +101,7 @@ def _run(config_file: str, working_dir: str) -> None:
         elif method == 'identify_defects':
             pattern_order = config.get('identify_defects', 'pattern_order')
 
-            num_clusters = config.get('identify_defects', 'num_clusters', fallback = 'default') 
-            if num_clusters != 'default':
-                num_clusters = ast.literal_eval(num_clusters)
-
-            response = convresponse(image = image, l = char_wavelength, shapelet_order = 'default', normresponse = 'Vector')[0]
-            centroids, clusterMembers, defects = defectid(response = response, l = char_wavelength,
-                                                          pattern_order = pattern_order, num_clusters = num_clusters)
+            centroids, clusterMembers, defects = defectid(image = image, pattern_order = pattern_order)
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
         
         else:
