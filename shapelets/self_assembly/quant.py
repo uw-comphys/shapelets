@@ -37,14 +37,14 @@ __all__ = [
 
 def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation. Also computes characteristic wavelength of the image[1]_ using shapelets.self_assembly.wavelength.get_wavelength.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
     
     Parameters
     ----------
     * image: np.ndarray
         * The image to be convolved with shapelet kernels
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets[3]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets[2]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * normresponse: str, optional
         * Normalize magnitude of response (omega) in terms of response vectors = "Vector" (default). Normalize each m-fold response w.r.t itself on [0, 1) = "Individual"
     * verbose: bool, optional
@@ -59,13 +59,12 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition[2]_ (see shapelets.functions.orthonormalpolar2D).
+    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D).
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://doi.org/10.1088/1361-6528/aaf353
-    .. [3] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [1] https://doi.org/10.1088/1361-6528/aaf353
+    .. [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if not isinstance(image, np.ndarray):
@@ -76,16 +75,13 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
             mmax = None
         else:
             raise ValueError('shapelet_order parameter as a str must be "default".')
-        
     elif isinstance(shapelet_order, int):
         mmax = shapelet_order
-
     else:
         raise TypeError('shapelet_order parameter must either be "default" or integer value.')
     
     if not isinstance(normresponse, str):
         raise TypeError('normresponse parameter must be of type str.')
-    
     elif normresponse not in ['Vector', 'Individual']:
         raise ValueError('Valid normresponse parameters are "Vector" or "Individual".')
 
@@ -229,7 +225,6 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     num_clusters = min_clusters[pattern_order]
     
     # get convolutional response data 
-    # shapelet_order parameter valid input check is enforced in the convresponse() function
     response = convresponse(image = image, shapelet_order = 'default', normresponse = 'Vector')[0]
     response2D = response.reshape(-1, response.shape[-1])
     
@@ -246,7 +241,6 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
         print(f"Clustering runtime = {t2:0.3} s")
 
     # get inputs of selected clusters
-    l = get_wavelength(image = image)
     plt.imshow(clusterMembers2D, cmap='jet')
     plt.axis('off')
     plt.title('a = add point; del/backspace = remove point; enter = finish')
@@ -273,20 +267,16 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     
     return centroids, clusterMembers2D, defects 
 
-def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.ndarray, verbose: bool = True):
+def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
     Computes the local pattern orientation[1]_ via an iterative scheme using shapelet orientation at maximum response from steerable filter theory[2]_.
 
     Parameters
     ----------
+    * image: numpy.ndarray
+        * The image loaded as a numpy array
     * pattern_order: str
         * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    * l: float
-        * The characteristic wavelength of the image
-    * response: np.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
-    * orients: np.ndarray
-        * The optimal shapelet filter orientation at maximum response as a 3D array, obtained from shapelets.self_assembly.quant.convresponse
     * verbose: bool, optional
         * True (default) to print out results of orientation algorithm to console
 
@@ -312,24 +302,25 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
     .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
     
     """
-    if (not isinstance(response, np.ndarray)) or (not isinstance(orients, np.ndarray)):
-        raise TypeError('response and orients parameters must be np.ndarray types.')
-
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image must be a numpy array.')
+    
     if not isinstance(pattern_order, str):
         raise TypeError('pattern_order parameter must be of str type.')
+    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
+        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
 
-    params = {
-        'stripe': 0,
-        'square': 3, 
-        'hexagonal': 5
-    }
-
-    if pattern_order not in params:
-        raise ValueError('Valid pattern_order parameters are "stripe", "square", "hexagonal".')
-    
+    # get orientation information based on pattern_order
+    params = {'stripe': 0, 'square': 3, 'hexagonal': 5}
     ind = params[pattern_order]
     maxval = 2*np.pi / (ind+1)
-        
+    
+    # get characteristic wavelength of image 
+    l = get_wavelength(image=image, verbose=False)
+
+    # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
+    response, orients = convresponse(image = image, shapelet_order = 6, normresponse = 'Individual')
+
     # find the response threshold iteratively 
     orient = orients[:,:,ind].copy()
     resp_og = response[:,:,ind].copy()
@@ -354,7 +345,7 @@ def orientation(pattern_order: str, l: float, response: np.ndarray, orients: np.
         err = (orientation_final == 0.0).sum() / orientation_final.size
             
         if err > errtol:
-            #TODO: alex@matthew: adaptive step width for resptol
+            # TODO: Adaptive step width for resptol to decrease runtime
             resptol -= 0.01
             resptol = np.round(resptol, 2)
             if verbose:
