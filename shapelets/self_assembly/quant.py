@@ -225,7 +225,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     num_clusters = min_clusters[pattern_order]
     
     # get convolutional response data 
-    response = convresponse(image = image, shapelet_order = 'default', normresponse = 'Vector')[0]
+    response = convresponse(image = image, shapelet_order = 'default', normresponse = 'Vector', verbose=verbose)[0]
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
@@ -319,7 +319,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     l = get_wavelength(image=image, verbose=False)
 
     # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
-    response, orients = convresponse(image = image, shapelet_order = 6, normresponse = 'Individual')
+    response, orients = convresponse(image = image, shapelet_order = 6, normresponse = 'Individual', verbose=verbose)
 
     # find the response threshold iteratively 
     orient = orients[:,:,ind].copy()
@@ -455,7 +455,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     
     # get convolutional response data 
     # shapelet_order parameter valid input check is enforced in the convresponse() function
-    response = convresponse(image = image, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
+    response = convresponse(image = image, shapelet_order = shapelet_order, normresponse = 'Vector', verbose=verbose)[0]
 
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]

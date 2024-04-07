@@ -154,8 +154,13 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
+    # check that save_path exists
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+        
     os.chdir(save_path)
 
+    # need to get characteristic wavelength for image trimming
     char_wavelength = get_wavelength(image = image, verbose = False)
 
     if output_from == 'response_distance':

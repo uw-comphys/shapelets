@@ -47,11 +47,7 @@ class TestMethods(unittest.TestCase):
         cls.image = read_image(image_name="hexSIM1.png", image_path=cls.dir, verbose=False)
         assert isinstance(cls.image, np.ndarray)
 
-        cls.wvl = get_wavelength(image = cls.image, verbose = False)
-        assert isinstance(cls.wvl, numbers.Real)
-
-        cls.omega, cls.phi = convresponse(cls.image, cls.wvl, shapelet_order='default', \
-                                          verbose=False)
+        cls.omega, cls.phi = convresponse(cls.image, shapelet_order='default', verbose=False)
     
     # This test will be run first on purpose
     def test_a_first(self) -> None:
@@ -63,54 +59,44 @@ class TestMethods(unittest.TestCase):
 
     def test_convresponse(self) -> None:
         with self.assertRaises(TypeError):
-            convresponse([], self.wvl, shapelet_order='default')
+            convresponse([], shapelet_order='default')
 
         with self.assertRaises(ValueError): 
-            convresponse(self.image, self.wvl, shapelet_order='')
+            convresponse(self.image, shapelet_order='')
         with self.assertRaises(TypeError):
-            convresponse(self.image, self.wvl, shapelet_order=5.)
+            convresponse(self.image, shapelet_order=5.)
         
         with self.assertRaises(TypeError):
-            convresponse(self.image, self.wvl, shapelet_order='default', \
-                         normresponse=[])
+            convresponse(self.image, shapelet_order='default', normresponse=[])
         with self.assertRaises(ValueError):
-            convresponse(self.image, self.wvl, shapelet_order='default', \
-                         normresponse='')
+            convresponse(self.image, shapelet_order='default', normresponse='')
 
         # Test non-default input of shapelet_order parameter 
-        omega, phi = convresponse(self.image, self.wvl, shapelet_order=20, verbose=False)
+        omega, phi = convresponse(self.image, shapelet_order=20, verbose=False)
         self.assertEqual(omega.shape, self.image.shape + (20,))
         self.assertEqual(phi.shape, self.image.shape + (20,))
     
     # Note: cannot test outputs as defectid() is an interactive function.
     def test_defectid(self) -> None:
         with self.assertRaises(TypeError):
-            defectid([], self.wvl, 'stripe', 'default')
+            defectid([], pattern_order='stripe')
         
         with self.assertRaises(ValueError):
-            defectid(self.omega, self.wvl, 'stripe', '')
+            defectid(self.image, pattern_order='')
         with self.assertRaises(TypeError):
-            defectid(self.omega, self.wvl, 'stripe', 5.)
-
-        with self.assertRaises(TypeError):
-            defectid(self.omega, self.wvl, [], 'default')
-        with self.assertRaises(ValueError):
-            defectid(self.omega, self.wvl, 'rectangular', 'default')
+            defectid(self.image, pattern_order=1.)
 
     def test_orientation(self) -> None:
         with self.assertRaises(TypeError):
-            orientation('hexagonal', self.wvl, [], self.phi)
-        with self.assertRaises(TypeError):
-            orientation('hexagonal', self.wvl, self.omega, [])
+            orientation([], pattern_order='square')
 
-        with self.assertRaises(TypeError):
-            orientation([], self.wvl, self.omega, self.phi)
         with self.assertRaises(ValueError):
-            orientation('rectangular', self.wvl, self.omega, self.phi)
+            orientation(self.image, pattern_order='')
+        with self.assertRaises(TypeError):
+            orientation(self.image, pattern_order=1.)
         
         print(' -> this test may take more than a few seconds')
-        mask, dilate, orient_result, _ = orientation('hexagonal', self.wvl, self.omega, \
-                                                     self.phi, verbose=False)
+        mask, dilate, orient_result, _ = orientation(self.image, pattern_order='hexagonal', verbose=False)
         
         self.assertTrue(isinstance(mask, np.ndarray))
         self.assertTrue(isinstance(dilate, np.ndarray))
@@ -122,29 +108,28 @@ class TestMethods(unittest.TestCase):
     
     def test_rdistance(self) -> None:
         with self.assertRaises(TypeError):
-            rdistance([], self.omega, 'default', 'default', 'default')
-
-        with self.assertRaises(TypeError):
-            rdistance(self.image, [], 'default', 'default', 'default')
+            rdistance([])
         
         with self.assertRaises(ValueError):
-            rdistance(self.image, self.omega, '', 'default', 'default')
+            rdistance(self.image, num_clusters='')
+        with self.assertRaises(TypeError):
+            rdistance(self.image, num_clusters=1.)
 
         with self.assertRaises(TypeError):
-            rdistance(self.image, self.omega, 'default', [1, 2], 'default')
+            rdistance(self.image, num_clusters='default', ux=[1, 2], uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, self.omega, 'default', 'incorrect', 'default')
+            rdistance(self.image, num_clusters='default', ux='incorrect', uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, self.omega, 'default', 'default', 'incorrect')            
+            rdistance(self.image, num_clusters='default', ux='default', uy='incorrect')            
         with self.assertRaises(ValueError):
-            rdistance(self.image, self.omega, 'default', [1,2,3], [1,2])
+            rdistance(self.image, num_clusters='default', ux=[1,2,3], uy=[1,2])
         with self.assertRaises(ValueError):
-            rdistance(self.image, self.omega, 'default', [1,2], [1,2,3])
+            rdistance(self.image, num_clusters='default', ux=[1,2], uy=[1,2,3])
 
         ux, uy = [237, 283], [32, 78]
         print(' -> this test may take more than a few seconds')
 
-        d = rdistance(self.image, self.omega, 'default', ux, uy, verbose=False)
+        d = rdistance(self.image, num_clusters='default', ux=ux, uy=uy, verbose=False)
 
         self.assertTrue(d.shape, self.image.shape)
         self.assertTrue(d.min() >= 0.)

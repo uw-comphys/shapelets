@@ -70,17 +70,17 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **galaxy_decompose** method may contain up to two parameters. Note that default refers to the default value if the parameter is excluded from the configuration file.
+The method outlined in the configuration file will also have its own header with specific parameters. The **galaxy_decompose** method may contain up to two parameters.  Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
 
 **shapelet_order** `int`
 
 * The maximum shapelet order (i.e. cartesian shapelets ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))) to calculate coefficients such that $n_1 + n_2 \leq n_{max}$.
-* default = 10
+* Default value is 10
 
 **compression_order** `int`
 
 * The number of shapelet coefficients to use for final image reconstruction
-* default = 25
+* Default value is 25. Here 20 is used just as an example
 
 ### Run Example
 
