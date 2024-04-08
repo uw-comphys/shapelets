@@ -55,33 +55,33 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 	[response_distance]
 	shapelet_order = default
-	num_clusters = 20
+	num_clusters = default
 	ux = [50, 80]
 	uy = [150, 180]
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **response_distance** method may contain up to four parameters. Note that *default* refers to the default value if the parameter is excluded from the configuration file.
+The method outlined in the configuration file will also have its own header with specific parameters. The **response_distance** method may contain up to four parameters. Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file).
 
 **shapelet_order** `int`
 
 * The maximum shapelet order ($m'$) used for convolution operations, i.e. $m \in [1, m']$ shapelets are used 
-* default = $m'$ $\rightarrow$ computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+* Default value is computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
 **num_clusters** `int`
 
 * The number of clusters for k-means clustering. Note using 0 is acceptable and will use all response vectors in the reference region (subdomain) ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
-* default = 20 $\rightarrow$ as determined by a distortion analysis ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
+* Default value is 20 clusters as determined by a distortion analysis ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
 
 **ux** `list`
 
 * The lower and upper x-coordinates (respectively) of the reference region (subdomain)
-* default $\rightarrow$ user is required to select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
+* Default requires user to select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
 **uy** `list`
 
 * The lower and upper y-coordinates (respectively) of the reference region (subdomain)
-* default $\rightarrow$ user is required to select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
+* Default requires user to select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
 ### Run Example
 

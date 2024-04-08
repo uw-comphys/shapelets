@@ -67,11 +67,10 @@ def _run(config_file: str, working_dir: str) -> None:
         
     # parsing input image of nanostructure
     if config.get('general', 'image_name', fallback=None):
+
+        # read image to be analyzed
         image_name = config.get('general', 'image_name')
         image = read_image(image_name = image_name, image_path = image_path)
-
-        # obtain characteristic wavelength, needed for all self-assembly applications
-        char_wavelength = get_wavelength(image = image)
 
         if method == 'response_distance':
             shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
@@ -89,29 +88,24 @@ def _run(config_file: str, working_dir: str) -> None:
             if uy != 'default':
                 uy = ast.literal_eval(uy)
 
-            response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
-            rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
+            rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
+
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
 
         elif method == 'orientation':
             pattern_order = config.get('orientation', 'pattern_order')
 
-            response, orients = convresponse(image = image, l = char_wavelength, shapelet_order = 6, normresponse = 'Individual')
-            mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, response = response, orients = orients)
+            mask, dilate, blended, maxval = orientation(image = image, pattern_order = pattern_order)
+
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
-    
+            
         elif method == 'identify_defects':
             pattern_order = config.get('identify_defects', 'pattern_order')
 
-            num_clusters = config.get('identify_defects', 'num_clusters', fallback = 'default') 
-            if num_clusters != 'default':
-                num_clusters = ast.literal_eval(num_clusters)
+            centroids, clusterMembers, defects = defectid(image = image, pattern_order = pattern_order)
 
-            response = convresponse(image = image, l = char_wavelength, shapelet_order = 'default', normresponse = 'Vector')[0]
-            centroids, clusterMembers, defects = defectid(response = response, l = char_wavelength,
-                                                          pattern_order = pattern_order, num_clusters = num_clusters)
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
-        
+
         else:
             raise ValueError('"method" parameter from configuration file not recognized by shapelets.')
 
@@ -132,7 +126,6 @@ def _run(config_file: str, working_dir: str) -> None:
             fits_data = load_fits_data(fits_path)
             (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(fits_data, output_base_path)
             decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)
-
         else:
             raise ValueError('"method" parameter from configuration file not recognized by shapelets.')
         

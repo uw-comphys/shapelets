@@ -60,12 +60,11 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The orientation method must contain one parameter. Note that default refers to the default value if the parameter is excluded from the configuration file.
+The method outlined in the configuration file will also have its own header with specific parameters. The orientation method must contain one parameter.  Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
 
 **pattern_order** `str`
 
 * The pattern order (symmetry) observed in the image. Options are `stripe`, `square`, `hexagonal`
-* This parameter does not have a default value
 
 ## Run Example
 

@@ -57,25 +57,14 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 	[identify_defects]
 	pattern_order = hexagonal
-	num_clusters = 10
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **identify_defects** method may contain up to two parameters. Note that default refers to the default value if the parameter is excluded from the configuration file.
+The method outlined in the configuration file will also have its own header with specific parameters. The **identify_defects** method may contain up to two parameters. Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
 
 **pattern_order** `str`
 
 * The pattern order (symmetry) observed in the image. Options are `stripe`, `square`, `hexagonal`
-* This parameter **does not have a default value**
-
-**num_clusters** `int`
-
-* The number of clusters for k-means clustering. Must be $\geq$ 1.
-* Default values are as follows,
-	* If pattern_order = stripe $\rightarrow$ 4
-	* If pattern_order = square $\rightarrow$ 8
-	* If pattern_order = hexagonal $\rightarrow$ 10
-* If an integer value is provided that is below the above default, the code will defer to the default value
 
 ### Run Example
 

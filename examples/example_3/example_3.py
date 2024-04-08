@@ -20,10 +20,8 @@ import os
 from pathlib import Path
 
 from shapelets.self_assembly import (
-    convresponse,
     read_image,
     orientation,
-    get_wavelength,
     process_output
 ) 
 
@@ -40,14 +38,8 @@ save_path = os.path.join(Path(__file__).parents[0], 'output')
 if not os.path.exists(save_path): 
     os.mkdir(save_path)
 
-# 3.2: get the characteristic wavelength of the pattern
-char_wavelength = get_wavelength(image = image)
+# 3.2: compute the local pattern orientation
+mask, dilate, blended, maxval = orientation(image = image, pattern_order = pattern_order)
 
-# 3.3: get the convolutional response 
-response, orients = convresponse(image = image, l = char_wavelength, shapelet_order = 6, normresponse = 'Individual')
-
-# 3.4: compute the local pattern orientation
-mask, dilate, blended, maxval = orientation(pattern_order = pattern_order, l = char_wavelength, response = response, orients = orients)
-
-# processing and saving the results to the **output/** directory 
+# 3.3: processing and saving the results to the **output/** directory 
 process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)

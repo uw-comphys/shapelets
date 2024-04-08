@@ -20,17 +20,15 @@ import os
 from pathlib import Path
 
 from shapelets.self_assembly import (
-    convresponse,
     read_image,
     rdistance,
-    get_wavelength,
     process_output
 ) 
 
 ## Section 2: parameters
 image_name = "lamSIM1.png"
-shapelet_order = 'default' 
-num_clusters = 20
+shapelet_order = 'default' # can also be integer value to set upper bound
+num_clusters = 'default' # default is 20, can be any other positive integer 
 ux = [50, 80]
 uy = [150, 180]
 
@@ -43,17 +41,11 @@ save_path = os.path.join(Path(__file__).parents[0], 'output')
 if not os.path.exists(save_path): 
     os.mkdir(save_path)
 
-# 3.2: get the characteristic wavelength of the pattern
-char_wavelength = get_wavelength(image = image)
-
-# 3.3: get the convolutional response 
-response = convresponse(image = image, l = char_wavelength, shapelet_order = shapelet_order, normresponse = 'Vector')[0]
-
-# 3.4: compute the response distance 
-try:
-    rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = ux, uy = uy)
+# 3.2: compute the response distance 
+try: # if ux, uy are defined above
+    rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
 except NameError:
-    rd_field = rdistance(image = image, response = response, num_clusters = num_clusters, ux = 'default', uy = 'default')
+    rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = 'default', uy = 'default')
 
-# processing and saving the results to the **output/** directory 
+# 3.3: processing and saving the results to the **output/** directory 
 process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
