@@ -43,9 +43,10 @@ The shapelets package provides reference documentation and code for four (4) sha
 
 New users should kindly follow these instructions to use the shapelets package:
 
-1. Consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions on Linux, Mac OS, and Windows machines.
+1. If you have Python 3.10+ installed, you can install the shapelets package via pip from your terminal/command line: `pip install shapelets` 
+2. If you do not have Python 3.10+ installed, consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for helpful instructions on Linux, Mac OS, and Windows machines.
 3. Consult the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) to see specific applications implemented in the package and a walkthrough of how to interact with the package correctly.
-2. Checkout other documentation, such as
+4. Checkout other documentation, such as
     * [Custom Commands](https://uw-comphys.github.io/shapelets/shapelets/docs/custom_commands.html) - describes command-line arguments specifically designed for this package
     * [Package Interface](https://uw-comphys.github.io/shapelets/shapelets/docs/package_interface.html) - describes two different ways of using the `shapelets` package (configuration files or traditional Python programming)
 

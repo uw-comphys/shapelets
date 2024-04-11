@@ -27,6 +27,8 @@ This example can be run in two different ways:
 * (1) text-based configuration files (shown here), and 
 * (2) programmatically via script-based Python programming (`example_1.py`)
 
+This example will go through the text-based configuration file approach (1). For users comfortable with Python programming, the example_1.py file is setup to run the same analysis described below. The outputs will appear in the same directory.
+
 ## Overview
 
 The response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) is calculated as:
@@ -61,7 +63,7 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **response_distance** method may contain up to four parameters. Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file).
+The method outlined in the configuration file will also have its own header with specific parameters. The **response_distance** method may contain up to four parameters. Certain parameters also have defaults, these can be excluded from the configuration file if desired.
 
 **shapelet_order** `int`
 
@@ -70,17 +72,17 @@ The method outlined in the configuration file will also have its own header with
 
 **num_clusters** `int`
 
-* The number of clusters for k-means clustering. Note using 0 is acceptable and will use all response vectors in the reference region (subdomain) ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
+* The number of clusters for k-means clustering. Note using 0 is acceptable and will use all response vectors in the reference region ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
 * Default value is 20 clusters as determined by a distortion analysis ([T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353))
 
 **ux** `list`
 
-* The lower and upper x-coordinates (respectively) of the reference region (subdomain)
+* The lower and upper x-coordinates (respectively) of the reference region 
 * Default requires user to select x-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
 **uy** `list`
 
-* The lower and upper y-coordinates (respectively) of the reference region (subdomain)
+* The lower and upper y-coordinates (respectively) of the reference region 
 * Default requires user to select y-bounds during runtime, see [here](#selecting-subdomain-bounds-during-runtime) for instructions
 
 ### Run Example
@@ -113,9 +115,5 @@ After executing example 1, either via ``shapelets config`` in the command line (
 * You may use the **left arrow** (bottom left) to return to original zoom
 * Failure to choose 4 points/corners (i.e., choosing less or more than 4) will restart the process automatically
 * Please choose a region of the pattern that contains zero observable defects in order to maximize the response distance results
-
-## Scripting Method
-
-For users comfortable with Python programming, the **example_1.py** file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
 
 """

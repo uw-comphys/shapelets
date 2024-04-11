@@ -28,7 +28,10 @@ The shapelets package provides reference documentation and code for four (4) sha
 
 ## Getting Started
 
-Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all documentation, including installation instructions, detailed examples, and more. 
+If you have Python 3.10+ installed on your machine, you can install the shapelets package from pip: `pip install shapelets`
+
+Users are directed to the shapelets [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for all relevant information, including installation instructions (including Python itself), detailed examples, and more. 
+
 If you plan to use the shapelets package for your own work, please cite appropriately using the [citation](#citation) below or the "Cite this repository" dropdown on the right sidebar.
 
 ## Issues
