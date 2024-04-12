@@ -85,7 +85,7 @@ url = {https://joss.theoj.org/papers/10.21105/joss.06058}
 
 ## Authors
 
-* Matthew Peres Tino
+* Matthew Peres Tino (mptino@uwaterloo.ca)
 * Abbas Yusuf Abdulaziz 
 * Nasser Mohieddin Abukhdeir
 * Robert Suderman 
