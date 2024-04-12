@@ -30,7 +30,7 @@ The `shapelets` package can be interfaced in two different ways:
 from shapelets.functions import cartesian2D
 ```
 
-The [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) are implemented primarily using the text-based configuration file method (#1).
-However, the examples also have Python files (.py) that perform the exact same analysis as shown via the configuration file method. 
+The [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) are implemented via the text-based configuration file method (#1 above).
+However, these examples also have associated Python files (.py) that perform the exact same analysis as shown via the configuration file method. 
 
 """
