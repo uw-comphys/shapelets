@@ -27,7 +27,7 @@ from shapelets.self_assembly import (
     lambda_to_beta
 )
 
-class TestBasic(unittest.TestCase):
+class TestSelfAssemblyBasic(unittest.TestCase):
     r"""
     Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
     Uses two simulated images of nanostructure, lamSIM1.png and hexSIM1.png in ./images for testing.

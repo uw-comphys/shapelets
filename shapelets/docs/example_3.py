@@ -27,6 +27,8 @@ This example can be run in two different ways:
 * (1) text-based configuration files (shown here), and 
 * (2) programmatically via script-based Python programming (`example_3.py`)
 
+This example will go through the text-based configuration file approach (1). For users comfortable with Python programming, the example_3.py file is setup to run the same analysis described below. The outputs will appear in the same directory.
+
 ## Overview
 
 Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains. The local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
@@ -60,7 +62,7 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The orientation method must contain one parameter.  Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
+The method outlined in the configuration file will also have its own header with specific parameters. The orientation method must contain one parameter, described below.
 
 **pattern_order** `str`
 
@@ -82,9 +84,4 @@ The output (shown below) will then be available in "shapelets/examples/example_3
 
 ![](images/sqrAFM2_orientation_blend.png)
 ![](images/sqrAFM2_orientation_overlay.png)
-
-## Scripting Method 
-
-For users comfortable with Python programming, the example_3.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
-
 """

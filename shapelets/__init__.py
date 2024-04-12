@@ -23,16 +23,16 @@ r"""
 
 ## What is shapelets? 
 
-shapelets is a python package that implements several shapelet functions and some of their significant applications in science and astronomy. These functions form a complete and orthonormal set, allowing them to capture complex geometries and information from any physical shape. Furthermore, shapelets are localized and can be scaled to match that of any physical feature. 
+Shapelets is a Python package that implements several shapelet functions and some of their significant applications in science and astronomy. Shapelet functions are a complete and orthogonal set of localized basis functions with mathematical properties convenient for manipulation and analysis of images from a broad range of applications.
 
-Due to these properties, they have seen extensive use in recent years, with several different formulations and applications:
+Due to these properties, they have seen extensive use in recent years, including:
 
 * Astronomy/astrophysics ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x), [R. Massey (2005)](https://doi.org/10.48550/arXiv.astro-ph/0408445), [J. Berge (2019)](https://doi.org/10.48550/arXiv.1903.05837))
-* Nanomaterials ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307), [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353), [M. P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+* Self-assembled nanomaterials ([R. Suderman (2015)](http://dx.doi.org/10.1103/PhysRevE.91.033307), [T. Akdeniz (2018)](https://doi.org/10.1088/1361-6528/aaf353), [M. P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 * Computational neuroscience ([J. D. Victor (2006)](https://doi.org/10.1152/jn.00498.2005), [T. O. Sharpee (2009)](https://doi.org/10.1007%2Fs10827-008-0107-5))
 * Medical imaging ([J. Weissman (2004)](https://doi.org/10.1364/OPEX.12.005760))
 
-The shapelets package provides reference documentation and code for four (4) shapelet functions: 
+The shapelets package provides reference code and documentation for 4 shapelet function definitions: 
 
 * Cartesian shapelets ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)), 
 * Polar shapelets ([R. Massey (2005)](https://doi.org/10.48550/arXiv.astro-ph/0408445)),
@@ -43,9 +43,10 @@ The shapelets package provides reference documentation and code for four (4) sha
 
 New users should kindly follow these instructions to use the shapelets package:
 
-1. Consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions on Linux, Mac OS, and Windows machines.
+1. If you have Python 3.10+ installed, you can install the shapelets package via pip from your terminal/command line: `pip install shapelets` 
+2. If you do not have Python 3.10+ installed, consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for helpful instructions on Linux, Mac OS, and Windows machines.
 3. Consult the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) to see specific applications implemented in the package and a walkthrough of how to interact with the package correctly.
-2. Checkout other documentation, such as
+4. Checkout other documentation, such as
     * [Custom Commands](https://uw-comphys.github.io/shapelets/shapelets/docs/custom_commands.html) - describes command-line arguments specifically designed for this package
     * [Package Interface](https://uw-comphys.github.io/shapelets/shapelets/docs/package_interface.html) - describes two different ways of using the `shapelets` package (configuration files or traditional Python programming)
 
@@ -84,7 +85,7 @@ url = {https://joss.theoj.org/papers/10.21105/joss.06058}
 
 ## Authors
 
-* Matthew Peres Tino
+* Matthew Peres Tino (mptino@uwaterloo.ca)
 * Abbas Yusuf Abdulaziz 
 * Nasser Mohieddin Abukhdeir
 * Robert Suderman 

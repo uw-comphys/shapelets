@@ -22,4 +22,3 @@ from .example_4 import *
 from .installation_guide import *
 from .package_interface import *
 from .custom_commands import *
-from .WSL_support import *

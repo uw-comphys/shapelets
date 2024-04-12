@@ -21,7 +21,6 @@ import unittest
 import numpy as np
 
 from shapelets.astronomy import (
-
     get_nspace,
     get_compressed_nspace,
     load_fits_data,
@@ -32,7 +31,7 @@ from shapelets.astronomy import (
     update_shapelet_parameters
 )
 
-class TestBasic(unittest.TestCase):
+class TestAstronomyBasic(unittest.TestCase):
     r"""
     Unit tests to support functionality of shapelets.astronomy sub-module.
     Uses one astronomical data file galaxies.fits and a variety of test cases
@@ -118,7 +117,6 @@ class TestBasic(unittest.TestCase):
     
         reconstructed = reconstruct(coefficients, 4, updated_parameters[0], updated_parameters[1], image.shape)
         self.assertEqual(reconstructed.shape, (120, 114))
-
 
 
 if __name__ == "__main__":

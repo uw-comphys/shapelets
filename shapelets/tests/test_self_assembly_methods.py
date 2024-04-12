@@ -30,7 +30,7 @@ from shapelets.self_assembly import (
     rdistance
 )
 
-class TestMethods(unittest.TestCase):
+class TestSelfAssemblyMethods(unittest.TestCase):
     r"""
     Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
     Specifically tests all methods in the self_assembly.quant sub-module.
@@ -95,7 +95,6 @@ class TestMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             orientation(self.image, pattern_order=1.)
         
-        print(' -> this test may take more than a few seconds')
         mask, dilate, orient_result, _ = orientation(self.image, pattern_order='hexagonal', verbose=False)
         
         self.assertTrue(isinstance(mask, np.ndarray))
@@ -127,7 +126,6 @@ class TestMethods(unittest.TestCase):
             rdistance(self.image, num_clusters='default', ux=[1,2], uy=[1,2,3])
 
         ux, uy = [237, 283], [32, 78]
-        print(' -> this test may take more than a few seconds')
 
         d = rdistance(self.image, num_clusters='default', ux=ux, uy=uy, verbose=False)
 

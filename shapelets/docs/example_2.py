@@ -27,6 +27,8 @@ This example can be run in two different ways:
 * (1) text-based configuration files (shown here), and 
 * (2) programmatically via script-based Python programming (`example_2.py`)
 
+This example will go through the text-based configuration file approach (1). For users comfortable with Python programming, the example_2.py file is setup to run the same analysis described below. The outputs will appear in the same directory.
+
 ## Overview
 
 The defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is a modification of the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)), whereby the user is required to manually select clusters associated with defects or defect structures, and the defect response distance is computed for each response vector in each cluster. 
@@ -60,7 +62,7 @@ The configuration file provided in the example [directory](https://github.com/uw
 
 where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **identify_defects** method may contain up to two parameters. Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
+The method outlined in the configuration file will also have its own header with specific parameters. The **identify_defects** method must contain one parameter, described below.
 
 **pattern_order** `str`
 
@@ -91,9 +93,4 @@ The output (shown below) will be available in "shapelets/examples/example_2/outp
 
 ![](images/hexSIM1_defectid_drd_k10.png)
 ![](images/hexSIM1_defectid_drd_overlay_k10.png)
-
-## Scripting Method
-
-For users comfortable with Python programming, the example_2.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
-
 """
