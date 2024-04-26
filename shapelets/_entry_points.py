@@ -56,9 +56,18 @@ def _run_tests():
     tests_dir = os.path.join(Path(__file__).parents[0], 'tests')
     os.chdir(tests_dir)
 
-    # command line arguments based on user OS
     # automatically find all tests using unittest built-in discovery component
+    # run unit tests from command line
     if str(platform.system()) == 'Windows':
-        os.system('python -B -m unittest -v')
-    else:
-        os.system('python3 -B -m unittest -v')               
+        # force Python3, but specific version is difficult to automate
+        os.system('py -3 -B -m unittest -v')
+    
+    else: # MAC and Linux systems
+        # find specific python version based on installation path
+        split_path = os.getcwd().split('/')
+        py_version = [py for py in split_path if 'python' in py]
+        if not py_version: # empty = default installation path not used, resort to default
+            os.system('python3 -B -m unittest -v')
+        else:
+            # In the event of non-standard installation paths, take last entry in py_version
+            os.system(f'{py_version[-1]} -B -m unittest -v')               
