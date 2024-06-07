@@ -539,7 +539,7 @@ def _rdistance(refVectors, testVectors) -> np.ndarray:
     testVectors = testVectors.astype(np.float64)
 
     # grab relative path of shared library file
-    cpath = os.path.join(Path(__file__).parents[0], 'rdistance.so')
+    cpath = os.path.join(Path(__file__).parents[0], '_rdistance.so')
 
     # load shared library
     cpplib = ctypes.CDLL(cpath)

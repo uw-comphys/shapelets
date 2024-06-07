@@ -1,4 +1,4 @@
 include shapelets/tests/images/*
 
-include shapelets/self_assembly/rdistance.cpp
-include shapelets/self_assembly/rdistance.so
+include shapelets/self_assembly/_rdistance.cpp
+include shapelets/self_assembly/_rdistance.so
