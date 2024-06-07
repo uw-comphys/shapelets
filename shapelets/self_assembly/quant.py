@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+import ctypes
+from pathlib import Path
+import os
+import platform
 import time 
 from typing import Union
 
@@ -359,9 +363,9 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
     return mask, dilate, orientation_final, maxval
 
-def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True):
+def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray:
     r""" 
-    Compute the response distance method from ref.[1]_ using the methodology from ref.[2]_.
+    Compute the response distance method from ref.[1]_ using the methodology from ref.[2]_. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
 
     Parameters
     ----------
@@ -453,8 +457,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         plt.axis('off')
         plt.show()"""
     
-    # get convolutional response data 
-    # shapelet_order parameter valid input check is enforced in the convresponse() function
+    # get convolutional response data, enforce shapelet_order parameter in convresponse() function
     response = convresponse(image = image, shapelet_order = shapelet_order, normresponse = 'Vector', verbose=verbose)[0]
 
     # compute response distance
@@ -472,22 +475,93 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         if verbose:
             print("Proceeding to compute response distance without k-means clustering:")
 
-    t1 = time.time()
-    d = np.zeros((Ny, Nx))
-    compList = np.array([10, 25, 50, 75, 100]).astype(int)
-    for i in range(Nx):
-        if int(100* i / Nx) in compList:
-            compList = compList[1:]
-            if verbose:
-                print(f"Response distance {int(100* i / Nx)}% complete")
-        for j in range(Ny):
-            dists = np.zeros(response_ref.shape[0])
-            for refvec in range(response_ref.shape[0]):
-                dists[refvec] = np.linalg.norm(response[j, i] - response_ref[refvec])
-            d[j, i] = dists.min()
-    
+    ti = time.time()
+
+    # prioritize C++ implementation, any issues should resort to python implementation
+    # TODO: both implementations should use 2d arrays (fix python implementation)
+    # TODO: need to figure out errors in Windows implementation
+    try:
+        print("Attempting to use C++ implementation of response distance")
+
+        response_2d = np.reshape(response, (-1, response.shape[-1]))
+        d_1d = _rdistance(response_ref, response_2d)
+        d = d_1d.reshape(Ny, Nx)
+    except:
+        print("C++ implementation failed, using Python implementation")
+
+        d = np.zeros((Ny, Nx))
+        compList = np.array([10, 25, 50, 75, 100]).astype(int)
+        for i in range(Nx):
+            if int(100* i / Nx) in compList:
+                compList = compList[1:]
+                if verbose:
+                    print(f"Response distance {int(100* i / Nx)}% complete")
+            for j in range(Ny):
+                dists = np.zeros(response_ref.shape[0])
+                for refvec in range(response_ref.shape[0]):
+                    dists[refvec] = np.linalg.norm(response[j, i] - response_ref[refvec])
+                d[j, i] = dists.min()
+            
+    tf = time.time()
+
     if verbose:
-        print("Response distance 100% complete")
-        print(f"Response distance runtime = {time.time()-t1:0.3} s")
+        print(f"Response distance 100% complete with runtime of {tf-ti:0.2}s")
 
     return d
+
+def _rdistance(refVectors, testVectors) -> np.ndarray:
+    r"""
+    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 15x faster than Python. Currently only works for *nix systems.
+
+    Parameters
+    ----------
+    * refVectors : numpy.ndarray
+        * The reference response vectors as a 2-dimensional array
+    * testVectors : numpy.ndarray
+        * The test (or non-reference) response vectors as a 2-dimensional array
+
+    Returns
+    -------
+    * rdists: np.ndarray
+        * The response distances as a 1-dimensional array (must be reshaped to match image dimensions)
+
+    Notes
+    -----
+    Any changes made to rdistance.cpp requires re-compiling the shared library via g++ -fPIC -shared -o rdistance.so rdistance.cpp
+
+    References
+    ----------
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+
+    """
+    # ensure input vectors are of type numpy.float64
+    refVectors = refVectors.astype(np.float64)
+    testVectors = testVectors.astype(np.float64)
+
+    # grab relative path of shared library file
+    cpath = os.path.join(Path(__file__).parents[0], 'rdistance.so')
+
+    # load shared library
+    cpplib = ctypes.CDLL(cpath)
+
+    # setup argument and return types
+    cpplib.rdistance.argtypes = [
+        np.ctypeslib.ndpointer(dtype=np.float64, ndim=2, flags='C_CONTIGUOUS'), 
+        np.ctypeslib.ndpointer(dtype=np.float64, ndim=2, flags='C_CONTIGUOUS'),
+        ctypes.c_int,
+        ctypes.c_int,
+        ctypes.c_int]
+
+    cpplib.rdistance.restype = ctypes.POINTER(ctypes.c_double)
+
+    # prepare arguments. reinforce int to coincide with c++ function inputs
+    numrefs = int(refVectors.shape[0])
+    numtest = int(testVectors.shape[0])
+    mmax = int(testVectors.shape[1])
+
+    ptrRdistance = cpplib.rdistance(refVectors, testVectors, numrefs, numtest, mmax)
+
+    # access entire memory space from pointer
+    rdists = np.ctypeslib.as_array(ptrRdistance, shape=(numtest,))
+
+    return rdists
