@@ -475,13 +475,21 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         if verbose:
             print("Proceeding to compute response distance without k-means clustering:")
 
-    ti = time.time()
-
     # prioritize C++ implementation, any issues should resort to python implementation
+    
     # TODO: both implementations should use 2d arrays (fix python implementation)
     # TODO: need to figure out errors in Windows implementation
+    
+    import platform
+    ostype = str(platform.platform())
+
+    ti = time.time()
+
     try:
         print("Attempting to use C++ implementation of response distance")
+
+        if 'win' in ostype.lower(): # temp hack/fix. remove after above todo
+            raise RuntimeError() 
 
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
