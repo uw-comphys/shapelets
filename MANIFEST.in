@@ -1,3 +1,4 @@
-include shapelets/tests/images/galaxies.fits
-include shapelets/tests/images/hexSIM1.png
-include shapelets/tests/images/lamSIM1.png
+include shapelets/tests/images/*
+
+include shapelets/self_assembly/_rdistance.cpp
+include shapelets/self_assembly/_rdistance.so
