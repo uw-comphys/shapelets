@@ -478,18 +478,13 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     # prioritize C++ implementation, any issues should resort to python implementation
     
     # TODO: both implementations should use 2d arrays (fix python implementation)
-    # TODO: need to figure out errors in Windows implementation
     
     import platform
-    ostype = str(platform.platform())
 
     ti = time.time()
 
     try:
         print("Attempting to use C++ implementation of response distance")
-
-        if 'win' in ostype.lower(): # temp hack/fix. remove after above todo
-            raise RuntimeError() 
 
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
@@ -519,7 +514,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
 def _rdistance(refVectors, testVectors) -> np.ndarray:
     r"""
-    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 15x faster than Python. Currently only works for *nix systems.
+    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 15x faster than Python.
 
     Parameters
     ----------
@@ -546,11 +541,23 @@ def _rdistance(refVectors, testVectors) -> np.ndarray:
     refVectors = refVectors.astype(np.float64)
     testVectors = testVectors.astype(np.float64)
 
-    # grab relative path of shared library file
-    cpath = os.path.join(Path(__file__).parents[0], '_rdistance.so')
+    ostype = str(platform.platform())
 
-    # load shared library
-    cpplib = ctypes.CDLL(cpath)
+    # load .so library for user's OS system
+    if 'win' in ostype.lower():
+        # grab relative path of shared library file for windows
+        cpath = os.path.join(Path(__file__).parents[0], '_rdistance_win.so')
+
+        # load shared windows library
+        cpplib = ctypes.CDLL(cpath, winmode=0)
+
+    # defaults to linux installation if OS does not have custom library
+    else:
+        # grab relative path of shared library file for linux
+        cpath = os.path.join(Path(__file__).parents[0], '_rdistance_nix.so')
+        
+        # load shared linux library
+        cpplib = ctypes.CDLL(cpath)
 
     # setup argument and return types
     cpplib.rdistance.argtypes = [
