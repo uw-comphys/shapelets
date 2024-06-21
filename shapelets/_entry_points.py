@@ -17,7 +17,7 @@
 
 import os
 from pathlib import Path
-import platform
+import subprocess
 import sys 
 import time
 
@@ -36,6 +36,7 @@ def _run_shapelets():
     elif len(sys.argv) == 2:
         config_file = sys.argv[1]
         working_dir = os.getcwd() 
+        
         _run._run(config_file, working_dir)
 
     # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
@@ -50,24 +51,26 @@ def _run_tests():
     """
     # notify user tests may take more than a few seconds
     print("Initiating shapelets unit tests. This will likely take a few minutes.")
-    time.sleep(10)
-    
-    # navigate to tests/ folder relative to this file
-    tests_dir = os.path.join(Path(__file__).parents[0], 'tests')
-    os.chdir(tests_dir)
 
-    # automatically find all tests using unittest built-in discovery component
-    # run unit tests from command line
-    if str(platform.system()) == 'Windows':
-        # force Python3, but specific version is difficult to automate
-        os.system('py -3 -B -m unittest -v')
-    
-    else: # MAC and Linux systems
-        # find specific python version based on installation path
-        split_path = os.getcwd().split('/')
-        py_version = [py for py in split_path if 'python' in py]
-        if not py_version: # empty = default installation path not used, resort to default
-            os.system('python3 -B -m unittest -v')
+    time.sleep(5)
+
+    # if the user knows what they're doing, this would use same interpreter as that to install the package
+    pyinterp = sys.executable 
+    tests_dir = os.path.join(Path(__file__).parents[0], 'tests')
+
+    # automatically find and run all unit tests using unittest built-in discovery feature
+    if pyinterp:
+        subprocess.call([pyinterp, '-B', '-m', 'unittest', '-v'], cwd=tests_dir)
+
+    else: 
+        # This loop should theoretically never hit... an interpreter should always be found
+        import platform
+        ostype = str(platform.platform())
+
+        print('Do you have a regular Python interpreter installed on your machine?')
+        print('Attempting manual unit testing...')
+
+        if 'win' in ostype.lower():
+            subprocess.call(['py', '-3', '-B', '-m', 'unittest', '-v'], cwd=tests_dir)
         else:
-            # In the event of non-standard installation paths, take last entry in py_version
-            os.system(f'{py_version[-1]} -B -m unittest -v')               
+            subprocess.call(['python3', '-B', '-m', 'unittest', '-v'], cwd=tests_dir)

@@ -1,5 +1,0 @@
-include shapelets/tests/images/*
-
-include shapelets/self_assembly/_rdistance.cpp
-include shapelets/self_assembly/_rdistance_nix.so
-include shapelets/self_assembly/_rdistance_win.so

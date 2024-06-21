@@ -1,3 +1,76 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+## METADATA ##
+
+[project]
+name = "shapelets"
+version = "1.1"
+description = "Shapelets provide reference access to various shapelet functions and some of their applications."
+requires-python = ">=3.10"
+dependencies = [
+    "astropy",
+    "matplotlib",
+	"numpy<2.0", # testing with numpy=2.0.0 broke other dependencies...
+    "opencv-python",
+    "pdoc",
+    "sep",
+    "scipy",
+]
+
+authors = [
+	# Added MPT twice because authors and author-email are separated in metadata
+	{name = "Matthew Peres Tino", email = "mptino@uwaterloo.ca"},
+	{name = "Matthew Peres Tino"},
+	{name = "Abbas Yusuf Abdulaziz"},
+	{name = "Nasser Mohieddin Abukhdeir"},
+	{name = "Robert Suderman"},
+	{name = "Thomas Akdeniz"},
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+keywords = [
+	"shapelets", 
+	"image analysis",
+]
+classifiers = [
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
+
+## NON-METADATA ##
+
+[project.scripts]
+shapelets = "shapelets._entry_points:_run_shapelets"
+shapelets-test = "shapelets._entry_points:_run_tests"
+
+[project.urls]
+homepage = "https://uw-comphys.github.io/shapelets"
+documentation = "https://uw-comphys.github.io/shapelets"
+source = "https://github.com/uw-comphys/shapelets"
+download = "https://github.com/uw-comphys/shapelets/releases"
+tracker = "https://github.com/uw-comphys/shapelets/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+# Using shapelets as the main directory, then list global patterns underneath it
+shapelets = [
+	"tests/images/*",
+	"self_assembly/_rdistance.cpp",
+	"self_assembly/_rdistance_nix.so",
+	"self_assembly/_rdistance_win.so",
+]
+
+
+[tool.setuptools]
+# Note: include-package-data (i.e. setup.cfg) is default true in pyproject.toml
+# include-package-data = true
