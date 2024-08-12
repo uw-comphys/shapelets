@@ -24,7 +24,8 @@ __all__ = [
     'cartesian1D',
     'cartesian2D',
     'polar2D',
-    'orthonormalpolar2D',
+    'orthonormalpolar2D_n0',
+    'orthonormalpolar2D_n1',
     'exponential1D',
     'exponential2D'
 ]
@@ -185,13 +186,13 @@ def polar2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndar
 
     return Sc(x1, x2)
 
-def orthonormalpolar2D(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def orthonormalpolar2D_n0(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
     r""" 
     Orthonormal 2D polar shapelet function defined as[1]_,
 
     $$ S_{m}(r, \theta; \beta) = \frac{1}{\beta \sqrt{\pi m!}} \left( \frac{r}{\beta} \right)^m exp \left( -\frac{r^2}{2\beta^2}-im\theta \right) $$
 
-    with $$ \beta = \frac{fl}{\sqrt{m}} $$
+    with $$ \beta = \frac{fl}{\sqrt{m}} $$, and
 
     where $\beta$ is the shapelet length scale, $f$ is a geometric scale factor[1]_, $l$ is the characteristic wavelength of the image[2]_, and $m$ is the shapelet degree of rotational symmetry.
 
@@ -213,7 +214,7 @@ def orthonormalpolar2D(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.n
 
     Notes
     -----
-    The orthonormal shapelet framework[1]_ only supports $n = 0$. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of that found in shapelets.functions.polar2D.
+    This orthonormal shapelet framework[1]_ was developed for $n = 0$ polar shapelets[2]_. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of the shapelets.functions.polar2D function by ref.[2]_.
 
     References
     ----------
@@ -234,6 +235,57 @@ def orthonormalpolar2D(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.n
     # shapelet function
     X = lambda r: r**m * L(r**2) * np.exp(-r**2 / 2)
     Sp = lambda r,t: beta**-1 * c * X(r/beta) * np.exp(-1j*m*t)
+    Sc = lambda x,y: Sp(np.sqrt(x**2 + y**2), np.arctan2(y,x))
+
+    return Sc(x1, x2)
+
+def orthonormalpolar2D_n1(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+    r""" 
+    Orthonormal 2D polar shapelet function one degree of radial symmetry defined as[1]_,
+
+    $$ S_{m}(r, \theta; \beta) = \frac{r^m \beta^{-(m+1)}}{\sqrt{\pi m! (m+1)}}
+                                \left[ 1 + m- \left( \frac{r}{\beta}\right)^2 \right] 
+                                e^{-\frac{r^2}{2\beta^2}} e^{-im\theta} $$
+
+    with $$ \beta $$ computed numerically[1]_, and
+
+    where $\beta$ is the shapelet length scale, $l$ is the characteristic wavelength of the image[2]_, and $m$ is the shapelet degree of rotational symmetry.
+
+    Parameters
+    ----------
+    * m: int
+        * Shapelet degree of rotational symmetry. Acceptable values are $m > 1$
+    * x1: Union[float,np.ndarray]
+        * First input to shapelet function
+    * x2: Union[float,np.ndarray]
+        * Second input to shapelet function
+    * beta: float
+        * The shapelet length scale parameter
+
+    Returns
+    -------
+    * Sc(x1, x2): Union[float,np.ndarray]
+        * Shapelet function evaluated at (x1, x2)
+
+    Notes
+    -----
+    This orthonormal shapelet framework[1]_ was developed for $n = 1$ polar shapelets[2]_. See ref.[2]_ for computing the characteristic wavelength of an image. Note that this shapelet formulation is a re-parameterization of the shapelets.functions.polar2D function by ref.[2]_.
+
+    References
+    ----------
+    .. [1] https://hdl.handle.net/10012/20779
+    .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
+
+    """
+    if m < 1:
+        raise ValueError("Function only supports m >= 1.")
+
+    # weighting constant
+    c = 1 / ( np.sqrt(np.pi * factorial(m, exact=True) * (m+1)) )
+
+    # shapelet function
+    X = lambda r: r**m * (1+m-(r**2)) * np.exp(-0.5 * r**2)
+    Sp = lambda r,t: (c / beta) * X(r/beta) * np.exp(-1j*m*t)
     Sc = lambda x,y: Sp(np.sqrt(x**2 + y**2), np.arctan2(y,x))
 
     return Sc(x1, x2)

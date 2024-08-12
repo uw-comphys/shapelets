@@ -30,7 +30,7 @@ from scipy.ndimage import grey_dilation, median_filter
 
 from .misc import trim_image, make_grid
 from .wavelength import get_wavelength, lambda_to_beta
-from ..functions import orthonormalpolar2D
+from ..functions import orthonormalpolar2D_n0
 
 __all__ = [
     'convresponse',
@@ -63,7 +63,7 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D).
+    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D_n0).
 
     References
     ----------
@@ -107,7 +107,7 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
             # get grid for discretization and initialize shapelet kernel
             N = 21 # minimum
             grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
+            shapelet = orthonormalpolar2D_n0(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
 
             # optimize shapelet (kernel) size
             accept = False
@@ -118,7 +118,7 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
                 if edgeweight > 0.0001:
                     N += 4
                     grid_x, grid_y = make_grid(N = N)
-                    shapelet = orthonormalpolar2D(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
+                    shapelet = orthonormalpolar2D_n0(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
                 else:
                     accept = True
 
@@ -142,7 +142,7 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
             # get grid for discretization and initialize shapelet kernel
             N = 21 # minimum
             grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D(m=m, x1=grid_x, x2=grid_y, beta=beta)
+            shapelet = orthonormalpolar2D_n0(m=m, x1=grid_x, x2=grid_y, beta=beta)
 
             # optimize shapelet (kernel) size
             accept = False
@@ -153,7 +153,7 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
                 if edgeweight > 0.0001:
                     N += 4
                     grid_x, grid_y = make_grid(N = N)
-                    shapelet = orthonormalpolar2D(m=m, x1=grid_x, x2=grid_y, beta=beta)
+                    shapelet = orthonormalpolar2D_n0(m=m, x1=grid_x, x2=grid_y, beta=beta)
                 else:
                     accept = True
             
@@ -479,18 +479,19 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     
     # TODO: both implementations should use 2d arrays (fix python implementation)
     
-    import platform
-
     ti = time.time()
 
     try:
-        print("Attempting to use C++ implementation of response distance")
+        if verbose: 
+            print("Attempting to use C++ implementation of response distance")
 
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
         d = d_1d.reshape(Ny, Nx)
+
     except:
-        print("C++ implementation failed, using Python implementation")
+        if verbose: 
+            print("C++ implementation failed, using Python implementation")
 
         d = np.zeros((Ny, Nx))
         compList = np.array([10, 25, 50, 75, 100]).astype(int)

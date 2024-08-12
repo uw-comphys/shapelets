@@ -23,7 +23,8 @@ from shapelets.functions import (
     cartesian1D,
     cartesian2D,
     polar2D,
-    orthonormalpolar2D,
+    orthonormalpolar2D_n0,
+    orthonormalpolar2D_n1,
     exponential1D,
     exponential2D
 )
@@ -34,7 +35,7 @@ class TestShapeletFunctions(unittest.TestCase):
     Currently includes,
         - cartesian shapelets (shapelets.functions.cartesian1D and shapelets.functions.cartesian2D),
         - polar shapelets (shapelets.functions.polar2D),
-        - orthonormal polar shapelets (shapelets.functions.orthonormalpolar2D), and
+        - orthonormal polar shapelets (shapelets.functions.orthonormalpolar2D_n0), and
         - exponential shapelets (shapelets.functions.exponential1D and shapelets.functions.exponential2D)
     """
 
@@ -84,8 +85,8 @@ class TestShapeletFunctions(unittest.TestCase):
         with self.assertRaises(ValueError): 
             polar2D(n = 3, m = 2, x1 = self.xvals, x2 = self.xvals)
     
-    def test_orthonormal(self) -> None:
-        shapelet2D = orthonormalpolar2D(m = 6, x1 = self.xvals, x2 = self.xvals)
+    def test_orthonormal_n0(self) -> None:
+        shapelet2D = orthonormalpolar2D_n0(m = 6, x1 = self.xvals, x2 = self.xvals)
 
         self.assertTrue(np.iscomplexobj(shapelet2D))
 
@@ -94,7 +95,19 @@ class TestShapeletFunctions(unittest.TestCase):
         self.assertAlmostEqual(np.real(shapelet2D[2]), 0., places = 16)
 
         with self.assertRaises(ValueError): 
-            orthonormalpolar2D(m = 0, x1 = self.xvals, x2 = self.xvals)
+            orthonormalpolar2D_n0(m = 0, x1 = self.xvals, x2 = self.xvals)
+    
+    def test_orthonormal_n1(self) -> None:
+        shapelet2D = orthonormalpolar2D_n1(m = 3, x1 = self.xvals, x2 = self.xvals)
+
+        self.assertTrue(np.iscomplexobj(shapelet2D))
+
+        self.assertEqual(shapelet2D[1], 0)
+        self.assertAlmostEqual(np.real(shapelet2D[0]), 0.1694669, places = 7)
+        self.assertAlmostEqual(np.imag(shapelet2D[2]), -0.1694669, places = 7)
+
+        with self.assertRaises(ValueError): 
+            orthonormalpolar2D_n0(m = 0, x1 = self.xvals, x2 = self.xvals)
     
     def test_exponential(self) -> None:
         shapelet1D = exponential1D(n = 1, x1 = self.xvals+1)

@@ -26,7 +26,7 @@ __all__ = [
 
 def lambda_to_beta(m: int, l: float):
     r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ (see shapelets.functions.orthonormalpolar2D).
+    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ (see shapelets.functions.orthonormalpolar2D_n0).
     
     Parameters
     ----------
