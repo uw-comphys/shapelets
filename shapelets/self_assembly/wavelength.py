@@ -28,7 +28,6 @@ __all__ = [
     'lambda_to_beta_n1',
     'get_opt_kernel_n1',
     'get_wavelength',
-    'radialavg',
 ]
 
 def make_grid(N: int):
@@ -121,11 +120,12 @@ def get_opt_kernel_n0(m: int, beta: float) -> np.ndarray:
     .. [1] https://doi.org/10.1088/1361-6528/aaf353
 
     """
+    # start with small kernel size and scale up until satisfied
     N = 21 # minimum
+
     grid_x, grid_y = make_grid(N = N)
     shapelet = orthonormalpolar2D_n0(m=m, x1=grid_x, x2=grid_y, beta=beta)
 
-    # optimize shapelet (kernel) size
     accept = False
 
     while not accept:
@@ -196,7 +196,8 @@ def lambda_to_beta_n1(m: int, l: float, verbose=False) -> float:
             if verbose:
                 print(f"Current distance {distance}, target is {lambda_opt}")
 
-            # check if solution is acceptable:
+            ## evaluate acceptability of solution ##
+
             # found solution
             if np.abs(reldistance) <= 1:
                 beta_opt = beta
@@ -211,7 +212,7 @@ def lambda_to_beta_n1(m: int, l: float, verbose=False) -> float:
                 else: 
                     beta += 3*reldistance * 0.1
 
-            # overshot
+            # overshot solution
             elif reldistance < 0:
                 if verbose:
                     print("We have overshot target, iterating backwards.")
@@ -221,8 +222,8 @@ def lambda_to_beta_n1(m: int, l: float, verbose=False) -> float:
 
 def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
     r""" 
-    Determines the optimal filter (kernel) width for an $n=1$ shapelet function based on $\beta$, the shapelet length-scale parameter.
-    
+    Determines the optimal filter (kernel) width for an $n=1$ orthonormal polar shapelet function[1]_ based on $\beta$, the shapelet length-scale parameter.
+
     Parameters
     ----------
     * m: int
@@ -235,13 +236,17 @@ def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
     * shapelet: np.ndarray
         * Shapelet function casted onto a discrete domain with the appropriate filter width.
 
+    References
+    ----------
+    .. [1] https://hdl.handle.net/10012/20779
+
     """
     # start with large kernel size and truncate down until satisfied
     N = 501
+
     grid_x, grid_y = make_grid(N = N)
     shapelet = orthonormalpolar2D_n1(m=m, x1=grid_x, x2=grid_y, beta=beta)
 
-    # optimize shapelet (kernel) size
     accept = False
 
     while not accept:
@@ -256,18 +261,16 @@ def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
 
     return shapelet
 
-def get_wavelength(image: np.ndarray, rng: list = [0, 50], verbose: bool = True) -> float:
+def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True) -> float:
     r""" 
-    Find characteristic wavelength of an image. Computed from ref.[1]_.
-
-    mpt@mpt: The rng needs to be optimized better. For example, if the wavelength is bigger than 50 need to fix this. But, if we just let rng = None (i.e., all wavelengths) then it will find way too big of a wavelength as the scale...
+    Find characteristic wavelength of an image. Computed using method described in ref.[1]_.
     
     Parameters
     ----------
     * image: np.ndarray
         * The image to be processed
     * rng: list
-        * Range of wavelengths to consider for maximum wavelength. I.e., will return max wavelength in range of [0, 50] (default)
+        * Range of wavelengths to consider for maximum wavelength. I.e., will return max wavelength in range of [0, 70] (default)
 
     Returns
     -------

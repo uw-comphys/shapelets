@@ -32,7 +32,7 @@ __all__ = [
     'trim_image'
 ]
 
-def read_image(image_name: str, image_path: str, verbose: bool = True):
+def read_image(image_name: str, image_path: str, verbose: bool = True) -> np.ndarray:
     r""" 
     Read an image using OpenCV, with some extra handling. By default, re-scales images as greyscale on [-1, 1].
     

@@ -21,6 +21,7 @@ import os
 import platform
 import time 
 from typing import Union
+import warnings
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,8 +30,7 @@ from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
 
 from .misc import trim_image
-from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0, lambda_to_beta_n1, get_opt_kernel_n1, make_grid
-from ..functions import orthonormalpolar2D_n0
+from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0, lambda_to_beta_n1, get_opt_kernel_n1
 
 __all__ = [
     'convresponse_n0',
@@ -42,7 +42,7 @@ __all__ = [
 
 def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
     
     Parameters
     ----------
@@ -56,19 +56,19 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
     Returns
     -------
     * omega: numpy.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array
+        * The magnitude of (maximum) convolutional response as a 3D array as per steerable shapelet formulism
     * phi: numpy.ndarray
         * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D_n0).
+    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets[3]_ (see shapelets.functions.orthonormalpolar2D_n0).
 
     References
     ----------
-    .. [1] https://doi.org/10.1088/1361-6528/aaf353
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [3] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [3] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if not isinstance(image, np.ndarray):
@@ -92,6 +92,7 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
     Ny, Nx = image.shape
     omegaTotal = []
 
+    # predefined maximum m value (mmax)
     if mmax != None:
         omega = np.empty((Ny, Nx, mmax)) 
         phi = np.empty((Ny, Nx, mmax))
@@ -100,30 +101,17 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
             beta = lambda_to_beta_n0(m=i+1, l=l)
 
             # get grid for discretization and initialize shapelet kernel
-            N = 21 # minimum
-            grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D_n0(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
-
-            # optimize shapelet (kernel) size
-            accept = False
-
-            while not accept:
-                edgeweight = np.abs(np.real(shapelet[int(shapelet.shape[0]/2), -1])) \
-                    / np.real(shapelet).max()
-                if edgeweight > 0.0001:
-                    N += 4
-                    grid_x, grid_y = make_grid(N = N)
-                    shapelet = orthonormalpolar2D_n0(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
-                else:
-                    accept = True
+            shapelet = get_opt_kernel_n0(m=i+1, beta=beta)
 
             # convolve kernel (shapelet) with image
             con = fftconvolve(image, shapelet, mode = 'same')
             omega[:,:,i] = np.abs(con)
             phi[:,:,i] = np.angle(con)
+
         if verbose:
             print(f"Convolution complete for shapelets m <= {mmax}")
 
+    # use iteration scheme from ref.[2]_ to get maximum shapelet order
     else:
         omega = np.empty((Ny, Nx, 200)) 
         phi = np.empty((Ny, Nx, 200))
@@ -164,9 +152,9 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
 
     return omega, phi
 
-def convresponse_n1(image: np.ndarray, mmax: int, l: float, verbose=True):
+def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
     
     Parameters
     ----------
@@ -186,17 +174,26 @@ def convresponse_n1(image: np.ndarray, mmax: int, l: float, verbose=True):
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D_n1).
+    This function uses the orthonormal polar shapelet definition for $n=1$ shapelets[2]_ (see shapelets.functions.orthonormalpolar2D_n1).
 
     References
     ----------
-    .. [1] https://hdl.handle.net/10012/20779
-    .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [2] https://hdl.handle.net/10012/20779
 
     """
-    # TODO: input type checks
-    # m \geq 0, and warning for beyond m=10
-        
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image parameter must be a numpy array.')
+    
+    if not isinstance(mmax, int):
+        raise TypeError('mmax parameter must be of type int.')
+    elif mmax >= 10:
+        msg = "WARNING: Desired shapelet behaviour is declining as m increases beyond 10. See Section 6.3 from https://hdl.handle.net/10012/20779 for more details."
+        warnings.warn(msg)
+
+    # get characteristic wavelength of image 
+    l = get_wavelength(image=image, verbose=verbose)
+
     Ny, Nx = image.shape
 
     omega = np.empty((Ny, Nx, mmax)) 
@@ -548,20 +545,21 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     
     ti = time.time()
 
+    # Use C++ implementation of response distance
     try:
-        if verbose: 
-            print("Attempting to use C++ implementation of response distance")
+        if verbose: print("Attempting to use C++ implementation of response distance")
 
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
         d = d_1d.reshape(Ny, Nx)
-
+    
+    # If failures occur, resort to working Python implementation
     except:
-        if verbose: 
-            print("C++ implementation failed, using Python implementation")
+        if verbose: print("C++ implementation failed, using Python implementation")
 
         d = np.zeros((Ny, Nx))
         compList = np.array([10, 25, 50, 75, 100]).astype(int)
+
         for i in range(Nx):
             if int(100* i / Nx) in compList:
                 compList = compList[1:]
@@ -580,15 +578,15 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
     return d
 
-def _rdistance(refVectors, testVectors) -> np.ndarray:
+def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     r"""
-    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 15x faster than Python.
+    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python[2]_.
 
     Parameters
     ----------
-    * refVectors : numpy.ndarray
+    * refVectors : np.ndarray
         * The reference response vectors as a 2-dimensional array
-    * testVectors : numpy.ndarray
+    * testVectors : np.ndarray
         * The test (or non-reference) response vectors as a 2-dimensional array
 
     Returns
@@ -603,6 +601,7 @@ def _rdistance(refVectors, testVectors) -> np.ndarray:
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [2] https://hdl.handle.net/10012/20779
 
     """
     # ensure input vectors are of type numpy.float64

@@ -23,6 +23,7 @@ import numpy as np
 from shapelets.self_assembly import (
     read_image,
     convresponse_n0,
+    convresponse_n1,
     defectid,
     orientation,
     rdistance
@@ -48,7 +49,7 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         cls.omega, cls.phi = convresponse_n0(cls.image, shapelet_order='default', verbose=False)
     
     # This test will be run first on purpose
-    def test_a_first(self) -> None:
+    def test_a_responses(self) -> None:
         self.assertTrue(isinstance(self.omega, np.ndarray))
         self.assertEqual(self.omega.shape, self.image.shape + (10,))
 
@@ -70,8 +71,16 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         self.assertEqual(phi.shape, self.image.shape + (20,))
     
     def test_convresponse_n1(self) -> None:
-        # TODO
-        pass
+        with self.assertRaises(TypeError):
+            convresponse_n1([], mmax=5)
+
+        with self.assertRaises(TypeError):
+            convresponse_n1(self.image, mmax=5.2)
+        
+        # Test for arbitrary number of shapelets
+        omega, phi = convresponse_n1(self.image, mmax=6, verbose=False)
+        self.assertEqual(omega.shape, self.image.shape + (6,))
+        self.assertEqual(phi.shape, self.image.shape + (6,))
     
     # Note: cannot test outputs as defectid() is an interactive function.
     def test_defectid(self) -> None:
