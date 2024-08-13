@@ -21,6 +21,7 @@ import os
 import platform
 import time 
 from typing import Union
+import warnings
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,20 +29,20 @@ from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
 
-from .misc import trim_image, make_grid
-from .wavelength import get_wavelength, lambda_to_beta
-from ..functions import orthonormalpolar2D
+from .misc import trim_image
+from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0, lambda_to_beta_n1, get_opt_kernel_n1
 
 __all__ = [
-    'convresponse',
+    'convresponse_n0',
+    'convresponse_n1',
     'defectid',
     'orientation',
     'rdistance'
 ]
 
-def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', normresponse: str = 'Vector', verbose: bool = True):
+def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
     
     Parameters
     ----------
@@ -49,26 +50,25 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
         * The image to be convolved with shapelet kernels
     * shapelet_order: Union[str,int]
         * Set as 'default' to use higher-order shapelets[2]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
-    * normresponse: str, optional
-        * Normalize magnitude of response (omega) in terms of response vectors = "Vector" (default). Normalize each m-fold response w.r.t itself on [0, 1) = "Individual"
     * verbose: bool, optional
         * True (default) to print out information from convolution operation to console
 
     Returns
     -------
     * omega: numpy.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array
+        * The magnitude of (maximum) convolutional response as a 3D array as per steerable shapelet formulism
     * phi: numpy.ndarray
         * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition[1]_ (see shapelets.functions.orthonormalpolar2D).
+    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets[3]_ (see shapelets.functions.orthonormalpolar2D_n0).
 
     References
     ----------
-    .. [1] https://doi.org/10.1088/1361-6528/aaf353
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     .. [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [3] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if not isinstance(image, np.ndarray):
@@ -83,11 +83,6 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
         mmax = shapelet_order
     else:
         raise TypeError('shapelet_order parameter must either be "default" or integer value.')
-    
-    if not isinstance(normresponse, str):
-        raise TypeError('normresponse parameter must be of type str.')
-    elif normresponse not in ['Vector', 'Individual']:
-        raise ValueError('Valid normresponse parameters are "Vector" or "Individual".')
 
     # get characteristic wavelength of image 
     l = get_wavelength(image=image, verbose=verbose)
@@ -97,38 +92,26 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
     Ny, Nx = image.shape
     omegaTotal = []
 
+    # predefined maximum m value (mmax)
     if mmax != None:
         omega = np.empty((Ny, Nx, mmax)) 
         phi = np.empty((Ny, Nx, mmax))
         for i in range(mmax):
             # get beta
-            beta = lambda_to_beta(m=i+1, l=l)
+            beta = lambda_to_beta_n0(m=i+1, l=l)
 
             # get grid for discretization and initialize shapelet kernel
-            N = 21 # minimum
-            grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
-
-            # optimize shapelet (kernel) size
-            accept = False
-
-            while not accept:
-                edgeweight = np.abs(np.real(shapelet[int(shapelet.shape[0]/2), -1])) \
-                    / np.real(shapelet).max()
-                if edgeweight > 0.0001:
-                    N += 4
-                    grid_x, grid_y = make_grid(N = N)
-                    shapelet = orthonormalpolar2D(m=i+1, x1=grid_x, x2=grid_y, beta=beta)
-                else:
-                    accept = True
+            shapelet = get_opt_kernel_n0(m=i+1, beta=beta)
 
             # convolve kernel (shapelet) with image
             con = fftconvolve(image, shapelet, mode = 'same')
             omega[:,:,i] = np.abs(con)
             phi[:,:,i] = np.angle(con)
+
         if verbose:
             print(f"Convolution complete for shapelets m <= {mmax}")
 
+    # use iteration scheme from ref.[2]_ to get maximum shapelet order
     else:
         omega = np.empty((Ny, Nx, 200)) 
         phi = np.empty((Ny, Nx, 200))
@@ -137,25 +120,10 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
         while currResp > minRespTol:
             # get beta
             m += 1
-            beta = lambda_to_beta(m=m, l=l)
+            beta = lambda_to_beta_n0(m=m, l=l)
 
             # get grid for discretization and initialize shapelet kernel
-            N = 21 # minimum
-            grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D(m=m, x1=grid_x, x2=grid_y, beta=beta)
-
-            # optimize shapelet (kernel) size
-            accept = False
-
-            while not accept:
-                edgeweight = np.abs(np.real(shapelet[int(shapelet.shape[0]/2), -1])) \
-                    / np.real(shapelet).max()
-                if edgeweight > 0.0001:
-                    N += 4
-                    grid_x, grid_y = make_grid(N = N)
-                    shapelet = orthonormalpolar2D(m=m, x1=grid_x, x2=grid_y, beta=beta)
-                else:
-                    accept = True
+            shapelet = get_opt_kernel_n0(m=m, beta=beta)
             
             con = fftconvolve(image, shapelet, mode = 'same')
             omegacurr = np.abs(con)
@@ -173,15 +141,84 @@ def convresponse(image: np.ndarray, shapelet_order: Union[str,int] = 'default', 
         if verbose:
             print(f"Convolution complete for shapelets m <= {m} before tolerance exceeded")
 
-    if normresponse == 'Vector': 
-        norms = np.linalg.norm(omega, axis = 2)
-        omega = omega / norms.reshape(Ny, Nx, 1)
-        
-    elif normresponse == 'Individual':
-        for i in range(omega.shape[2]):
-            omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
+    # normalize response vectors
+    norms = np.linalg.norm(omega, axis = 2)
+    omega = omega / norms.reshape(Ny, Nx, 1)
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [1].
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [3]_.
+    for i in range(phi.shape[2]):
+        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
+        phi[:,:,i] *=  2*np.pi / (i+1)
+
+    return omega, phi
+
+def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
+    r""" 
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
+    
+    Parameters
+    ----------
+    * image: np.ndarray
+        * The image to be convolved with shapelet kernels
+    * mmax: int
+        * Maximum $m$ shapelet parameter to compute convolutions. Note that $m \geq 0$
+    * verbose: bool, optional
+        * True (default) to print out information from convolution operation to console
+
+    Returns
+    -------
+    * omega: numpy.ndarray
+        * The magnitude of (maximum) convolutional response as a 3D array
+    * phi: numpy.ndarray
+        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
+
+    Notes
+    -----
+    This function uses the orthonormal polar shapelet definition for $n=1$ shapelets[2]_ (see shapelets.functions.orthonormalpolar2D_n1).
+
+    References
+    ----------
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [2] https://hdl.handle.net/10012/20779
+
+    """
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image parameter must be a numpy array.')
+    
+    if not isinstance(mmax, int):
+        raise TypeError('mmax parameter must be of type int.')
+    elif mmax >= 10:
+        msg = "WARNING: Desired shapelet behaviour is declining as m increases beyond 10. See Section 6.3 from https://hdl.handle.net/10012/20779 for more details."
+        warnings.warn(msg)
+
+    # get characteristic wavelength of image 
+    l = get_wavelength(image=image, verbose=verbose)
+
+    Ny, Nx = image.shape
+
+    omega = np.empty((Ny, Nx, mmax)) 
+    phi = np.empty((Ny, Nx, mmax))
+
+    for i in range(mmax):
+        # get optimal beta from numerical scheme
+        beta = lambda_to_beta_n1(m=i+1, l=l)
+
+        # get optimal kernel size
+        shapelet = get_opt_kernel_n1(m = i+1, beta = beta)
+
+        # convolve kernel (shapelet) with image
+        con = fftconvolve(image, shapelet, mode = 'same')
+        omega[:,:,i] = np.abs(con)
+        phi[:,:,i] = np.angle(con)
+    
+    if verbose:
+        print(f"Convolution complete for shapelets m <= {mmax}")
+            
+    # normalize response vectors
+    norms = np.linalg.norm(omega, axis = 2)
+    omega = omega / norms.reshape(Ny, Nx, 1)
+
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [2]_.
     for i in range(phi.shape[2]):
         phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
         phi[:,:,i] *=  2*np.pi / (i+1)
@@ -229,7 +266,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     num_clusters = min_clusters[pattern_order]
     
     # get convolutional response data 
-    response = convresponse(image = image, shapelet_order = 'default', normresponse = 'Vector', verbose=verbose)[0]
+    response = convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
@@ -323,11 +360,38 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     l = get_wavelength(image=image, verbose=False)
 
     # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
-    response, orients = convresponse(image = image, shapelet_order = 6, normresponse = 'Individual', verbose=verbose)
+    # note that custom convolutional response function embedded here since vectors need to be independently normalized
+
+    Ny, Nx = image.shape
+    mmax = 6
+
+    omega = np.empty((Ny, Nx, mmax)) 
+    phi = np.empty((Ny, Nx, mmax))
+    
+    for i in range(mmax):
+        # get beta
+        beta = lambda_to_beta_n0(m=i+1, l=l)
+
+        # get grid for discretization and initialize shapelet kernel
+        shapelet = get_opt_kernel_n0(m=i+1, beta=beta)
+
+        # convolve kernel (shapelet) with image
+        con = fftconvolve(image, shapelet, mode = 'same')
+        omega[:,:,i] = np.abs(con)
+        phi[:,:,i] = np.angle(con)
+    
+    # normalize response individually, not in terms of vectors across m values
+    for i in range(omega.shape[2]):
+            omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
+
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [3]_.
+    for i in range(phi.shape[2]):
+        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
+        phi[:,:,i] *=  2*np.pi / (i+1)
 
     # find the response threshold iteratively 
-    orient = orients[:,:,ind].copy()
-    resp_og = response[:,:,ind].copy()
+    orient = phi[:,:,ind].copy()
+    resp_og = omega[:,:,ind].copy()
     dilationsize = int( np.round(2*l, 0) )
     blendsize = int( np.round(4*l, 0) )
     
@@ -458,7 +522,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         plt.show()"""
     
     # get convolutional response data, enforce shapelet_order parameter in convresponse() function
-    response = convresponse(image = image, shapelet_order = shapelet_order, normresponse = 'Vector', verbose=verbose)[0]
+    response = convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
 
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]
@@ -479,21 +543,23 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     
     # TODO: both implementations should use 2d arrays (fix python implementation)
     
-    import platform
-
     ti = time.time()
 
+    # Use C++ implementation of response distance
     try:
-        print("Attempting to use C++ implementation of response distance")
+        if verbose: print("Attempting to use C++ implementation of response distance")
 
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
         d = d_1d.reshape(Ny, Nx)
+    
+    # If failures occur, resort to working Python implementation
     except:
-        print("C++ implementation failed, using Python implementation")
+        if verbose: print("C++ implementation failed, using Python implementation")
 
         d = np.zeros((Ny, Nx))
         compList = np.array([10, 25, 50, 75, 100]).astype(int)
+
         for i in range(Nx):
             if int(100* i / Nx) in compList:
                 compList = compList[1:]
@@ -512,15 +578,15 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
     return d
 
-def _rdistance(refVectors, testVectors) -> np.ndarray:
+def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     r"""
-    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 15x faster than Python.
+    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python[2]_.
 
     Parameters
     ----------
-    * refVectors : numpy.ndarray
+    * refVectors : np.ndarray
         * The reference response vectors as a 2-dimensional array
-    * testVectors : numpy.ndarray
+    * testVectors : np.ndarray
         * The test (or non-reference) response vectors as a 2-dimensional array
 
     Returns
@@ -535,6 +601,7 @@ def _rdistance(refVectors, testVectors) -> np.ndarray:
     References
     ----------
     .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [2] https://hdl.handle.net/10012/20779
 
     """
     # ensure input vectors are of type numpy.float64

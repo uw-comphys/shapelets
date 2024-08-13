@@ -24,7 +24,8 @@ import numpy as np
 from shapelets.self_assembly import (
     read_image, 
     get_wavelength,
-    lambda_to_beta
+    lambda_to_beta_n0,
+    lambda_to_beta_n1
 )
 
 class TestSelfAssemblyBasic(unittest.TestCase):
@@ -34,7 +35,7 @@ class TestSelfAssemblyBasic(unittest.TestCase):
     Currently includes:
         - self_assembly.misc.read_image, 
         - self_assembly.wavelength.get_wavelength, and
-        - self_assembly.wavelength.lambda_to_beta
+        - self_assembly.wavelength.lambda_to_beta_n0
     """
 
     @classmethod
@@ -43,9 +44,8 @@ class TestSelfAssemblyBasic(unittest.TestCase):
         cls.lamSIM = read_image(image_name = "lamSIM1.png", image_path = cls.dir, verbose = False)
         cls.hexSIM = read_image(image_name = "hexSIM1.png", image_path = cls.dir, verbose = False)
 
-    # This test will be fun first on purpose
-    # Test read_image()
-    def test_a_first(self) -> None:
+    # This test will be fun first on purpose. Test read_image
+    def test_a_read_image(self) -> None:
         self.assertTrue(isinstance(self.lamSIM, np.ndarray))
         self.assertEqual(self.lamSIM.min(), -1)
         self.assertEqual(self.lamSIM.max(), 1)
@@ -56,8 +56,8 @@ class TestSelfAssemblyBasic(unittest.TestCase):
         self.assertEqual(self.hexSIM.max(), 1)
         self.assertEqual(self.hexSIM.shape, (507, 507))
     
-    # Test get_wavelength() and lambda_to_beta()
-    def test_scale(self) -> None:
+    # Test get_wavelength 
+    def test_scaling(self) -> None:
         with self.assertRaises(TypeError):
             get_wavelength('')
 
@@ -65,18 +65,25 @@ class TestSelfAssemblyBasic(unittest.TestCase):
         self.assertTrue(isinstance(lamSIM_wvl, numbers.Real))
         self.assertAlmostEqual(lamSIM_wvl, 10.231, places = 3)
 
-        lamSIM_beta = lambda_to_beta(3, lamSIM_wvl)
-        self.assertTrue(isinstance(lamSIM_beta, numbers.Real))
-        self.assertAlmostEqual(lamSIM_beta, 3.41, places = 2)
+        lamSIM_beta_n0 = lambda_to_beta_n0(3, lamSIM_wvl)
+        self.assertTrue(isinstance(lamSIM_beta_n0, numbers.Real))
+        self.assertAlmostEqual(lamSIM_beta_n0, 3.41, places = 2)
+
+        lamSIM_beta_n1 = lambda_to_beta_n1(3, lamSIM_wvl)
+        self.assertTrue(isinstance(lamSIM_beta_n1, numbers.Real))
+        self.assertAlmostEqual(lamSIM_beta_n1, 7.3, places = 5)
 
         hexSIM_wvl = get_wavelength(image = self.hexSIM, verbose = False)
         self.assertTrue(isinstance(hexSIM_wvl, numbers.Real))
         self.assertAlmostEqual(hexSIM_wvl, 16.882, places = 3)
         
-        hexSIM_beta = lambda_to_beta(6, hexSIM_wvl)
-        self.assertTrue(isinstance(hexSIM_beta, numbers.Real))
-        self.assertAlmostEqual(hexSIM_beta, 6.89, places = 2)
+        hexSIM_beta_n0 = lambda_to_beta_n0(6, hexSIM_wvl)
+        self.assertTrue(isinstance(hexSIM_beta_n0, numbers.Real))
+        self.assertAlmostEqual(hexSIM_beta_n0, 6.89, places = 2)
 
+        hexSIM_beta_n1 = lambda_to_beta_n1(6, hexSIM_wvl)
+        self.assertTrue(isinstance(hexSIM_beta_n1, numbers.Real))
+        self.assertAlmostEqual(hexSIM_beta_n1, 9.1, places = 5)
 
 if __name__ == "__main__":
     unittest.main()
