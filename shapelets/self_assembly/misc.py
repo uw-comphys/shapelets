@@ -26,45 +26,11 @@ from scipy.ndimage import median_filter
 from .wavelength import get_wavelength
 
 __all__ = [
-    'make_grid',
     'read_image',
     'process_output',
     'image_difference',
     'trim_image'
 ]
-
-def make_grid(N: int):
-    r""" 
-    Make discretized grid based on width (N).
-    
-    Parameters
-    ----------
-    * N: int
-        * The width of the kernel (odd numbers only)
-
-    Returns
-    -------
-    * grid_x: np.ndarray
-        * The grid's x coordinate space
-    * grid_y: np.ndarray
-        * The grid's y coordinate space
-    
-    Notes
-    -----
-    As per convention, N should only be an odd number. Additionally, note that grid_x = grid_y.
-
-    """
-    if N % 2 == 0:
-        print('Detected even grid size, adding 1 to enforce odd rule See self_assembly.misc.make_grid() docs.')
-        N += 1
-    if N < 3:
-        raise ValueError('N must be at least 3 or greater.')
-    
-    bounds = [-(N-1)/2.0, (N-1)/2.0]
-    grid = np.linspace(bounds[0], bounds[1], N)
-    grid_x, grid_y = np.meshgrid(grid, grid)
-
-    return grid_x, grid_y
 
 def read_image(image_name: str, image_path: str, verbose: bool = True):
     r""" 

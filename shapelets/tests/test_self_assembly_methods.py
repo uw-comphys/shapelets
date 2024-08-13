@@ -15,16 +15,14 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-import numbers 
 import os
 import unittest
 
 import numpy as np
 
 from shapelets.self_assembly import (
-    read_image, 
-    get_wavelength,
-    convresponse,
+    read_image,
+    convresponse_n0,
     defectid,
     orientation,
     rdistance
@@ -47,7 +45,7 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         cls.image = read_image(image_name="hexSIM1.png", image_path=cls.dir, verbose=False)
         assert isinstance(cls.image, np.ndarray)
 
-        cls.omega, cls.phi = convresponse(cls.image, shapelet_order='default', verbose=False)
+        cls.omega, cls.phi = convresponse_n0(cls.image, shapelet_order='default', verbose=False)
     
     # This test will be run first on purpose
     def test_a_first(self) -> None:
@@ -57,24 +55,23 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         self.assertTrue(isinstance(self.phi, np.ndarray))
         self.assertEqual(self.phi.shape, self.image.shape + (10,))
 
-    def test_convresponse(self) -> None:
+    def test_convresponse_n0(self) -> None:
         with self.assertRaises(TypeError):
-            convresponse([], shapelet_order='default')
+            convresponse_n0([], shapelet_order='default')
 
         with self.assertRaises(ValueError): 
-            convresponse(self.image, shapelet_order='')
+            convresponse_n0(self.image, shapelet_order='')
         with self.assertRaises(TypeError):
-            convresponse(self.image, shapelet_order=5.)
-        
-        with self.assertRaises(TypeError):
-            convresponse(self.image, shapelet_order='default', normresponse=[])
-        with self.assertRaises(ValueError):
-            convresponse(self.image, shapelet_order='default', normresponse='')
+            convresponse_n0(self.image, shapelet_order=5.)
 
         # Test non-default input of shapelet_order parameter 
-        omega, phi = convresponse(self.image, shapelet_order=20, verbose=False)
+        omega, phi = convresponse_n0(self.image, shapelet_order=20, verbose=False)
         self.assertEqual(omega.shape, self.image.shape + (20,))
         self.assertEqual(phi.shape, self.image.shape + (20,))
+    
+    def test_convresponse_n1(self) -> None:
+        # TODO
+        pass
     
     # Note: cannot test outputs as defectid() is an interactive function.
     def test_defectid(self) -> None:
