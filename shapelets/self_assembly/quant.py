@@ -596,7 +596,7 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
 
     Notes
     -----
-    Any changes made to rdistance.cpp requires re-compiling the shared library via g++ -fPIC -shared -o rdistance.so rdistance.cpp
+    Any changes made to _rdistance.cpp requires re-compiling the shared library via g++ -fPIC -shared -o _rdistance.so _rdistance.cpp
 
     References
     ----------
@@ -608,23 +608,39 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     refVectors = refVectors.astype(np.float64)
     testVectors = testVectors.astype(np.float64)
 
-    ostype = str(platform.platform())
+    ostype = platform.system()
+    arch   = platform.machine().lower()
 
     # load .so library for user's OS system
-    if 'win' in ostype.lower():
-        # grab relative path of shared library file for windows
-        cpath = os.path.join(Path(__file__).parents[0], '_rdistance_win.so')
+    if 'Windows' == ostype:
+        if 'amd64' != arch:
+            raise NotImplementedError('Only AMD64 windows is supported.')
+        else:
+            # grab relative path of shared library file for windows
+            cpath = os.path.join(Path(__file__).parents[0], '_rdistance_win_amd64.so')
 
-        # load shared windows library
-        cpplib = ctypes.CDLL(cpath, winmode=0)
+            # load shared windows library
+            cpplib = ctypes.CDLL(cpath, winmode=0)
+    elif 'Linux' == ostype:
+        if 'amd64' != arch:
+            raise NotImplementedError('Only AMD64 linux is supported.')
+        else:
+            # grab relative path of shared library file for linux
+            cpath = os.path.join(Path(__file__).parents[0], '_rdistance_nix_amd64.so')
 
-    # defaults to linux installation if OS does not have custom library
+            # load shared linux library
+            cpplib = ctypes.CDLL(cpath)
+    elif 'Darwin' == ostype:
+        if 'arm64' != arch:
+            raise NotImplementedError('Only arm64 macOS is supported.')
+        else:
+            # grab relative path of shared library file for linux
+            cpath = os.path.join(Path(__file__).parents[0], '_rdistance_mac_arm64.so')
+
+            # load shared mac library
+            cpplib = ctypes.CDLL(cpath)
     else:
-        # grab relative path of shared library file for linux
-        cpath = os.path.join(Path(__file__).parents[0], '_rdistance_nix.so')
-        
-        # load shared linux library
-        cpplib = ctypes.CDLL(cpath)
+        raise NotImplementedError('Only Windows, Linux, and macOS are supported.')
 
     # setup argument and return types
     cpplib.rdistance.argtypes = [
