@@ -25,9 +25,11 @@ jobs:
 
       # ADJUST THIS: install all dependencies (including pdoc)
       - run: pip install -e .
+      
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pdoc --math -o docs/ shapelets
+      # Use negative regular expressions to suppress pdoc compilation for non .py files
+      - run: pdoc --math -o docs/ shapelets !shapelets.self_assembly._rdistance*
 
       - uses: actions/upload-pages-artifact@v3
         with:
