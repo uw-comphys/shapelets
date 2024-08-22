@@ -61,7 +61,7 @@ def make_grid(N: int):
 
 def get_opt_kernel_n0(m: int, beta: float) -> np.ndarray:
     r""" 
-    Determines the optimal filter (kernel) width for an $n=0$ orthonormal polar shapelet function[TA_get_opt_kernel_n0]_ based on $\beta$, the shapelet length-scale parameter.
+    Determines the optimal filter (kernel) width for an $n=0$ orthonormal polar shapelet function [1] based on $\beta$, the shapelet length-scale parameter.
     
     Parameters
     ----------
@@ -77,7 +77,7 @@ def get_opt_kernel_n0(m: int, beta: float) -> np.ndarray:
 
     References
     ----------
-    .. [TA_get_opt_kernel_n0] https://doi.org/10.1088/1361-6528/aaf353
+    * [1] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     # start with small kernel size and scale up until satisfied
@@ -102,7 +102,7 @@ def get_opt_kernel_n0(m: int, beta: float) -> np.ndarray:
 
 def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
     r""" 
-    Determines the optimal filter (kernel) width for an $n=1$ orthonormal polar shapelet function[MT_get_opt_kernel_n1]_ based on $\beta$, the shapelet length-scale parameter.
+    Determines the optimal filter (kernel) width for an $n=1$ orthonormal polar shapelet function [1] based on $\beta$, the shapelet length-scale parameter.
 
     Parameters
     ----------
@@ -118,7 +118,7 @@ def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
 
     References
     ----------
-    .. [MT_get_opt_kernel_n1] https://hdl.handle.net/10012/20779
+    * [1] https://hdl.handle.net/10012/20779
 
     """
     # start with large kernel size and truncate down until satisfied

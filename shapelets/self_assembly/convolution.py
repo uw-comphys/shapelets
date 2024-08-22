@@ -33,14 +33,14 @@ __all__ = [
 
 def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[RS_convresponse_n0]_.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism [1].
     
     Parameters
     ----------
     * image: np.ndarray
         * The image to be convolved with shapelet kernels
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets[MT_convresponse_n0]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets [2] ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * verbose: bool, optional
         * True (default) to print out information from convolution operation to console
 
@@ -53,13 +53,13 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets[TA_convresponse_n0]_ (see shapelets.functions.orthonormalpolar2D_n0).
+    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets [3] (see shapelets.functions.orthonormalpolar2D_n0).
 
     References
     ----------
-    .. [RS_convresponse_n0] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [MT_convresponse_n0] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [TA_convresponse_n0] https://doi.org/10.1088/1361-6528/aaf353
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    * [3] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if not isinstance(image, np.ndarray):
@@ -145,7 +145,7 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
 
 def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[RS_convresponse_n1]_.
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism [1].
     
     Parameters
     ----------
@@ -165,12 +165,12 @@ def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition for $n=1$ shapelets[MT_convresponse_n1]_ (see shapelets.functions.orthonormalpolar2D_n1).
+    This function uses the orthonormal polar shapelet definition for $n=1$ shapelets [2] (see shapelets.functions.orthonormalpolar2D_n1).
 
     References
     ----------
-    .. [RS_convresponse_n1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [MT_convresponse_n1] https://hdl.handle.net/10012/20779
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [2] https://hdl.handle.net/10012/20779
 
     """
     if not isinstance(image, np.ndarray):

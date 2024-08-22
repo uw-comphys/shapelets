@@ -174,7 +174,7 @@ def reconstruct(s_coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarr
 # calculate improved parameters to optimize shapelet coeffcients
 def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centroid: np.ndarray, nspace: list[tuple[int, int]]=None) -> tuple[float, np.ndarray]:
     r"""
-    Calculates an object's characteristic scale and centroid using its calculated shapelet coefficients[AF_update_shapelet_parameters]_. These new parameters can be used to decompose the image again with lower error.
+    Calculates an object's characteristic scale and centroid using its calculated shapelet coefficients [1]. These new parameters can be used to decompose the image again with lower error.
 
     Parameters
     ----------
@@ -198,7 +198,7 @@ def update_shapelet_parameters(coeff: np.ndarray, n_max: int, beta: float, centr
 
     References
     ----------
-    .. [AF_update_shapelet_parameters] https://doi.org/10.1046/j.1365-8711.2003.05901.x
+    * [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
 
     """
 
