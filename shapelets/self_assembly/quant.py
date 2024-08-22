@@ -59,7 +59,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     * centroids: np.ndarray
         * The centroids from k-means clustering [2]. Each centroid is a row vector
     * clusterMembers2D: np.ndarray
-        * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is defined by centroids[1]
+        * Shows which cluster each pixel from image is a member of. I.e., value of x would mean it belongs to the cluster who's centroid is defined by centroids[x] (in numpy array notation)
     * defects: np.ndarray
         * The result of the defect response distance method [1]
 
