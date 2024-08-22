@@ -15,6 +15,7 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+from .convolution import *
 from .misc import *
 from .quant import *
 from .wavelength import *
