@@ -223,7 +223,7 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
 
 def load_fits_data(filename: str) -> np.ndarray:
     r"""
-    Loads data as numpy.ndarray from provided .fits file.
+    Loads data as numpy.ndarray from provided .fits file[FITS_load_fits_data]_.
 
     Parameters
     ----------
@@ -237,11 +237,11 @@ def load_fits_data(filename: str) -> np.ndarray:
     
     Notes
     -----
-    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories[1]_. FITS provides a method to transport arrays and tables of data alongside its related metadata. 
+    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories[FITS_load_fits_data]_. FITS provides a method to transport arrays and tables of data alongside its related metadata. 
     
     References
     ----------
-    .. [1] https://fits.gsfc.nasa.gov/rfc4047.txt
+    .. [FITS_load_fits_data] https://fits.gsfc.nasa.gov/rfc4047.txt
 
     """
     with fits.open(filename) as hdul:
