@@ -136,7 +136,7 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
     norms = np.linalg.norm(omega, axis = 2)
     omega = omega / norms.reshape(Ny, Nx, 1)
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [RS]_.
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
     for i in range(phi.shape[2]):
         phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
         phi[:,:,i] *=  2*np.pi / (i+1)
@@ -209,7 +209,7 @@ def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     norms = np.linalg.norm(omega, axis = 2)
     omega = omega / norms.reshape(Ny, Nx, 1)
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [RS]_.
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
     for i in range(phi.shape[2]):
         phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
         phi[:,:,i] *=  2*np.pi / (i+1)

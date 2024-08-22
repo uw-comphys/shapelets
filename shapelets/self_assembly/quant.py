@@ -200,7 +200,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     for i in range(omega.shape[2]):
             omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [3]_.
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
     for i in range(phi.shape[2]):
         phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
         phi[:,:,i] *=  2*np.pi / (i+1)

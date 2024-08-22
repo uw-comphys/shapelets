@@ -247,7 +247,7 @@ def orthonormalpolar2D_n1(m: int, x1: Union[float,np.ndarray], x2: Union[float,n
                                 \left[ 1 + m- \left( \frac{r}{\beta}\right)^2 \right] 
                                 e^{-\frac{r^2}{2\beta^2}} e^{-im\theta} $$
 
-    with $$ \beta $$ computed numerically[1]_, and
+    with $$ \beta $$ computed numerically[MT_orthonormalpolar2D_n1]_, and
 
     where $\beta$ is the shapelet length scale, $l$ is the characteristic wavelength of the image[RS_orthonormalpolar2D_n1]_, and $m$ is the shapelet degree of rotational symmetry.
 
