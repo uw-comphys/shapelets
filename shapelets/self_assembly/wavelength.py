@@ -27,7 +27,7 @@ __all__ = [
 
 def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True) -> float:
     r""" 
-    Find characteristic wavelength of an image. Computed using method described in ref.[1]_.
+    Find characteristic wavelength of an image. Computed using method described in ref.[RS_get_wavelength]_.
     
     Parameters
     ----------
@@ -39,11 +39,11 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True)
     Returns
     -------
     * char_wavelength: float
-        * The characteristic wavelength of the image
+        * The characteristic wavelength of the image[RS_get_wavelength]_
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [RS_get_wavelength] http://dx.doi.org/10.1103/PhysRevE.91.033307
     
     """
     if type(image) != np.ndarray:
@@ -85,7 +85,7 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True)
 
 def radialavg(image: np.ndarray) -> np.ndarray:
     r""" 
-    Calculates the radially averaged intensity of an image. Based on work from ref.[1]_.
+    Calculates the radially averaged intensity of an image. Based on work from ref.[RS_radialavg]_.
     
     Parameters
     ----------
@@ -99,7 +99,7 @@ def radialavg(image: np.ndarray) -> np.ndarray:
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [RS_radialavg] http://dx.doi.org/10.1103/PhysRevE.91.033307
     
     """
     # Determine two arrays, x and y, which contain the indices of the image.

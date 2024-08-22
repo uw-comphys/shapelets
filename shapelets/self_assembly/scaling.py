@@ -27,24 +27,24 @@ __all__ = [
 
 def lambda_to_beta_n0(m: int, l: float) -> float:
     r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ with $n=0$ (see shapelets.functions.orthonormalpolar2D_n0).
+    Converts lambda (l), the characteristic wavelength of the image[RS_lambda_to_beta_n0]_ to the appropriate beta value for orthonormal polar shapelets[TA_lambda_to_beta_n0]_ with $n=0$ (see shapelets.functions.orthonormalpolar2D_n0).
     
     Parameters
     ----------
     * m: int
         * Shapelet degree of rotational symmetry
     * l: float
-        * The characteristic wavelength of the image[1]_
+        * The characteristic wavelength of the image[RS_lambda_to_beta_n0]_
     
     Returns
     -------
     * beta: float
-        * The characteristic shapelet length scale parameter based on ref.[2]_
+        * The characteristic shapelet length scale parameter based on ref.[TA_lambda_to_beta_n0]_
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://doi.org/10.1088/1361-6528/aaf353
+    .. [RS_lambda_to_beta_n0] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [TA_lambda_to_beta_n0] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if m == 4:   
@@ -63,24 +63,24 @@ def lambda_to_beta_n0(m: int, l: float) -> float:
 
 def lambda_to_beta_n1(m: int, l: float, verbose=False) -> float:
     r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ with $n=1$ (see shapelets.functions.orthonormalpolar2D_n1).
+    Converts lambda (l), the characteristic wavelength of the image[RS_lambda_to_beta_n1]_ to the appropriate beta value for orthonormal polar shapelets[MT_lambda_to_beta_n1]_ with $n=1$ (see shapelets.functions.orthonormalpolar2D_n1).
     
     Parameters
     ----------
     * m: int
         * Shapelet degree of rotational symmetry
     * l: float
-        * The characteristic wavelength of the image[1]_
+        * The characteristic wavelength of the image[RS_lambda_to_beta_n1]_
     
     Returns
     -------
     * beta: float
-        * The characteristic shapelet length scale parameter based on ref.[2]_
+        * The characteristic shapelet length scale parameter based on ref.[MT_lambda_to_beta_n1]_
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://hdl.handle.net/10012/20779
+    .. [RS_lambda_to_beta_n1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [MT_lambda_to_beta_n1] https://hdl.handle.net/10012/20779
 
     """
     lambda_opt = np.round(l*1.5, 0)

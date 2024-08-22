@@ -43,7 +43,7 @@ __all__ = [
 
 def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
-    Computes the defect identification method[1]_. Also known as the defect response distance method.
+    Computes the defect identification method[MT_defectid]_. Also known as the defect response distance method[MT_defectid]_.
 
     Parameters
     ----------
@@ -57,16 +57,16 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     Returns
     -------
     * centroids: np.ndarray
-        * The centroids from k-means clustering[2]_. Each centroid is a row vector
+        * The centroids from k-means clustering[WU_defectid]_. Each centroid is a row vector
     * clusterMembers2D: np.ndarray
         * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is dedfined by centroids[1]
     * defects: np.ndarray
-        * The result of the defect response distance method[1]_
+        * The result of the defect response distance method[MT_defectid]_
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1007/978-3-642-29807-3
+    .. [MT_defectid] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [WU_defectid] https://doi.org/10.1007/978-3-642-29807-3
 
     """
     if not isinstance(image, np.ndarray):
@@ -126,7 +126,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
 def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
-    Computes the local pattern orientation[1]_ via an iterative scheme using shapelet orientation at maximum response from steerable filter theory[2]_.
+    Computes the local pattern orientation[MT_orientation]_ via an iterative scheme using shapelet orientation at maximum response from steerable filter theory[SFT_orientation]_.
 
     Parameters
     ----------
@@ -144,7 +144,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     * dilate: np.ndarray
         * The dilated mask
     * orientation: np.ndarray
-        * Applying smoothing/blending to the dilated mask via median filter kernel[3]_
+        * Applying smoothing/blending to the dilated mask via median filter kernel[MF_orientation]_
     * maxval: float
         * The maximum allowed orientation value, where $maxval = \frac{2 \pi}{m}$
     
@@ -154,9 +154,9 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1109/34.93808
-    .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
+    .. [MT_orientation] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [SFT_orientation] https://doi.org/10.1109/34.93808
+    .. [MF_orientation] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
     
     """
     if not isinstance(image, np.ndarray):
@@ -245,16 +245,16 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
 def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray:
     r""" 
-    Compute the response distance method from ref.[1]_ using the methodology from ref.[2]_. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
+    Compute the response distance method from ref.[RS_rdistance]_. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
 
     Parameters
     ----------
     * image: numpy.ndarray
         * The image loaded as a numpy array
     * num_clusters: Union[str,int]
-        * The number of clusters as input to k-means clustering[3]_. If str, acceptable value is "default" (which uses 20 clusters[2]_)
+        * The number of clusters as input to k-means clustering[WU_rdistance]_. If str, acceptable value is "default" (which uses 20 clusters[TA_rdistance]_)
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets[4]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets[MT_rdistance]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * ux: Union[str,list]
         * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
     * uy: Union[str,list]
@@ -269,10 +269,10 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://doi.org/10.1088/1361-6528/aaf353
-    .. [3] https://doi.org/10.1007/978-3-642-29807-3
-    .. [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [RS_rdistance] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [TA_rdistance] https://doi.org/10.1088/1361-6528/aaf353
+    .. [WU_rdistance] https://doi.org/10.1007/978-3-642-29807-3
+    .. [MT_rdistance] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if not isinstance(image, np.ndarray):
@@ -396,7 +396,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
 def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     r"""
-    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python[2]_.
+    Wrapper function for C++ implementation of response distance method[a]_. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python[b]_.
 
     Parameters
     ----------
@@ -416,8 +416,8 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://hdl.handle.net/10012/20779
+    .. [a] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [b] https://hdl.handle.net/10012/20779
 
     """
     # ensure input vectors are of type numpy.float64
