@@ -21,7 +21,9 @@ import warnings
 import numpy as np
 from scipy.signal import fftconvolve
 
-from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0, lambda_to_beta_n1, get_opt_kernel_n1
+from .kernel import get_opt_kernel_n0, get_opt_kernel_n1
+from .scaling import lambda_to_beta_n0, lambda_to_beta_n1
+from .wavelength import get_wavelength
 
 __all__ = [
     'convresponse_n0',

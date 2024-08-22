@@ -29,8 +29,10 @@ from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
  
 from .convolution import convresponse_n0
+from .kernel import get_opt_kernel_n0
 from .misc import trim_image
-from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0
+from .scaling import lambda_to_beta_n0
+from .wavelength import get_wavelength
 
 __all__ = [
     'defectid',

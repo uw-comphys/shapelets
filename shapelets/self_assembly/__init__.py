@@ -16,6 +16,8 @@
 ########################################################################################################################
 
 from .convolution import *
+from .kernel import *
 from .misc import *
 from .quant import *
+from .scaling import *
 from .wavelength import *
