@@ -22,7 +22,7 @@
 /**
  * A simple C++ implementation of the response distance method from ref. [1], developed by Matthew Tino (mptino@uwaterloo.ca).
  * Note that 'extern "C"' must be used such that this function is compiled as C code for use as shared library, in compatibility with ctypes python library. Extra int type parameters are needed because the size of arrays cannot be inferred from pointer.
- * Additionally, to compile this file as shared library: g++ -fPIC -shared -o rdistance.so rdistance.cpp
+ * Additionally, to compile this file as shared library: g++ -fPIC -shared -o _rdistance.so _rdistance.cpp
  * 
  * @param refs Pointer to first element of 2D array refs, which contains the reference response vectors.
  * @param test Pointer to first element of 2D array test, which contains the test (or non-reference) response vectors.
