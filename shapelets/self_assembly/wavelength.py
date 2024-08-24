@@ -19,251 +19,15 @@ import numbers
 
 import numpy as np
 
-from ..functions import orthonormalpolar2D_n0, orthonormalpolar2D_n1
-
 __all__ = [
-    'make_grid',
-    'lambda_to_beta_n0',
-    'get_opt_kernel_n0',
-    'lambda_to_beta_n1',
-    'get_opt_kernel_n1',
     'get_wavelength',
+    'radialavg',
 ]
 
-def make_grid(N: int):
-    r""" 
-    Make discretized grid based on width (N).
-    
-    Parameters
-    ----------
-    * N: int
-        * The width of the kernel (odd numbers only)
-
-    Returns
-    -------
-    * grid_x: np.ndarray
-        * The grid's x coordinate space
-    * grid_y: np.ndarray
-        * The grid's y coordinate space
-    
-    Notes
-    -----
-    As per convention, N should only be an odd number. Additionally, note that grid_x = grid_y.
-
-    """
-    if N % 2 == 0:
-        print('Detected even grid size, adding 1 to enforce odd rule See self_assembly.wavelength.make_grid() docs.')
-        N += 1
-    if N < 3:
-        raise ValueError('N must be at least 3 or greater.')
-    
-    bounds = [-(N-1)/2.0, (N-1)/2.0]
-    grid = np.linspace(bounds[0], bounds[1], N)
-    grid_x, grid_y = np.meshgrid(grid, grid)
-
-    return grid_x, grid_y
-
-def lambda_to_beta_n0(m: int, l: float) -> float:
-    r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ with $n=0$ (see shapelets.functions.orthonormalpolar2D_n0).
-    
-    Parameters
-    ----------
-    * m: int
-        * Shapelet degree of rotational symmetry
-    * l: float
-        * The characteristic wavelength of the image[1]_
-    
-    Returns
-    -------
-    * beta: float
-        * The characteristic shapelet length scale parameter based on ref.[2]_
-
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://doi.org/10.1088/1361-6528/aaf353
-
-    """
-    if m == 4:   
-        f = np.sqrt(2) / 2
-    elif m == 3: 
-        f = 1 / np.sqrt(3)
-    elif m == 2: 
-        f = 1 / 2
-    elif m == 1: 
-        f = 1 / 4
-    else:        
-        f = 1
-
-    beta = (l / np.sqrt(m)) * f
-    return beta
-
-def get_opt_kernel_n0(m: int, beta: float) -> np.ndarray:
-    r""" 
-    Determines the optimal filter (kernel) width for an $n=0$ orthonormal polar shapelet function[1]_ based on $\beta$, the shapelet length-scale parameter.
-    
-    Parameters
-    ----------
-    * m: int
-        * Shapelet degree of rotational symmetry
-    * beta: float
-        * The characteristic shapelet length scale parameter.
-    
-    Returns
-    -------
-    * shapelet: np.ndarray
-        * Shapelet function casted onto a discrete domain with the appropriate filter width.
-
-    References
-    ----------
-    .. [1] https://doi.org/10.1088/1361-6528/aaf353
-
-    """
-    # start with small kernel size and scale up until satisfied
-    N = 21 # minimum
-
-    grid_x, grid_y = make_grid(N = N)
-    shapelet = orthonormalpolar2D_n0(m=m, x1=grid_x, x2=grid_y, beta=beta)
-
-    accept = False
-
-    while not accept:
-        edgeweight = np.abs(np.real(shapelet[int(shapelet.shape[0]/2), -1])) \
-            / np.real(shapelet).max()
-        if edgeweight > 0.0001:
-            N += 4
-            grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D_n0(m=m, x1=grid_x, x2=grid_y, beta=beta)
-        else:
-            accept = True
-    
-    return shapelet
-
-def lambda_to_beta_n1(m: int, l: float, verbose=False) -> float:
-    r""" 
-    Converts lambda (l), the characteristic wavelength of the image[1]_ to the appropriate beta value for orthonormal polar shapelets[2]_ with $n=1$ (see shapelets.functions.orthonormalpolar2D_n1).
-    
-    Parameters
-    ----------
-    * m: int
-        * Shapelet degree of rotational symmetry
-    * l: float
-        * The characteristic wavelength of the image[1]_
-    
-    Returns
-    -------
-    * beta: float
-        * The characteristic shapelet length scale parameter based on ref.[2]_
-
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://hdl.handle.net/10012/20779
-
-    """
-    lambda_opt = np.round(l*1.5, 0)
-    beta = 1
-
-    accept = False
-
-    while not accept:
-
-        # get appropriate sized kernel
-        shapelet = get_opt_kernel_n1(m = m, beta = beta)
-
-        # extract the midline to work with 1D data for simplicity
-        halfpoint = int((shapelet.shape[0] - 1) / 2)
-        data = np.real(shapelet[halfpoint, :])
-
-        # now find the two peaks associated with two max / min of inner/outer shapelet lobes
-        numpts = data.size
-        peak_ind = np.array([])
-        for p in range(halfpoint+1, numpts-1): # check all points except for the ends
-            if (data[p-1] < data[p] > data[p+1]) or (data[p-1] > data[p] < data[p+1]):
-                peak_ind = np.append(peak_ind, p)
-
-        if peak_ind.size != 2:
-            print("Error in expected number of peaks... kernel error. Skipping iteration...")
-            breakpoint()
-            beta += 2*0.1
-
-        else:
-            # want {peak_HP - halfpoint} to be close to 1.5*lambda
-            peak_MP = np.round((peak_ind[1] - peak_ind[0]) / 2, 0) + peak_ind[0]
-            distance = peak_MP - halfpoint
-            reldistance = lambda_opt - distance
-            if verbose:
-                print(f"Current distance {distance}, target is {lambda_opt}")
-
-            ## evaluate acceptability of solution ##
-
-            # found solution
-            if np.abs(reldistance) <= 1:
-                beta_opt = beta
-                if verbose: print(f"optimum beta found to be {beta_opt}")
-                accept = True # stop
-
-            # undershot solution
-            if reldistance > 0:
-                # adaptive stepping to speed up computations
-                if reldistance < 2:
-                    beta += 0.1
-                else: 
-                    beta += 3*reldistance * 0.1
-
-            # overshot solution
-            elif reldistance < 0:
-                if verbose:
-                    print("We have overshot target, iterating backwards.")
-                beta -= reldistance*0.1
-    
-    return beta_opt
-
-def get_opt_kernel_n1(m: int, beta: float) -> np.ndarray:
-    r""" 
-    Determines the optimal filter (kernel) width for an $n=1$ orthonormal polar shapelet function[1]_ based on $\beta$, the shapelet length-scale parameter.
-
-    Parameters
-    ----------
-    * m: int
-        * Shapelet degree of rotational symmetry
-    * beta: float
-        * The characteristic shapelet length scale parameter.
-    
-    Returns
-    -------
-    * shapelet: np.ndarray
-        * Shapelet function casted onto a discrete domain with the appropriate filter width.
-
-    References
-    ----------
-    .. [1] https://hdl.handle.net/10012/20779
-
-    """
-    # start with large kernel size and truncate down until satisfied
-    N = 501
-
-    grid_x, grid_y = make_grid(N = N)
-    shapelet = orthonormalpolar2D_n1(m=m, x1=grid_x, x2=grid_y, beta=beta)
-
-    accept = False
-
-    while not accept:
-        edgeweight = np.abs(np.real(shapelet[int(shapelet.shape[0]/2), -1])) / np.real(shapelet).max()
-
-        if edgeweight < 0.001:
-            N -= 4
-            grid_x, grid_y = make_grid(N = N)
-            shapelet = orthonormalpolar2D_n1(m=m, x1=grid_x, x2=grid_y, beta=beta)
-        else:
-            accept = True
-
-    return shapelet
 
 def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True) -> float:
     r""" 
-    Find characteristic wavelength of an image. Computed using method described in ref.[1]_.
+    Find characteristic wavelength of an image. Computed using method described in ref. [1].
     
     Parameters
     ----------
@@ -275,11 +39,11 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True)
     Returns
     -------
     * char_wavelength: float
-        * The characteristic wavelength of the image
+        * The characteristic wavelength of the image [1]
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     
     """
     if type(image) != np.ndarray:
@@ -321,7 +85,7 @@ def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True)
 
 def radialavg(image: np.ndarray) -> np.ndarray:
     r""" 
-    Calculates the radially averaged intensity of an image. Based on work from ref.[1]_.
+    Calculates the radially averaged intensity of an image. Based on work from ref. [1].
     
     Parameters
     ----------
@@ -335,7 +99,7 @@ def radialavg(image: np.ndarray) -> np.ndarray:
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     
     """
     # Determine two arrays, x and y, which contain the indices of the image.

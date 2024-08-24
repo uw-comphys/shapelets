@@ -21,213 +21,29 @@ import os
 import platform
 import time 
 from typing import Union
-import warnings
 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
-
+ 
+from .convolution import convresponse_n0
+from .kernel import get_opt_kernel_n0
 from .misc import trim_image
-from .wavelength import get_wavelength, lambda_to_beta_n0, get_opt_kernel_n0, lambda_to_beta_n1, get_opt_kernel_n1
+from .scaling import lambda_to_beta_n0
+from .wavelength import get_wavelength
 
 __all__ = [
-    'convresponse_n0',
-    'convresponse_n1',
     'defectid',
     'orientation',
-    'rdistance'
+    'rdistance',
 ]
 
-def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default', verbose: bool = True):
-    r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
-    
-    Parameters
-    ----------
-    * image: np.ndarray
-        * The image to be convolved with shapelet kernels
-    * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets[2]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
-    * verbose: bool, optional
-        * True (default) to print out information from convolution operation to console
-
-    Returns
-    -------
-    * omega: numpy.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array as per steerable shapelet formulism
-    * phi: numpy.ndarray
-        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
-
-    Notes
-    -----
-    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets[3]_ (see shapelets.functions.orthonormalpolar2D_n0).
-
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [3] https://doi.org/10.1088/1361-6528/aaf353
-
-    """
-    if not isinstance(image, np.ndarray):
-        raise TypeError('image parameter must be a numpy array.')
-
-    if isinstance(shapelet_order, str):
-        if shapelet_order == 'default': 
-            mmax = None
-        else:
-            raise ValueError('shapelet_order parameter as a str must be "default".')
-    elif isinstance(shapelet_order, int):
-        mmax = shapelet_order
-    else:
-        raise TypeError('shapelet_order parameter must either be "default" or integer value.')
-
-    # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=verbose)
-
-    minRespTol = 0.1
-    
-    Ny, Nx = image.shape
-    omegaTotal = []
-
-    # predefined maximum m value (mmax)
-    if mmax != None:
-        omega = np.empty((Ny, Nx, mmax)) 
-        phi = np.empty((Ny, Nx, mmax))
-        for i in range(mmax):
-            # get beta
-            beta = lambda_to_beta_n0(m=i+1, l=l)
-
-            # get grid for discretization and initialize shapelet kernel
-            shapelet = get_opt_kernel_n0(m=i+1, beta=beta)
-
-            # convolve kernel (shapelet) with image
-            con = fftconvolve(image, shapelet, mode = 'same')
-            omega[:,:,i] = np.abs(con)
-            phi[:,:,i] = np.angle(con)
-
-        if verbose:
-            print(f"Convolution complete for shapelets m <= {mmax}")
-
-    # use iteration scheme from ref.[2]_ to get maximum shapelet order
-    else:
-        omega = np.empty((Ny, Nx, 200)) 
-        phi = np.empty((Ny, Nx, 200))
-        currResp = 1.
-        m = 0
-        while currResp > minRespTol:
-            # get beta
-            m += 1
-            beta = lambda_to_beta_n0(m=m, l=l)
-
-            # get grid for discretization and initialize shapelet kernel
-            shapelet = get_opt_kernel_n0(m=m, beta=beta)
-            
-            con = fftconvolve(image, shapelet, mode = 'same')
-            omegacurr = np.abs(con)
-
-            omegaTotal.append(np.sum(omegacurr))
-            currResp = np.sum(omegacurr) / np.max(omegaTotal)
-            
-            omega[:,:,m-1] = np.abs(con)
-            phi[:,:,m-1] = np.angle(con)
-            
-        # remove last convolutional data since it broke the while loop, true m = m -1
-        m -= 1
-        omega = omega[:,:,:m]
-        phi = phi[:,:,:m]
-        if verbose:
-            print(f"Convolution complete for shapelets m <= {m} before tolerance exceeded")
-
-    # normalize response vectors
-    norms = np.linalg.norm(omega, axis = 2)
-    omega = omega / norms.reshape(Ny, Nx, 1)
-
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [3]_.
-    for i in range(phi.shape[2]):
-        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
-        phi[:,:,i] *=  2*np.pi / (i+1)
-
-    return omega, phi
-
-def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
-    r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism[1]_.
-    
-    Parameters
-    ----------
-    * image: np.ndarray
-        * The image to be convolved with shapelet kernels
-    * mmax: int
-        * Maximum $m$ shapelet parameter to compute convolutions. Note that $m \geq 0$
-    * verbose: bool, optional
-        * True (default) to print out information from convolution operation to console
-
-    Returns
-    -------
-    * omega: numpy.ndarray
-        * The magnitude of (maximum) convolutional response as a 3D array
-    * phi: numpy.ndarray
-        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
-
-    Notes
-    -----
-    This function uses the orthonormal polar shapelet definition for $n=1$ shapelets[2]_ (see shapelets.functions.orthonormalpolar2D_n1).
-
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://hdl.handle.net/10012/20779
-
-    """
-    if not isinstance(image, np.ndarray):
-        raise TypeError('image parameter must be a numpy array.')
-    
-    if not isinstance(mmax, int):
-        raise TypeError('mmax parameter must be of type int.')
-    elif mmax >= 10:
-        msg = "WARNING: Desired shapelet behaviour is declining as m increases beyond 10. See Section 6.3 from https://hdl.handle.net/10012/20779 for more details."
-        warnings.warn(msg)
-
-    # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=verbose)
-
-    Ny, Nx = image.shape
-
-    omega = np.empty((Ny, Nx, mmax)) 
-    phi = np.empty((Ny, Nx, mmax))
-
-    for i in range(mmax):
-        # get optimal beta from numerical scheme
-        beta = lambda_to_beta_n1(m=i+1, l=l)
-
-        # get optimal kernel size
-        shapelet = get_opt_kernel_n1(m = i+1, beta = beta)
-
-        # convolve kernel (shapelet) with image
-        con = fftconvolve(image, shapelet, mode = 'same')
-        omega[:,:,i] = np.abs(con)
-        phi[:,:,i] = np.angle(con)
-    
-    if verbose:
-        print(f"Convolution complete for shapelets m <= {mmax}")
-            
-    # normalize response vectors
-    norms = np.linalg.norm(omega, axis = 2)
-    omega = omega / norms.reshape(Ny, Nx, 1)
-
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [2]_.
-    for i in range(phi.shape[2]):
-        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
-        phi[:,:,i] *=  2*np.pi / (i+1)
-
-    return omega, phi
 
 def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
-    Computes the defect identification method[1]_. Also known as the defect response distance method.
+    Computes the defect identification method from ref. [1]. Also known as the defect response distance method in ref. [1].
 
     Parameters
     ----------
@@ -241,16 +57,16 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     Returns
     -------
     * centroids: np.ndarray
-        * The centroids from k-means clustering[2]_. Each centroid is a row vector
+        * The centroids from k-means clustering [2]. Each centroid is a row vector
     * clusterMembers2D: np.ndarray
-        * Shows which cluster each pixel from image is a member of. I.e., value of 1 would mean it belongs to the cluster who's centroid is dedfined by centroids[1]
+        * Shows which cluster each pixel from image is a member of. I.e., value of x would mean it belongs to the cluster who's centroid is defined by centroids[x] (in numpy array notation)
     * defects: np.ndarray
-        * The result of the defect response distance method[1]_
+        * The result of the defect response distance method [1]
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1007/978-3-642-29807-3
+    * [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    * [2] https://doi.org/10.1007/978-3-642-29807-3
 
     """
     if not isinstance(image, np.ndarray):
@@ -310,7 +126,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
 def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     r""" 
-    Computes the local pattern orientation[1]_ via an iterative scheme using shapelet orientation at maximum response from steerable filter theory[2]_.
+    Computes the local pattern orientation from ref. [1] via an iterative scheme using shapelet orientation at maximum response from steerable filter theory [2].
 
     Parameters
     ----------
@@ -328,7 +144,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     * dilate: np.ndarray
         * The dilated mask
     * orientation: np.ndarray
-        * Applying smoothing/blending to the dilated mask via median filter kernel[3]_
+        * Applying smoothing/blending to the dilated mask via median filter kernel [3]
     * maxval: float
         * The maximum allowed orientation value, where $maxval = \frac{2 \pi}{m}$
     
@@ -338,9 +154,9 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1109/34.93808
-    .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
+    * [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    * [2] https://doi.org/10.1109/34.93808
+    * [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
     
     """
     if not isinstance(image, np.ndarray):
@@ -384,7 +200,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     for i in range(omega.shape[2]):
             omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory from ref [3]_.
+    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
     for i in range(phi.shape[2]):
         phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
         phi[:,:,i] *=  2*np.pi / (i+1)
@@ -429,16 +245,16 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
 def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray:
     r""" 
-    Compute the response distance method from ref.[1]_ using the methodology from ref.[2]_. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
+    Compute the response distance method from ref. [1]. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
 
     Parameters
     ----------
     * image: numpy.ndarray
         * The image loaded as a numpy array
     * num_clusters: Union[str,int]
-        * The number of clusters as input to k-means clustering[3]_. If str, acceptable value is "default" (which uses 20 clusters[2]_)
+        * The number of clusters as input to k-means clustering [2]. If str, acceptable value is "default" (which uses 20 clusters [3])
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets[4]_ ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets [4] ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
     * ux: Union[str,list]
         * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
     * uy: Union[str,list]
@@ -453,10 +269,10 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://doi.org/10.1088/1361-6528/aaf353
-    .. [3] https://doi.org/10.1007/978-3-642-29807-3
-    .. [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [3] https://doi.org/10.1088/1361-6528/aaf353
+    * [2] https://doi.org/10.1007/978-3-642-29807-3
+    * [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if not isinstance(image, np.ndarray):
@@ -580,7 +396,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
 
 def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     r"""
-    Wrapper function for C++ implementation of response distance method[1]_. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python[2]_.
+    Wrapper function for C++ implementation of response distance method [a]. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python [b].
 
     Parameters
     ----------
@@ -600,8 +416,8 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    .. [2] https://hdl.handle.net/10012/20779
+    * [a] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [b] https://hdl.handle.net/10012/20779
 
     """
     # ensure input vectors are of type numpy.float64

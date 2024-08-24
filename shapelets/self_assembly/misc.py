@@ -93,7 +93,7 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     * shapelets.self_assembly.quant.orientation
     * shapelets.self_assembly.quant.defectid
     
-    It was used to generate Figures 6, 7, 8, and 9 from ref.[1]_.
+    It was used to generate Figures 6, 7, 8, and 9 from ref. [1].
 
     NOTE: any image saved from the **kwargs argument is trimmed using shapelets.self_assembly.misc.trim_image. This is because the convolution with shapelet kernels is padded on the edges, producing a fuzzy convolutional response. The shapelets.self_assembly.misc.trim_image function removes this fuzzy response.
 
@@ -117,7 +117,7 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    * [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     # check that save_path exists
@@ -285,9 +285,9 @@ def process_output(image: np.ndarray, image_name: str, save_path: str, output_fr
     else: 
         raise ValueError(f"output_from parameter as {output_from} not recognized by process_output().")
 
-def image_difference(im1: np.ndarray, im2: np.ndarray):
+def image_difference(im1: np.ndarray, im2: np.ndarray) -> np.ndarray:
     r""" 
-    This function computes the normalized difference between two images. It was used to generate Figure 5 from ref.[1]_.
+    This function computes the normalized difference between two images. It was used to generate Figure 5 from ref.[MT_image_difference]_.
 
     Parameters
     ----------
@@ -307,7 +307,7 @@ def image_difference(im1: np.ndarray, im2: np.ndarray):
     
     References
     ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [MT_image_difference] http://dx.doi.org/10.1088/1361-6528/ad1df4
 
     """
     if im1.shape != im2.shape:
@@ -322,16 +322,16 @@ def image_difference(im1: np.ndarray, im2: np.ndarray):
     
     return diff
 
-def trim_image(im: np.ndarray, l: float):
+def trim_image(im: np.ndarray, l: float) -> np.ndarray:
     r""" 
-    Trim image edges based on characteristic wavelength (l). Useful for images post convolution, as edges can present distortions because of padded convolution.
+    Trim image edges based on characteristic wavelength (l) [1]. Useful for images post convolution, as edges can present distortions because of padded convolution.
 
     Parameters
     ----------
     * im: np.ndarray
         * The image to trim
     * l: float
-        * The characteristic wavelength of the image[1]_
+        * The characteristic wavelength of the image
     
     Returns
     -------
@@ -339,11 +339,11 @@ def trim_image(im: np.ndarray, l: float):
 
     Notes
     -----
-    The characteristic wavelength[1]_ is roughly the distance between feature centers, thus making it an appropriate size for image trim or truncation after convolution.
+    The characteristic wavelength [1] is roughly the distance between feature centers, thus making it an appropriate size for image trim or truncation after convolution.
 
     References
     ----------
-    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
 
     """
     trim = round(l/2)
