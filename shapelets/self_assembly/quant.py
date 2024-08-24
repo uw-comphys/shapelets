@@ -355,23 +355,17 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         if verbose:
             print("Proceeding to compute response distance without k-means clustering:")
 
-    # prioritize C++ implementation, any issues should resort to python implementation
-    
-    # TODO: both implementations should use 2d arrays (fix python implementation)
-    
+    # prioritize C++ implementation, any errors should resort to python implementation
     ti = time.time()
 
-    # Use C++ implementation of response distance
     try:
-        if verbose: print("Attempting to use C++ implementation of response distance")
-
+        print("Attempting to use C++ implementation of response distance")
         response_2d = np.reshape(response, (-1, response.shape[-1]))
         d_1d = _rdistance(response_ref, response_2d)
         d = d_1d.reshape(Ny, Nx)
     
-    # If failures occur, resort to working Python implementation
-    except:
-        if verbose: print("C++ implementation failed, using Python implementation")
+    except Exception as err:
+        print(f"C++ implementation failed: {repr(err)}.\nResorting to Python implementation\n")
 
         d = np.zeros((Ny, Nx))
         compList = np.array([10, 25, 50, 75, 100]).astype(int)
@@ -390,7 +384,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     tf = time.time()
 
     if verbose:
-        print(f"Response distance 100% complete with runtime of {tf-ti:0.2}s")
+        print(f"Response distance complete with runtime of {tf-ti:0.2}s")
 
     return d
 
@@ -424,12 +418,16 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
     refVectors = refVectors.astype(np.float64)
     testVectors = testVectors.astype(np.float64)
 
+    # grab lists of synomyms for architecture CPU names
+    archx86 = ['x86_64', 'x86', 'amd64']
+    archarm = ['aarch64', 'arm64', 'armv8', 'armv9']
+
+    # grab operating system and cpu arch info
     ostype = platform.system()
     arch   = platform.machine().lower()
 
-    # load .so library for user's OS system
     if 'Windows' == ostype:
-        if 'amd64' != arch:
+        if arch not in archx86:
             raise NotImplementedError('Only AMD64 windows is supported.')
         else:
             # grab relative path of shared library file for windows
@@ -437,8 +435,9 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
 
             # load shared windows library
             cpplib = ctypes.CDLL(cpath, winmode=0)
+
     elif 'Linux' == ostype:
-        if 'amd64' != arch:
+        if arch not in archx86:
             raise NotImplementedError('Only AMD64 linux is supported.')
         else:
             # grab relative path of shared library file for linux
@@ -446,15 +445,17 @@ def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
 
             # load shared linux library
             cpplib = ctypes.CDLL(cpath)
+            
     elif 'Darwin' == ostype:
-        if 'arm64' != arch:
-            raise NotImplementedError('Only arm64 macOS is supported.')
+        if arch not in archarm:
+            raise NotImplementedError('Only ARM64 macOS is supported.')
         else:
             # grab relative path of shared library file for linux
             cpath = os.path.join(Path(__file__).parents[0], '_rdistance_mac_arm64.so')
 
             # load shared mac library
             cpplib = ctypes.CDLL(cpath)
+
     else:
         raise NotImplementedError('Only Windows, Linux, and macOS are supported.')
 
