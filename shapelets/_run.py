@@ -18,7 +18,6 @@
 import ast
 import configparser
 import os
-from pathlib import Path
 
 from .astronomy.galaxy import *
 
@@ -77,9 +76,8 @@ def _run(config_file: str, working_dir: str) -> None:
             if shapelet_order != 'default':
                 shapelet_order = ast.literal_eval(shapelet_order)
 
-            num_clusters = config.get('response_distance', 'num_clusters', fallback = 'default')
-            if num_clusters != 'default':
-                num_clusters = ast.literal_eval(num_clusters)
+            num_clusters = config.get('response_distance', 'num_clusters', fallback = 20)
+            num_clusters = ast.literal_eval(num_clusters)
 
             ux = config.get('response_distance', 'ux', fallback = 'default')
             uy = config.get('response_distance', 'uy', fallback = 'default')
