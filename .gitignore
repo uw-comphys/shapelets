@@ -1,0 +1,27 @@
+# Ignore latex files, including those created from detailed documents
+*.aux
+*.log
+*.out
+*.blg
+*.brf
+*.thm
+*.toc
+*.bbl
+*.ist
+*.lof
+*.lot
+*.glo
+
+# python-related pip install (build) files and other
+*.egg-info/
+*build/
+
+# python dump
+__pycache__/
+
+# compressed items
+*.npz
+*.pkl 
+
+# output directories
+*output/
