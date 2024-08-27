@@ -1,12 +1,7 @@
+
 # shapelets
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.06058/status.svg)](https://doi.org/10.21105/joss.06058)
-
-[**Getting Started**](#getting-started)
-| [**Issues**](#issues)
-| [**Contribute**](#contribute)
-| [**Citation**](#citation)
-| [**Authors**](#authors)
 
 ## What is shapelets? 
 
@@ -27,9 +22,16 @@ The shapelets library provides reference code and documentation for several shap
 
 ## Getting Started
 
-If you have Python 3.10+ installed on your machine, you can install the shapelets library in the terminal via pip: `pip install shapelets`
+New users should follow these instructions to install and use the shapelets library correctly:
 
-Otherwise, consult the [official website](https://uw-comphys.github.io/shapelets/shapelets.html) for installation instructions, detailed examples, and custom command-line arguments to interact with the shapelets library efficiently.
+1. If you have Python 3.10+ installed, you can install the shapelets library via pip from your terminal/command line: `pip install shapelets` 
+2. If you do not have Python 3.10+ installed, consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for instructions on Linux, macOS, and Windows machines.
+3. Consult the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) to see specific applications implemented in the library.
+4. Checkout other documentation, such as
+    * [Custom Commands](https://uw-comphys.github.io/shapelets/shapelets/docs/custom_commands.html) - describes command-line arguments available for this library
+    * [Library Interface](https://uw-comphys.github.io/shapelets/shapelets/docs/library_interface.html) - describes two different ways of interfacing the `shapelets` library
+
+If you plan to use the shapelets library for your own work, please cite appropriately using the [citation](#citation) below.
 
 ## Issues
 
@@ -46,7 +48,21 @@ The authors of the shapelets library welcome external contributions to the sourc
 
 ## Citation
 
-If you plan to use shapelets in your own work, please cite using the *Cite this repository* dropdown button on the top right of this page (under *About*).
+If you plan to use shapelets in your own work, please cite using the following bibtex citation:
+
+```
+@article{TinoShapelets2024,
+author = {Tino, Matthew Peres and Abdulaziz, Abbas Yusuf and Suderman, Robert and Akdeniz, Thomas and Abukhdeir, Nasser Mohieddin},
+title = {Shapelets: A Python package implementing shapelet functions and their applications},
+doi = {10.21105/joss.06058},
+journal = {Journal of Open Source Software},
+number = {95},
+pages = {6058},
+volume = {9},
+year = {2024},
+url = {https://joss.theoj.org/papers/10.21105/joss.06058}
+}
+```
 
 ## Authors
 
