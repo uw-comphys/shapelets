@@ -64,10 +64,8 @@ where = ["."]
 [tool.setuptools.package-data]
 # Using shapelets as the main directory, then list global patterns underneath it
 shapelets = [
-	"tests/images/*",
-	"self_assembly/_rdistance.cpp",
-	"self_assembly/_rdistance_nix.so",
-	"self_assembly/_rdistance_win.so",
+	'tests/images/*',
+	'self_assembly/_rdistance*',
 ]
 
 
