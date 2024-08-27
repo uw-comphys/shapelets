@@ -19,10 +19,10 @@ r"""
 
 # Custom Commands
 
-The shapelets package makes use of [entry points](https://packaging.python.org/en/latest/specifications/entry-points/).
-These are custom command-line arguments that trigger specific programming tasks in the background.
+The shapelets library makes use of [entry points](https://packaging.python.org/en/latest/specifications/entry-points/).
+These are custom command-line arguments that trigger specific library actions.
 
-* `shapelets CONFIG` - this entry point is used to interact with the shapelets package via configuration files. Here `CONFIG` is the name of the text-based configuration file that will perform a particular analysis based on its contents. See the package [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) for useful demonstration. Note that the configuration file must be in the same directory as your working (terminal) directory to use this entry point correctly.
-* `shapelets-test` - triggers all [unit tests](https://github.com/uw-comphys/shapelets/tree/main/shapelets/tests) and will report any failures. It is encouraged to use this command if (1) you are modifying the package source code and (2) after initial [installation](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) of the shapelets package.
+* `shapelets CONFIG` - this entry point is used to interact with the shapelets library via configuration files. Here `CONFIG` is the name of the text-based configuration file that details specific parameters for an analysis. See the library [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) for useful demonstration. 
+* `shapelets-test` - triggers all library [unit tests](https://github.com/uw-comphys/shapelets/tree/main/shapelets/tests) and will report any failures. It is encouraged to use this command if (1) you are modifying the library source code or (2) after initial library [installation](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html).
 
 """

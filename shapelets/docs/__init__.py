@@ -20,5 +20,5 @@ from .example_2 import *
 from .example_3 import *
 from .example_4 import *
 from .installation_guide import *
-from .package_interface import *
+from .library_interface import *
 from .custom_commands import *

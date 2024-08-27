@@ -17,12 +17,12 @@
 
 r"""
 
-# Package Interfacing
+# Library Interfacing
 
-The `shapelets` package can be interfaced in two different ways:
+The `shapelets` library can be interfaced in two different ways:
 
-1. Configuration file method (developed for non-programmers)
-    * Parameters are described in a text-based configuration file, and the `shapelets` package then reads this file and runs the appropriate analysis
+1. Configuration file method (for non-programmers)
+    * Parameters are described in a text-based configuration file, and the `shapelets` library then reads this file and runs the appropriate analysis
 2. Scripting method (intended for those comfortable with Python programming)
     * A more traditional format where relevant methods are imported in python files, i.e. 
 
