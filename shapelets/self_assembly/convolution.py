@@ -33,14 +33,14 @@ __all__ = [
 
 def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default', verbose: bool = True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism [1].
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism in ref. [1].
     
     Parameters
     ----------
     * image: np.ndarray
         * The image to be convolved with shapelet kernels
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets [2] ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets [2] ($m \leq m'$). Can also pass integer value for filter m upper bound but value must be > 0
     * verbose: bool, optional
         * True (default) to print out information from convolution operation to console
 
@@ -49,17 +49,18 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
     * omega: numpy.ndarray
         * The magnitude of (maximum) convolutional response as a 3D array as per steerable shapelet formulism
     * phi: numpy.ndarray
-        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
+        * The shapelet filter optimal orientation (corresponding to maximum convolutional response) for the steerable shapelet formulism in ref. [3]
 
     Notes
     -----
-    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets [3] (see shapelets.functions.orthonormalpolar2D_n0).
+    This function uses the orthonormal polar shapelet definition for $n=0$ shapelets [4] (see shapelets.functions.orthonormalpolar2D_n0).
 
     References
     ----------
     * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
     * [2] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    * [3] https://doi.org/10.1088/1361-6528/aaf353
+    * [3] https://hdl.handle.net/10012/20779
+    * [4] https://doi.org/10.1088/1361-6528/aaf353
 
     """
     if not isinstance(image, np.ndarray):
@@ -69,11 +70,13 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
         if shapelet_order == 'default': 
             mmax = None
         else:
-            raise ValueError('shapelet_order parameter as a str must be "default".')
-    elif isinstance(shapelet_order, int):
-        mmax = shapelet_order
+            raise ValueError('mmax parameter as a str must be "default".')
+    elif not isinstance(shapelet_order, int):
+        raise TypeError('mmax parameter must either be "default" or integer value.')
+    elif shapelet_order <=0:
+        raise ValueError('mmax parameter, if passed as an integer, must be > 0.')
     else:
-        raise TypeError('shapelet_order parameter must either be "default" or integer value.')
+        mmax = shapelet_order
 
     # get characteristic wavelength of image 
     l = get_wavelength(image=image, verbose=verbose)
@@ -102,7 +105,7 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
         if verbose:
             print(f"Convolution complete for shapelets m <= {mmax}")
 
-    # use iteration scheme from ref.[MT]_ to get maximum shapelet order
+    # use iteration scheme from ref. [2] to get maximum shapelet order
     else:
         omega = np.empty((Ny, Nx, 200)) 
         phi = np.empty((Ny, Nx, 200))
@@ -136,16 +139,15 @@ def convresponse_n0(image: np.ndarray, shapelet_order: Union[str,int] = 'default
     norms = np.linalg.norm(omega, axis = 2)
     omega = omega / norms.reshape(Ny, Nx, 1)
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
+    # to compute optimal filter orientations as per the steerable shapelet formulism
     for i in range(phi.shape[2]):
-        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
-        phi[:,:,i] *=  2*np.pi / (i+1)
+        phi[:,:,i] /=  i+1
 
     return omega, phi
 
 def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     r""" 
-    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism [1].
+    This function computes the convolution between a range of shapelets kernels and an image, extracting the magnitude of response as well as the shapelet-based orientation as per the steerable shapelet formulism in ref. [1].
     
     Parameters
     ----------
@@ -161,7 +163,7 @@ def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     * omega: numpy.ndarray
         * The magnitude of (maximum) convolutional response as a 3D array
     * phi: numpy.ndarray
-        * The shapelet orientation at maximum response normalized to $[0, 2pi/m)$
+        * The shapelet filter optimal orientation (corresponding to maximum convolutional response) for the steerable shapelet formulism in ref. [2]
 
     Notes
     -----
@@ -181,6 +183,8 @@ def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     elif mmax >= 10:
         msg = "WARNING: Desired shapelet behaviour is declining as m increases beyond 10. See Section 6.3 from https://hdl.handle.net/10012/20779 for more details."
         warnings.warn(msg)
+    elif mmax < 0:
+        raise ValueError('mmax parameter must be >= 0.')
 
     # get characteristic wavelength of image 
     l = get_wavelength(image=image, verbose=verbose)
@@ -209,9 +213,8 @@ def convresponse_n1(image: np.ndarray, mmax: int, verbose=True):
     norms = np.linalg.norm(omega, axis = 2)
     omega = omega / norms.reshape(Ny, Nx, 1)
 
-    # to correct angles on [0, 2pi/m] as per steerable shapelet theory.
+    # to compute optimal filter orientations as per the steerable shapelet formulism
     for i in range(phi.shape[2]):
-        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
-        phi[:,:,i] *=  2*np.pi / (i+1)
+        phi[:,:,i] /=  i+1
 
     return omega, phi

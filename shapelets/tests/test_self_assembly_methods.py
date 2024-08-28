@@ -64,6 +64,8 @@ class TestSelfAssemblyMethods(unittest.TestCase):
             convresponse_n0(self.image, shapelet_order='')
         with self.assertRaises(TypeError):
             convresponse_n0(self.image, shapelet_order=5.)
+        with self.assertRaises(ValueError):
+            convresponse_n0(self.image, shapelet_order=-1)
 
         # Test non-default input of shapelet_order parameter 
         omega, phi = convresponse_n0(self.image, shapelet_order=20, verbose=False)
@@ -76,6 +78,8 @@ class TestSelfAssemblyMethods(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             convresponse_n1(self.image, mmax=5.2)
+        with self.assertRaises(ValueError):
+            convresponse_n1(self.image, mmax=-1)
         
         # Test for arbitrary number of shapelets
         omega, phi = convresponse_n1(self.image, mmax=6, verbose=False)
