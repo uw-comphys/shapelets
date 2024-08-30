@@ -120,24 +120,24 @@ class TestSelfAssemblyMethods(unittest.TestCase):
             rdistance([])
         
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters='')
+            rdistance(self.image, num_clusters=-1)
         with self.assertRaises(TypeError):
             rdistance(self.image, num_clusters=1.)
 
         with self.assertRaises(TypeError):
-            rdistance(self.image, num_clusters='default', ux=[1, 2], uy='default')
+            rdistance(self.image, num_clusters=20, ux=[1, 2], uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters='default', ux='incorrect', uy='default')
+            rdistance(self.image, num_clusters=20, ux='incorrect', uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters='default', ux='default', uy='incorrect')            
+            rdistance(self.image, num_clusters=20, ux='default', uy='incorrect')            
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters='default', ux=[1,2,3], uy=[1,2])
+            rdistance(self.image, num_clusters=20, ux=[1,2,3], uy=[1,2])
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters='default', ux=[1,2], uy=[1,2,3])
+            rdistance(self.image, num_clusters=20, ux=[1,2], uy=[1,2,3])
 
         ux, uy = [237, 283], [32, 78]
 
-        d = rdistance(self.image, num_clusters='default', ux=ux, uy=uy, verbose=False)
+        d = rdistance(self.image, num_clusters=20, ux=ux, uy=uy, verbose=False)
 
         self.assertTrue(d.shape, self.image.shape)
         self.assertTrue(d.min() >= 0.)

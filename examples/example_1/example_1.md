@@ -49,7 +49,7 @@ The method outlined in the configuration file will also have its own header with
 **shapelet_order** `int`
 
 * The maximum shapelet order ($m'$) used for convolution operations, i.e. $m \in [1, m']$ shapelets are used 
-* Default value is computed by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
+* Default value (via keyword *default* as shown above) allows $m'$ to be determined by the higher-order shapelet algorithm ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
 **num_clusters** `int`
 
