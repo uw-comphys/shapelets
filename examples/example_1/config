@@ -5,5 +5,5 @@ method = response_distance
 [response_distance]
 shapelet_order = default
 num_clusters = default
-ux = [50, 80]
-uy = [150, 180]
+ux = [109, 158]
+uy = [283, 322]

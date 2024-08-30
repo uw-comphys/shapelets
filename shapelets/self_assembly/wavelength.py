@@ -25,7 +25,7 @@ __all__ = [
 ]
 
 
-def get_wavelength(image: np.ndarray, rng: list = [0, 70], verbose: bool = True) -> float:
+def get_wavelength(image: np.ndarray, rng: list = [0, 100], verbose: bool = True) -> float:
     r""" 
     Find characteristic wavelength of an image. Computed using method described in ref. [1].
     

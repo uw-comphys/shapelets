@@ -32,7 +32,7 @@ __all__ = [
     'trim_image'
 ]
 
-def read_image(image_name: str, image_path: str, verbose: bool = True) -> np.ndarray:
+def read_image(image_name: str, image_path: str, do_rescale: bool = True, verbose: bool = True) -> np.ndarray:
     r""" 
     Read an image using OpenCV, with some extra handling. By default, re-scales images as greyscale on [-1, 1].
     
@@ -42,6 +42,8 @@ def read_image(image_name: str, image_path: str, verbose: bool = True) -> np.nda
         * The filename of the image (including extension)
     * image_path: str
         * The path holding the image
+    * do_rescale : bool, optional
+        * Automatically re-scale in accordance with requirements for wavelength algorithm. Default is True
     * verbose: bool, optional
         * True (default) to print image-related information
     
@@ -55,33 +57,34 @@ def read_image(image_name: str, image_path: str, verbose: bool = True) -> np.nda
     Re-scaling of image to greyscale on [-1, 1] is intentional to align with the minimum and maximum of shapelet function values.
     
     """
-    # Ensure image_path provided exists
     if not os.path.exists(image_path):
         raise RuntimeError(f'Image path: {image_path} does not exist.')
     
-    # read image then ensure image does exist (by evaluating result of cv2.imread)
     f = cv2.imread(os.path.join(image_path, image_name))
     if not isinstance(f, np.ndarray):
         raise RuntimeError(f"Could not read image: {image_name}. Ensure it is located in {image_path} and is of image format.")
 
-    # convert to grayscale
     f = cv2.cvtColor(f, cv2.COLOR_BGR2GRAY)
 
-    # check if re-scaling is needed b/c k-means clustering cannot handle very large images
-    init_shape = f.shape
-    resized = False 
-    while any(dim >= 1000 for dim in f.shape):
-        dim0, dim1 = round(f.shape[0]*0.8), round(f.shape[1]*0.8)
-        f = cv2.resize(f, dsize=(dim0, dim1))
-        resized = True
+    # NOTE: image may require rescaling based on two observed issues:
+    #   1. scipy.cluster.vq.kmeans yields abort: coredump if one dim of image large (~2000 pixels)
+    #   2. wavelength algorithm fails if image is too small... need to upsample
 
-    # rescale to [-1, 1] greyscale 
+    if do_rescale:
+        while any(dim >= 2000 for dim in f.shape):
+            height, width = round(f.shape[0]*0.8), round(f.shape[1]*0.8)
+            f = cv2.resize(f, dsize=(width, height)) # dsize is opposite numpy convention
+
+        while any(dim <= 500 for dim in f.shape):
+            height, width = round(f.shape[0]*1.2), round(f.shape[1]*1.2)
+            f = cv2.resize(f, dsize=(width, height)) # dsize is opposite numpy convention
+
+    # rescale to [-1, 1] greyscale to match shapelet kernel min/max values
     f = ( ((f-f.min()) / (f.max()-f.min())) * 2 ) - 1
 
     if verbose: 
         print(f"Successfully loaded image: {image_name}")
-        if resized: print(f"New image dimensions are: {f.shape} as initial size {init_shape} too large")
-        else: print(f"Image dimensions are: {f.shape}")
+        print(f"Image loaded with dimensions: {f.shape}")
         print(f"Image {image_name} normalized to greyscale on [-1, 1] to align with shapelet kernels")
 
     return f
