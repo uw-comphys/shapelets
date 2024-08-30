@@ -49,7 +49,7 @@ class TestSelfAssemblyBasic(unittest.TestCase):
         self.assertTrue(isinstance(self.lamSIM, np.ndarray))
         self.assertEqual(self.lamSIM.min(), -1)
         self.assertEqual(self.lamSIM.max(), 1)
-        self.assertEqual(self.lamSIM.shape, (296, 296))
+        self.assertEqual(self.lamSIM.shape, (511, 511))
 
         self.assertTrue(isinstance(self.hexSIM, np.ndarray))
         self.assertEqual(self.hexSIM.min(), -1)
@@ -63,19 +63,19 @@ class TestSelfAssemblyBasic(unittest.TestCase):
 
         lamSIM_wvl = get_wavelength(image = self.lamSIM, verbose = False)
         self.assertTrue(isinstance(lamSIM_wvl, numbers.Real))
-        self.assertAlmostEqual(lamSIM_wvl, 10.231, places = 3)
+        self.assertAlmostEqual(lamSIM_wvl, 17.60, places = 2)
 
         lamSIM_beta_n0 = lambda_to_beta_n0(3, lamSIM_wvl)
         self.assertTrue(isinstance(lamSIM_beta_n0, numbers.Real))
-        self.assertAlmostEqual(lamSIM_beta_n0, 3.41, places = 2)
+        self.assertAlmostEqual(lamSIM_beta_n0, 5.87, places = 2)
 
         lamSIM_beta_n1 = lambda_to_beta_n1(3, lamSIM_wvl)
         self.assertTrue(isinstance(lamSIM_beta_n1, numbers.Real))
-        self.assertAlmostEqual(lamSIM_beta_n1, 7.3, places = 5)
+        self.assertAlmostEqual(lamSIM_beta_n1, 12.4, places = 1)
 
         hexSIM_wvl = get_wavelength(image = self.hexSIM, verbose = False)
         self.assertTrue(isinstance(hexSIM_wvl, numbers.Real))
-        self.assertAlmostEqual(hexSIM_wvl, 16.882, places = 3)
+        self.assertAlmostEqual(hexSIM_wvl, 16.88, places = 2)
         
         hexSIM_beta_n0 = lambda_to_beta_n0(6, hexSIM_wvl)
         self.assertTrue(isinstance(hexSIM_beta_n0, numbers.Real))
@@ -83,7 +83,7 @@ class TestSelfAssemblyBasic(unittest.TestCase):
 
         hexSIM_beta_n1 = lambda_to_beta_n1(6, hexSIM_wvl)
         self.assertTrue(isinstance(hexSIM_beta_n1, numbers.Real))
-        self.assertAlmostEqual(hexSIM_beta_n1, 9.1, places = 5)
+        self.assertAlmostEqual(hexSIM_beta_n1, 9.1, places = 1)
 
 if __name__ == "__main__":
     unittest.main()

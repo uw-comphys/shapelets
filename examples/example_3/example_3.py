@@ -33,7 +33,7 @@ pattern_order = "square"
 
 # 3.1: image and output directory handling
 image_path = os.path.join(Path(__file__).parents[0], 'images')
-image = read_image(image_name = image_name, image_path = image_path)
+image = read_image(image_name = image_name, image_path = image_path, do_rescale=False)
 save_path = os.path.join(Path(__file__).parents[0], 'output')
 if not os.path.exists(save_path): 
     os.mkdir(save_path)

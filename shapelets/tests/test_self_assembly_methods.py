@@ -41,9 +41,10 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
 
         # Ensure core functions have appropriate outputs before proceeding.
-        # Note that read_image and get_wavelength are not tested here, so inline asserts
-        #   are used to ensure correct output.
+        # NOTE: read_image & get_wavelength are not tested here, so inline asserts are used to ensure correct output.
+        
         cls.image = read_image(image_name="hexSIM1.png", image_path=cls.dir, verbose=False)
+
         assert isinstance(cls.image, np.ndarray)
 
         cls.omega, cls.phi = convresponse_n0(cls.image, shapelet_order='default', verbose=False)

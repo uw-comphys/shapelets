@@ -28,7 +28,7 @@ from shapelets.self_assembly import (
 ## Section 2: parameters
 image_name = "lamSIM1.png"
 shapelet_order = 'default' # can also be integer value to set upper bound
-num_clusters = 'default' # default is 20, can be any other positive integer 
+num_clusters = 20 # default is 20, can be any other positive integer 
 ux = [109, 158]
 uy = [283, 322]
 

@@ -4,6 +4,6 @@ method = response_distance
 
 [response_distance]
 shapelet_order = default
-num_clusters = default
+num_clusters = 20
 ux = [109, 158]
 uy = [283, 322]
