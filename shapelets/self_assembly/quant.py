@@ -244,7 +244,8 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
     return mask, dilate, orientation_final, maxval
 
-def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shapelet_order: Union[str,int] = 'default', ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray:
+def rdistance(image: np.ndarray, num_clusters: int = 20, shapelet_order: Union[str,int] = 'default', 
+              ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray: 
     r""" 
     Compute the response distance method from ref. [1]. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
 
@@ -252,10 +253,10 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     ----------
     * image: numpy.ndarray
         * The image loaded as a numpy array
-    * num_clusters: Union[str,int]
-        * The number of clusters as input to k-means clustering [2]. If str, acceptable value is "default" (which uses 20 clusters [3])
+    * num_clusters: int
+        * The number of clusters as input to k-means clustering [2]. Default is 20 from ref. [3]. Can pass 0 to not use k-means clustering on reference region
     * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets [4] ($m \leq m'$). Can also accept integer value such that analysis uses $m \in [1, shapelet_{order}]$
+        * Set as 'default' to use higher-order shapelets [4] ($m \leq m'$). Can also pass positive integer value for filter m upper bound
     * ux: Union[str,list]
         * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
     * uy: Union[str,list]
@@ -279,23 +280,18 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
     if not isinstance(image, np.ndarray):
         raise TypeError('image must be a numpy array.')
         
-    if isinstance(num_clusters, str):
-        if num_clusters == 'default': 
-            num_clusters = 20
-        else:
-            raise ValueError('If num_clusters is str type, must be "default" otherwise use int.')
-    elif not isinstance(num_clusters, int):
-        raise TypeError('If num_clusters is not str type, must be int.')
+    if not isinstance(num_clusters, int):
+        raise TypeError('num_clusters must be int type.')
+    elif num_clusters < 0:
+        raise ValueError('num_clusters must be >= 0, see function documentation.')
 
     if type(ux) != type(uy):
         raise TypeError('ux and uy parameters must be both be "default" or both 2-element lists.')
-    
     elif isinstance(ux, str):
         if ux == 'default' and uy == 'default':
             choose_ref = True 
         else:
             raise ValueError('As str types, ux and uy parameters must be "default".')
-    
     elif isinstance(ux, list):
         if len(ux) != 2 or len(uy) != 2:
             raise ValueError('ux or uy has less or more than 2 elements.')
@@ -338,7 +334,7 @@ def rdistance(image: np.ndarray, num_clusters: Union[str,int] = 'default', shape
         plt.axis('off')
         plt.show()"""
     
-    # get convolutional response data, enforce shapelet_order parameter in convresponse() function
+    # get convolutional response data, enforce shapelet_order parameter checking inside function call
     response = convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
 
     # compute response distance
