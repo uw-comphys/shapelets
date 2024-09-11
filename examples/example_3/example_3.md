@@ -2,7 +2,7 @@
 
 See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) for example files and code. 
 
-This example demonstrates computation of the local pattern orientation  for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
+This example demonstrates computation of the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
 
 This example can be run in two different ways:
 * (1) text-based configuration files (shown here), and 

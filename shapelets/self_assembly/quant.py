@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds core analysis functions for the self-assembly submodule. It includes image analysis techniques for (pattern) nanostructures, such as defect identification, pattern orientation, and the response distance method. 
+"""
+
 import ctypes
 from pathlib import Path
 import os

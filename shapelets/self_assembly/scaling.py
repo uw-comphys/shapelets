@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds functions that compute appropriate shapelet length-scales given characteristic pattern length-scales.
+"""
+
 import numpy as np
 
 from .kernel import get_opt_kernel_n1

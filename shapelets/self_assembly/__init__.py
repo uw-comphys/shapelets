@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+The self-assembly submodule.
+"""
+
 from .convolution import *
 from .kernel import *
 from .misc import *

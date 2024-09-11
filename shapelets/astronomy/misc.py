@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds miscellaneous functions for the astronomy submodule.
+"""
+
 from math import comb as choose
 
 import numpy as np

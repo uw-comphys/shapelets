@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds functions required to decompose images of galaxies via shapelet decomposition.
+"""
+
 from dataclasses import dataclass
 
 from astropy.io import fits
