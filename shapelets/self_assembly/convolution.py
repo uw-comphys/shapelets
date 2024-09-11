@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds functions for computing convolutions between shapelet kernels (filters) and target images.
+"""
+
 from typing import Union
 import warnings
 

@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds functions responsible for computing the characteristic wavelength of an image.
+"""
+
 import numbers 
 
 import numpy as np

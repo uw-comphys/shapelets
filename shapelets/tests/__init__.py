@@ -15,5 +15,13 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+# Testing Instructions
+The unit tests for the shapelets library can be run by invoking the entry point: 
+```
+shapelets-test
+```
+"""
+
 # Define __all__ as empty list such that tests are not rendered on pdoc website documentation
 __all__ = []

@@ -15,5 +15,9 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+The astronomy submodule.
+"""
+
 from .galaxy import * 
 from .misc import * 

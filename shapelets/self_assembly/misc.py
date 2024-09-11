@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds miscellaneous functions that are critical for the self-assembly submodule, such as processing of image inputs and analysis outputs.
+"""
+
 import os 
 
 import cv2 

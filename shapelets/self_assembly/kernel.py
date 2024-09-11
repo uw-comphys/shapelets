@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+This module holds functions for kernel (filter) handling, such as making discrete grids and computing optimal kernel sizes.
+"""
+
 import numpy as np
 
 from ..functions import orthonormalpolar2D_n0, orthonormalpolar2D_n1

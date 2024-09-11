@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+r"""
+.. include:: README.md
+"""
+
 from .example_1 import *
 from .example_2 import *
 from .example_3 import *
