@@ -24,7 +24,7 @@ from math import comb as choose
 import numpy as np
 from scipy.special import binom, erf
 
-from ..functions import cartesian1D, cartesian2D
+from ..core.functions import cartesian1D, cartesian2D
 
 SQRTPI = np.sqrt(np.pi)
 

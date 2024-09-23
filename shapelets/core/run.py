@@ -19,13 +19,13 @@ import ast
 import configparser
 import os
 
-from .astronomy.galaxy import *
+from ..astronomy.galaxy import *
 
-from .self_assembly.misc import *
-from .self_assembly.quant import *
-from .self_assembly.wavelength import *
+from ..self_assembly.misc import *
+from ..self_assembly.quant import *
+from ..self_assembly.wavelength import *
 
-def _run(config_file: str, working_dir: str) -> None:
+def run(config_file: str, working_dir: str) -> None:
     r"""
     Main run function that handles input configuration file.
     
@@ -41,9 +41,6 @@ def _run(config_file: str, working_dir: str) -> None:
     Differentiation between submodule use is based on image_name or fits_name provided in config file. Note that this may need to be changed in the future if more astronomy functionality is added.
 
     """
-    ## configparser setup and input/output path organization ##
-
-    # instantiate and read
     config = configparser.ConfigParser()
     config_file = os.path.join(working_dir, config_file)
     if not os.path.exists(config_file):
@@ -51,10 +48,8 @@ def _run(config_file: str, working_dir: str) -> None:
     else:
         config.read(config_file)
 
-    # handle method
     method = config.get('general', 'method')
 
-    # image and output paths
     image_path = os.path.join(working_dir, 'images')
     save_path = os.path.join(working_dir, 'output')
     if not os.path.exists(image_path): 
@@ -105,7 +100,7 @@ def _run(config_file: str, working_dir: str) -> None:
             process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
 
         else:
-            raise ValueError('"method" parameter from configuration file not recognized by shapelets.')
+            raise ValueError("method parameter {method} from configuration file not recognized by shapelets.")
 
     ## astronomy submodule use ##
         
@@ -125,7 +120,7 @@ def _run(config_file: str, working_dir: str) -> None:
             (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(fits_data, output_base_path)
             decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)
         else:
-            raise ValueError('"method" parameter from configuration file not recognized by shapelets.')
+            raise ValueError("method parameter {method} from configuration file not recognized by shapelets.")
         
     else:
-        raise NameError('No image (from image_name) or FITS (from fits_name) listed in configuration file.')
+        raise NameError("No image (from image_name) or FITS (from fits_name) listed in configuration file.")

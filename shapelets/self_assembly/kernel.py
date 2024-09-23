@@ -21,7 +21,7 @@ This module holds functions for kernel (filter) handling, such as making discret
 
 import numpy as np
 
-from ..functions import orthonormalpolar2D_n0, orthonormalpolar2D_n1
+from ..core.functions import orthonormalpolar2D_n0, orthonormalpolar2D_n1
 
 __all__ = [
     'make_grid',
@@ -54,7 +54,7 @@ def make_grid(N: int):
     if N % 2 == 0:
         print('Detected even grid size, adding 1 to enforce odd rule See self_assembly.wavelength.make_grid() docs.')
         N += 1
-    if N < 3:
+    if N < 9:
         raise ValueError('N must be at least 3 or greater.')
     
     bounds = [-(N-1)/2.0, (N-1)/2.0]
