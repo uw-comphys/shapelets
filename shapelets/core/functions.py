@@ -30,7 +30,8 @@ __all__ = [
     'exponential2D'
 ]
 
-def cartesian1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+
+def cartesian1D(n: int, x1: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     1D cartesian shapelet function as defined in ref. [1],
 
@@ -73,7 +74,7 @@ def cartesian1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Union[
 
     return Sc(x1)
 
-def cartesian2D(n1: int, n2: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def cartesian2D(n1: int, n2: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     2D cartesian shapelet function as defined in ref. [1],
 
@@ -123,7 +124,7 @@ def cartesian2D(n1: int, n2: int, x1: Union[float,np.ndarray], x2: Union[float,n
 
     return Sc(x1, x2)
 
-def polar2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def polar2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     2D polar shapelet function as defined in ref. [1],
 
@@ -186,7 +187,7 @@ def polar2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndar
 
     return Sc(x1, x2)
 
-def orthonormalpolar2D_n0(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def orthonormalpolar2D_n0(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     Orthonormal 2D polar shapelet function as defined in ref. [1],
 
@@ -239,7 +240,7 @@ def orthonormalpolar2D_n0(m: int, x1: Union[float,np.ndarray], x2: Union[float,n
 
     return Sc(x1, x2)
 
-def orthonormalpolar2D_n1(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def orthonormalpolar2D_n1(m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     Orthonormal 2D polar shapelet function one degree of radial symmetry as defined in ref. [1],
 
@@ -288,7 +289,7 @@ def orthonormalpolar2D_n1(m: int, x1: Union[float,np.ndarray], x2: Union[float,n
 
     return Sc(x1, x2)
 
-def exponential1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def exponential1D(n: int, x1: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r""" 
     1D exponential shapelet function as defined in ref. [1],
 
@@ -335,7 +336,7 @@ def exponential1D(n: int, x1: Union[float,np.ndarray], beta: float = 1.) -> Unio
 
     return Sc(x1)
 
-def exponential2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float = 1.) -> Union[float,np.ndarray]:
+def exponential2D(n: int, m: int, x1: Union[float,np.ndarray], x2: Union[float,np.ndarray], beta: float) -> Union[float,np.ndarray]:
     r"""
     2D exponential shapelet function as defined in ref. [1],
 

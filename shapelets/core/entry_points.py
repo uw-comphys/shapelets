@@ -21,12 +21,11 @@ import subprocess
 import sys 
 import time
 
-from . import _run
+from . import run
 
-def _run_shapelets():
+def run_shapelets():
     r"""
-    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plaintext file that exists in the same directory level as the working directory.  
-
+    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plain-text file that exists in the same directory level as the working directory.  
     """
     # if user did not provide any configuration filename (which is required)
     if len(sys.argv) == 1: 
@@ -37,26 +36,24 @@ def _run_shapelets():
         config_file = sys.argv[1]
         working_dir = os.getcwd() 
         
-        _run._run(config_file, working_dir)
+        run.run(config_file, working_dir)
 
     # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
     else: 
         raise RuntimeError('Please provide one argument (configuration filename), i.e.: "shapelets config".')
 
 
-def _run_tests():
+def run_tests():
     r"""
-    Main function that runs all the unit tests via unittest from Python STL. This is only invoked via the entry point "shapelets-test".
-    
+    Main function that runs all the unit tests via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from any directory on your system.
     """
-    # notify user tests may take more than a few seconds
     print("Initiating shapelets unit tests. This will likely take a few minutes.")
 
-    time.sleep(5)
+    time.sleep(3)
 
     # if the user knows what they're doing, this would use same interpreter as that to install the package
     pyinterp = sys.executable 
-    tests_dir = os.path.join(Path(__file__).parents[0], 'tests')
+    tests_dir = os.path.join(Path(__file__).parents[1], 'tests')
 
     # automatically find and run all unit tests using unittest built-in discovery feature
     if pyinterp:
