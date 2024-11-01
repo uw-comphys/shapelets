@@ -37,7 +37,7 @@ Please ensure your macOS is at least macOS 12 Monterey (released 2021).
 
 1. Install [Homebrew](https://brew.sh/) by copy and pasting the link on their homepage into your terminal
 2. Install Python 3.10 and pip via: `brew install python@3.10` (automatically installs pip) 
-3. Install the shapelets library via `pip install shapelets`
+3. Install the shapelets library via `pip3.10 install shapelets`
 4. Optionally, after successful installation, you can verify the integrity of the shapelets library via: `shapelets-test`
 
 ### Linux
