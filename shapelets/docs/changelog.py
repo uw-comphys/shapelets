@@ -17,6 +17,6 @@
 
 r"""
 
-.. include:: ../CHANGELOG.md
+.. include:: ../../CHANGELOG.md
 
 """
