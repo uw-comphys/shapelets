@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "shapelets"
-version = "1.1"
+version = "1.2"
 description = "Shapelets provide reference access to various shapelet functions and some of their applications."
 requires-python = ">=3.10"
 dependencies = [
