@@ -7,7 +7,8 @@ All substantial or important changes to `shapelets` will be written in this file
 - MNT: General modifications, maintenance (including documentation), or enhancements 
 - NEW: Introduction of a new component or feature
 
-## UNRELEASED
+## [1.2] -- Dec 14, 2024
+- commit 3ece26b391735e749d684419ed33d91c0855df9a
 - NEW: Introduced CHANGELOG.md for detailed version control history 
 - NEW: Introduced `shapelets.core` for essential components (i.e., shapelet functions, entry points)
 - FIX: Corrected characteristic wavelength overestimation ([#64](https://github.com/uw-comphys/shapelets/pull/64))
@@ -18,7 +19,7 @@ All substantial or important changes to `shapelets` will be written in this file
 - MNT: Merged setup.cfg and MANIFEST.in into pyproject.toml, which now holds all project specifications
 - MNT: Replaced existing Python response distance with C++ implementation, achieving ~15x speed-up!
 
-## [1.1] -- 12/04/2024
+## [1.1] -- Apr 12, 2024
 - commit cd45ff9174503c44179538af2d83cf2c2444d53a
 - FIX: Fixed issue where unit tests were not available after pip installation ([#45](https://github.com/uw-comphys/shapelets/pull/45))
 - MNT: Simplified input parameters and improved readability for `shapelets.self_assembly` methods 
@@ -26,6 +27,6 @@ All substantial or important changes to `shapelets` will be written in this file
 - NEW: Formal library citation now available via CITATION.cff
 - MNT: Minor modifications and corrections to [JOSS manuscript](https://joss.theoj.org/papers/10.21105/joss.06058)
 
-## [1.0] -- 03/14/2024
+## [1.0] -- Mar 14, 2024
 - commit 6ce31fbd1194cac024f1f65d2fa7c21ed0c67990
 - NEW: Initial complete and functional release following [JOSS manuscript](https://joss.theoj.org/papers/10.21105/joss.06058) acceptance
