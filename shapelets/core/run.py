@@ -20,31 +20,28 @@ import os
 
 from .analysis import do_analysis, METHODS_ASTRONOMY, METHODS_SELFASSEMBLY
 
-def run(config_file: str, working_dir: str) -> None:
+def run(config_filepath: str, working_dir: str) -> None:
     r"""
-    Main run function that parses the configuration file, ensures it exists in the provided (working) directory, and sets up output directory for post-analysis.
-    
+    Main run function that 
+        (1) parses the configuration file, 
+        (2) sets up output directory for results, and 
+        (3) runs associated analysis
+
     Parameters
     ----------
-    * config_file : str
-        * The name of the configuration file in working_dir
+    * config_filepath : str
+        * The absolute or relative path of a configuration file
     * working_dir : str
-        * The absolute path (working directory) where the entry point was invoked from
+        * The working directory which is where the configuration file is stored
 
     """
     config = configparser.ConfigParser()
-
-    config_file = os.path.join(working_dir, config_file)
-
-    if not os.path.exists(config_file):
-        raise RuntimeError(f"Configuration file {config_file} does not exist. Check filename spelling and ensure it is located in {working_dir}.")
-
-    config.read(config_file)
+    config.read(config_filepath)
 
     all_methods = METHODS_ASTRONOMY + METHODS_SELFASSEMBLY
-
     if config.get('general', 'method') not in all_methods:
-        raise RuntimeError(f"The method '{config.get('general', 'method')}' provided in configuration file '{config_file}' is not recognized by shapelets. Available options are: {', '.join(m for m in all_methods)}.")
+        available_methods = ', '.join(m for m in all_methods)
+        raise RuntimeError(f"The method '{config.get('general', 'method')}' provided in configuration your file is invalid. Available options are: {available_methods}.")
     
     image_dir = os.path.join(working_dir, 'images')
     if not os.path.exists(image_dir): 

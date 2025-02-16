@@ -1,38 +1,24 @@
 # Example 3 - Local Pattern Orientation
 
-See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) for example files and code. 
+See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) for files and code related to this example. 
 
-This example demonstrates computation of the local pattern orientation ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) for self-assembly microscopy imaging using the ``shapelets.self_assembly`` submodule.
-
-This example can be run in two different ways:
-* (1) text-based configuration files (shown here), and 
-* (2) programmatically via script-based Python programming (`example_3.py`)
-
-This example will go through the text-based configuration file approach (1). For users comfortable with Python programming, the example_3.py file is setup to run the same analysis described below. The outputs will appear in the same directory.
-
-## Overview
-
-Local pattern orientation is concerned with the relative orientation of nanostructure along grain boundaries and in between grains. The local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) contains three (3) main steps:
-
-* (1) **Masking**: Performed for well-defined features using a specific response threshold. This threshold is found via an interative scheme. Only the orientation values from these well-defined features are retained after masking.
-* (2) **Dilation**: Performed via morphological greyscale dilation from ``scipy.ndimage.grey_dilation`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)) to expand the orientation from well-defined features and define orientation in void space (between well-defined features and over orientational boundaries). The dilation kernel size is chosen to be $2\lambda$, where $\lambda$ is the characteristic wavelength of the pattern and is also the approximate distance between well-defined features. 
-* (3) **Blending**: Performed via a median filter from `scipy.ndimage.median_filter`` ([P. Virtanen (2020)](https://doi.org/10.1038/s41592-019-0686-2)) to allow for effective transition in orientations between neighbouring well-defined features and across orientational boundaries. The blending kernel size is chosen to be $4\lambda$ so that the orientation is averaged from two layers of surrounding neighbouring features.
-
-It is also important to note that this pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) is only applicable to images with **one** dominant pattern type. I.e., images with mixed patterns are invalid. 
-
-The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) should contain the following.
-
-![](../images/example_3_dir.png)
-
-where **config** is the text-based configuration file, **example_3.py** is the Python script file, and **images/** holds the experimental square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950)) for analysis.
+This example demonstrates the local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.quant.orientation`` for a square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950))
 
 ![](images/sqrAFM2.png)
 
-## Configuration File Method
+## Overview
+
+Local pattern orientation is concerned with relative nanostructure orientation along grain boundaries and between grains. 
+The details of this method can be found [here](http://dx.doi.org/10.1088/1361-6528/ad1df4). 
+
+It is also important to note that this method is only applicable to images with **one** dominant pattern type. 
+Images with mixed patterns are not allowed.
+
+## Configuration File
 
 ### Setup
 
-The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) contains the following information:
+The example [config](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) contains the following:
 
 	[general]
 	image_name = sqrAFM2.png
@@ -41,27 +27,34 @@ The configuration file provided in the example [directory](https://github.com/uw
 	[orientation]
 	pattern_order = square
 
-where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis, respectively.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The orientation method must contain one parameter, described below.
+The **orientation** method requires one parameter.
 
-**pattern_order** `str`
+**pattern_order** `str` (required)
 
-* The pattern order (symmetry) observed in the image. Options are `stripe`, `square`, `hexagonal`
+* The pattern order (symmetry) observed in the image.
+* Example values: `stripe`, `square`, `hexagonal`
 
 ## Run Example
 
-Please ensure that `shapelets` is properly installed before proceeding. 
+Ensure `shapelets` is installed before proceeding.
 See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions.
 
-Navigate your terminal to "shapelets/examples/example_3". When you are ready, execute ``shapelets config`` in the command line.
+This example assumes the working directory has a sub-directory ``analysis`` containing the necessary files: ``analysis/config`` and ``analysis/images/sqrAFM2.png``. 
 
+To run the example, execute ``shapelets-run ./analysis/config`` in the command line.
 Depending on your computer hardware, the iterative convergence scheme may take a couple of minutes.
 
-The output (shown below) will then be available in "shapelets/examples/example_3/output" containing the mask (top left), dilated feature orientation (top right), smoothed orientation result, and the smoothed orientation result superimposed onto the original pattern (shown below, respectively).
+The output (shown below) will then be available in ``./analysis/output`` containing the mask (top left), dilated feature orientation (top right), smoothed orientation result, and the smoothed orientation result superimposed onto the original pattern (shown below, respectively).
 
 ![](../images/sqrAFM2_orientation_maskedresp.png)
 ![](../images/sqrAFM2_orientation_dilate.png)
 
 ![](../images/sqrAFM2_orientation_blend.png)
 ![](../images/sqrAFM2_orientation_overlay.png)
+
+## Additional Notes
+
+For users who do not wish to use configuration files and would prefer to interact with shapelets via standard python programming, please see the ``example_3.py`` script [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3).
+You can use this script as a template to conduct your own analyses.

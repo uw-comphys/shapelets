@@ -25,22 +25,28 @@ from . import run
 
 def run_shapelets():
     r"""
-    Main function that runs shapelets. This is only invoked via the entry point "shapelets CONFIG" where CONFIG is the name of the configuration plain-text file that exists in the same directory level as the working directory.  
+    Main function that runs shapelets that is called via entry point "shapelets-run".
+    Currently supports one additional argument - the path to configuration file. 
+    Example - "shapelets-run /path/to/CONFIG" where /path/to/CONFIG is the relative or absolute path to a configuration file.
     """
-    # if user did not provide any configuration filename (which is required)
-    if len(sys.argv) == 1: 
-        raise RuntimeError('Please provide name of config file, i.e. "shapelets config".')
+    # enforce configuration filepath
+    if len(sys.argv) == 2: 
+        working_dir = os.getcwd()
+        config_filepath = sys.argv[1]
 
-     # if user did provide a configuration filename/path
-    elif len(sys.argv) == 2:
-        config_file = sys.argv[1]
-        working_dir = os.getcwd() 
+        # ensure configuration file exists
+        if not os.path.isabs(config_filepath):
+            config_filepath = os.path.join(working_dir, config_filepath)
+        if not os.path.isfile(config_filepath):
+            raise RuntimeError(f'Configuration file at {config_filepath} was not found.')
         
-        run.run(config_file, working_dir)
+        # change working directory to where config is stored
+        working_dir = Path(config_filepath).parents[0]
+        os.chdir(working_dir)
 
-    # if the user provides more than 1 argument (in addition to shapelets). Print error messages and quit.
+        run.run(config_filepath, working_dir)
     else: 
-        raise RuntimeError('Please provide one argument (configuration filename), i.e.: "shapelets config".')
+        raise RuntimeError('Please provide the path to the configuration file, i.e. "shapelets-run /path/to/config".')
 
 
 def run_tests():
