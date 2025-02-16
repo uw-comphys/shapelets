@@ -1,12 +1,12 @@
 # Example 4 - Galactic Image Decomposition
 
-See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) for example files and code. 
+See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) for files and code related to this example. 
 
-This example demonstrates the decomposition and reconstruction of images of galaxies ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)) using the ``shapelets.astronomy`` submodule.
+This example demonstrates the galaxy decomposition and reconstruction method ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)) implemented via multiple functions in the ``shapelets.astronomy`` submodule for a FITS file, which contains a subset of images of galaxies from the Hubble Deep Field North ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)). 
+This data is shown below as linear (left) and mean normalized (right) greyscale images. 
 
-This example can be run in two different ways:
-* (1) text-based configuration files (shown here), and 
-* (2) programmatically via script-based Python programming (`example_4.py`)
+![](../images/galaxies_linear.png)
+![](../images/galaxies_std.png)
 
 ## Overview
 
@@ -26,20 +26,11 @@ These intesities represent localized celestial objects (such as galaxies) that, 
 
 Steps 2-3 are repeated for all galaxies identified by the **Source Extractor**.
 
-The example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) should contain the following.
-
-![](../images/example_4_dir.png)
-
-where **config** is the text-based configuration file, **example_4.py** is the Python script file, and **images/** holds the FITS file used in this example which contains a subset of images of galaxies from the Hubble Deep Field North ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)). This data is shown below as the linear (left) and mean normalized (right) greyscale images. 
-
-![](../images/galaxies_linear.png)
-![](../images/galaxies_std.png)
-
-## Configuration File Method
+## Configuration File
 
 ### Setup
 
-The configuration file provided in the example [directory](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) contains the following information:
+The example [config](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4) contains the following:
 
 	[general] 
 	method = galaxy_decompose
@@ -49,30 +40,32 @@ The configuration file provided in the example [directory](https://github.com/uw
 	shapelet_order = default 
 	compression_order = 20 
 
-where **image_name** and **method** are required parameters that specify the image filename and method used for analysis.
+where **image_name** and **method** are required parameters that specify the image filename and method used for analysis, respectively.
 
-The method outlined in the configuration file will also have its own header with specific parameters. The **galaxy_decompose** method may contain up to two parameters.  Only values that have a default value may be omitted from the configuration file (see below, if no default value is written then it must be present in configuration file). 
+The **galaxy_decompose** method requires two parameters.
 
-**shapelet_order** `int`
+**shapelet_order** `int` (required)
 
 * The maximum shapelet order (i.e. cartesian shapelets ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))) to calculate coefficients such that $n_1 + n_2 \leq n_{max}$.
-* Default value is 10
+* Example values: `default` (recommended), `10`, `20`
 
-**compression_order** `int`
+**compression_order** `int` (required)
 
 * The number of shapelet coefficients to use for final image reconstruction
-* Default value is 25. Here 20 is used just as an example
+* Example values: `20`, `25` (recommended)
 
 ### Run Example
 
-Please ensure that `shapelets` is properly installed before proceeding.
+Ensure `shapelets` is installed before proceeding.
 See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions.
 
-Navigate your terminal to "shapelets/examples/example_4". When you are ready, execute ``shapelets config`` in the command line.
+This example assumes the working directory has a sub-directory ``analysis`` containing the necessary files: ``analysis/config`` and ``analysis/images/galaxies.fits``. 
 
-The output (shown below) will be available in "shapelets/examples/example_4/output" and the first (left) image contains the ellipses enclosing the locations of galaxies superimposed on the linear and mean normalized image. 
+To run the example, execute ``shapelets-run ./analysis/config`` in the command line.
 
-The second image contains information about the first decomposed galaxy, such as:
+The output (shown below) will then be available in ``./analysis/output`` where the first (left) image contains the ellipses enclosing the locations of galaxies superimposed on the linear and mean normalized image. 
+
+The second image (right) contains information about the first decomposed galaxy, such as:
 * the subdomain of the original image containing the galaxy,
 * a reconstruction of the galaxy using the all calculated coefficients and a compressed set coefficients, and
 * the compressed reconstruction's relative error
@@ -80,6 +73,7 @@ The second image contains information about the first decomposed galaxy, such as
 ![](../images/galaxies_map.png)
 ![](../images/galaxies_decomposed.png)
 
-## Scripting Method 
+## Additional Notes
 
-For users comfortable with Python programming, the example_4.py file is structured to run the same analysis as described previously. The outputs will appear in the same directory.
+For users who do not wish to use configuration files and would prefer to interact with shapelets via standard python programming, please see the ``example_4.py`` script [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4).
+You can use this script as a template to conduct your own analyses.
