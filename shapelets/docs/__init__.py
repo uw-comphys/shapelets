@@ -17,7 +17,7 @@
 
 r"""
 
-This submodule contains documentation for several examples (see below), installation instructions, custom commands, library interfacing, and a CHANGELOG for detailed commit history.
+This submodule contains documentation for several examples of implemeneted shapelets applications (see below), installation instructions, custom commands, and a CHANGELOG for detailed commit history.
 
 Examples for the **shapelets.self_assembly** submodule:
 * Example 1 - computing the response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
@@ -34,5 +34,4 @@ from .example_2 import *
 from .example_3 import *
 from .example_4 import *
 from .installation_guide import *
-from .library_interface import *
 from .custom_commands import *
