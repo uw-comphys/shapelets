@@ -48,7 +48,7 @@ classifiers = [
 ## NON-METADATA ##
 
 [project.scripts]
-shapelets = "shapelets.core.entry_points:run_shapelets"
+shapelets-run = "shapelets.core.entry_points:run_shapelets"
 shapelets-test = "shapelets.core.entry_points:run_tests"
 
 [project.urls]
