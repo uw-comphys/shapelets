@@ -15,8 +15,11 @@ dependencies = [
 	"numpy<2.0", # testing with numpy=2.0.0 broke other dependencies...
     "opencv-python",
     "pdoc",
+    "scikit-learn",
+    "scikit-image",
     "sep",
     "scipy",
+    "tensorflow",
 ]
 
 authors = [
