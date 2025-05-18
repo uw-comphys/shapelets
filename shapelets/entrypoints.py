@@ -23,9 +23,9 @@ import time
 
 from . import run
 
+
 def run_shapelets():
-    r"""
-    Main function that runs shapelets that is called via entry point "shapelets-run".
+    r""" Main function that runs shapelets that is called via entry point "shapelets-run".
     Currently supports one additional argument - the path to configuration file. 
     Example - "shapelets-run /path/to/CONFIG" where /path/to/CONFIG is the relative or absolute path to a configuration file.
     """
@@ -50,8 +50,8 @@ def run_shapelets():
 
 
 def run_tests():
-    r"""
-    Main function that runs all the unit tests via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from any directory on your system.
+    r"""Main function that runs all the unit tests via unittest from Python STL. 
+    This is only invoked via the entry point "shapelets-test" from any directory on your system.
     """
     print("Initiating shapelets unit tests. This will likely take a few minutes.")
 

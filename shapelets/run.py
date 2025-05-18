@@ -17,38 +17,55 @@
 
 import ast 
 import configparser
-import os 
+import os
 import sys
 
-from ..astronomy.galaxy import decompose_galaxies, get_postage_stamps, load_fits_data
-from ..self_assembly.misc import process_output, read_image
-from ..self_assembly.quant import defectid, orientation, rdistance
+from shapelets.astronomy.galaxy import decompose_galaxies, get_postage_stamps, load_fits_data
+from shapelets.self_assembly.misc import process_output, read_image
+from shapelets.self_assembly.quant import defectid, orientation, rdistance
 
-METHODS_ASTRONOMY       = ['galaxy_decompose']
-METHODS_SELFASSEMBLY    = ['response_distance', 'orientation', 'identify_defects']
+METHODS = ['galaxy_decompose', 'response_distance', 'orientation', 'identify_defects']
 
-def do_analysis(config: configparser.ConfigParser, working_dir: str, image_dir: str, output_dir: str) -> None:
-    r"""
-    Main function that handles usage of the configuration file method by appropriately directing the parameters in the config file for the requested analysis.
+
+def run(
+    config_filepath: str, 
+    working_dir: str
+):
+    r""" Main run function that does the following,
+    (1) parses the configuration file, 
+    (2) sets up output directory for results, and 
+    (3) runs associated analysis
 
     Parameters
     ----------
-    * config : configparser.ConfigParser
-        * The parsed configuration file
-    * working_dir : str 
-        * The absolute path (working directory) where the entry point was invoked from
-    * image_dir : str
-        * The directory containing the image (or .FITS file) for analysis
-    * output_dir : str
-        * The output directory where results from the analysis will be saved
+    config_filepath : str
+        &emsp; The absolute or relative path of a configuration file
+    working_dir : str
+        &emsp; The working directory (where the config. file is) 
 
     """
+    config = configparser.ConfigParser()
+    config.read(config_filepath)
+
+    if config.get('general', 'method') not in METHODS:
+        available_methods = ', '.join(m for m in METHODS)
+        raise RuntimeError(f"The method '{config.get('general', 'method')}' provided in configuration your file is invalid. Available options are: {available_methods}.")
+    
+    image_dir = os.path.join(working_dir, 'images')
+    if not os.path.exists(image_dir): 
+        raise RuntimeError(f"Path '{image_dir}' does not exist.")
+    
+    output_dir = os.path.join(working_dir, 'output')
+    if not os.path.exists(output_dir): 
+        os.mkdir(output_dir)
+
     method = config.get('general', 'method')
 
     # shapelets.astronomy submodule #
     # ----------------------------- #
 
-    # galaxy decomposition: https://doi.org/10.1046/j.1365-8711.2003.05901.x
+    # galaxy decomposition: https://doi.org/10.1046/j.1365-8711.2003.05901.x #
+
     if method == 'galaxy_decompose':
         fits_name = config.get('general', 'fits_name')
         fits_path = os.path.join(working_dir, 'images', fits_name)
@@ -73,7 +90,8 @@ def do_analysis(config: configparser.ConfigParser, working_dir: str, image_dir: 
     image_name = config.get('general', 'image_name')
     image = read_image(image_name = image_name, image_path = image_dir)
 
-    # response distance: https://doi.org/10.1088/1361-6528/ad1df4
+    # response distance: https://doi.org/10.1088/1361-6528/ad1df4 #
+
     if method == 'response_distance':
         shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
         if shapelet_order != 'default':
@@ -93,7 +111,8 @@ def do_analysis(config: configparser.ConfigParser, working_dir: str, image_dir: 
 
         process_output(image = image, image_name = image_name, save_path = output_dir, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
 
-    # local pattern orientation: https://doi.org/10.1088/1361-6528/ad1df4
+    # local pattern orientation: https://doi.org/10.1088/1361-6528/ad1df4 #
+
     elif method == 'orientation':
         pattern_order = config.get('orientation', 'pattern_order')
 
@@ -101,7 +120,8 @@ def do_analysis(config: configparser.ConfigParser, working_dir: str, image_dir: 
 
         process_output(image = image, image_name = image_name, save_path = output_dir, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
     
-    # defect identification method: https://doi.org/10.1088/1361-6528/ad1df4
+    # defect identification method: https://doi.org/10.1088/1361-6528/ad1df4 #
+
     elif method == 'identify_defects':
         pattern_order = config.get('identify_defects', 'pattern_order')
 

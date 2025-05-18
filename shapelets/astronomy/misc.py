@@ -15,16 +15,22 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
-This module holds miscellaneous functions for the astronomy submodule.
+"""
+This module holds miscellaneous functions for the shapelets.astronomy module.
 """
 
 from math import comb as choose
 
 import numpy as np
-from scipy.special import binom, erf
+from scipy.special import(
+    binom, 
+    erf
+)
 
-from ..core.functions import cartesian1D, cartesian2D
+from shapelets.functions import(
+    cartesian1D, 
+    cartesian2D
+)
 
 SQRTPI = np.sqrt(np.pi)
 

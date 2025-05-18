@@ -15,8 +15,8 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
-This module holds miscellaneous functions that are critical for the self-assembly submodule, such as processing of image inputs and analysis outputs.
+"""
+This module holds miscellaneous functions for the shapelets.self_assembly module.
 """
 
 import os 

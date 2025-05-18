@@ -19,7 +19,7 @@ import unittest
 
 import numpy as np
 
-from shapelets.core.functions import (
+from shapelets.functions import (
     cartesian1D,
     cartesian2D,
     polar2D,

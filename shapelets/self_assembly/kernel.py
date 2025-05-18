@@ -15,13 +15,16 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
+"""
 This module holds functions for kernel (filter) handling, such as making discrete grids and computing optimal kernel sizes.
 """
 
 import numpy as np
 
-from ..core.functions import orthonormalpolar2D_n0, orthonormalpolar2D_n1
+from shapelets.functions import(
+    orthonormalpolar2D_n0, 
+    orthonormalpolar2D_n1
+)
 
 __all__ = [
     'make_grid',
