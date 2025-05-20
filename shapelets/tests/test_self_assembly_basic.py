@@ -21,16 +21,17 @@ import unittest
 
 import numpy as np
 
-from shapelets.self_assembly import (
-    read_image, 
+from shapelets.self_assembly.misc import read_image
+from shapelets.self_assembly.wavelength import(
     get_wavelength,
     lambda_to_beta_n0,
     lambda_to_beta_n1
 )
 
+
 class TestSelfAssemblyBasic(unittest.TestCase):
-    r"""
-    Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
+    r""" Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
+
     Uses two simulated images of nanostructure, lamSIM1.png and hexSIM1.png in ./images for testing.
     Currently includes:
         - self_assembly.misc.read_image, 
@@ -84,6 +85,7 @@ class TestSelfAssemblyBasic(unittest.TestCase):
         hexSIM_beta_n1 = lambda_to_beta_n1(6, hexSIM_wvl)
         self.assertTrue(isinstance(hexSIM_beta_n1, numbers.Real))
         self.assertAlmostEqual(hexSIM_beta_n1, 9.1, places = 1)
+
 
 if __name__ == "__main__":
     unittest.main()
