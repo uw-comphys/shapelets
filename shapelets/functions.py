@@ -30,9 +30,10 @@ def cartesian1D(
     x1: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 1D cartesian shapelet function evaluated at (x1) [float or array].
+    r""" Returns a 1D cartesian shapelet function [1]_ 
+    evaluated at (x1) [float or array].
     
-    The 1D cartesian shapelet function is defined in ref. [1] as
+    The 1D cartesian shapelet function is defined as
 
     .. math::  
 
@@ -51,16 +52,15 @@ def cartesian1D(
     Parameters
     ----------
     n : int  
-        &emsp; Shapelet order. Acceptable values are :math:`n \geq 0`  
+        Shapelet order. Acceptable values are :math:`n \geq 0`  
     x1 : Union[float,np.ndarray]  
-        &emsp; The input to the shapelet function  
+        The input to the shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
-
+        The shapelet length scale parameter  
+    
     References
     ----------
-    * [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
+    .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
     """
     if n < 0:
         raise ValueError('n must be a non-negative integer.')
@@ -72,7 +72,9 @@ def cartesian1D(
     a = 1 / (( 2**n * np.sqrt(np.pi) * factorial(int(n), exact = True) )**0.5)
 
     # Define shapelet
-    Sc = lambda x: (1/np.sqrt(beta)) * a * H(x/beta) * np.exp(- ((x/beta)**2) / 2 )
+    Sc = lambda x: (1/np.sqrt(beta)) * a \
+        * H(x/beta) \
+        * np.exp(- ((x/beta)**2) / 2 )
 
     return Sc(x1)
 
@@ -84,19 +86,22 @@ def cartesian2D(
     x2: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 2D cartesian shapelet function evaluated at (x1,x2) [float or array].
+    r""" Returns a 2D cartesian shapelet function [1]_
+    evaluated at (x1,x2) [float or array].
     
-    The 2D cartesian shapelet function as defined in ref. [1] as
+    The 2D cartesian shapelet function is defined as
 
     .. math::
 
-        S_{n_1,n_2}(x_1, x_2; \beta) = \beta^{-1} \phi_{n_1}(\frac{x_1}{\beta}) 
-                                        \phi_{n_2}(\frac{x_2}{\beta}) 
+        S_{n_1,n_2}(x_1, x_2; \beta) = 
+            \beta^{-1} \phi_{n_1}(\frac{x_1}{\beta}) 
+            \phi_{n_2}(\frac{x_2}{\beta}) 
 
     .. math::
         
-        \phi_n(x) = \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} H_n(x) 
-                    exp(-\frac{x^2}{2}) 
+        \phi_n(x) = 
+            \left( 2^n \pi^{\frac{1}{2}} n! \right)^{-\frac{1}{2}} 
+            H_n(x) exp(-\frac{x^2}{2}) 
 
     where :math:`\phi_n` is the dimensionless basis function, 
     :math:`\beta` is the shapelet length scale, 
@@ -106,20 +111,19 @@ def cartesian2D(
     Parameters
     ----------
     n1 : int  
-        &emsp; Shapelet order in x direction. :math:`n1 \geq 0`  
+        Shapelet order in x direction. :math:`n1 \geq 0`  
     n2 : int  
-        &emsp; Shapelet order in y direction. :math:`n2 \geq 0`  
+        Shapelet order in y direction. :math:`n2 \geq 0`  
     x1 : Union[float,np.ndarray]  
-        &emsp; First input to shapelet function  
+        First input to shapelet function  
     x2 : Union[float,np.ndarray]  
-        &emsp; Second input to shapelet function  
+        Second input to shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
+        The shapelet length scale parameter  
 
     References
     ----------
-    * [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
-
+    .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
     """
     if n1 < 0 or n2 < 0:
         raise ValueError('n1 and n2 must both be non-negative integers.')
@@ -133,7 +137,11 @@ def cartesian2D(
     a2 = 1 / (( 2**n2 * np.sqrt(np.pi) * factorial(int(n2), exact = True) )**0.5)
 
     # Define shapelet
-    Sc = lambda x,y: (1/beta) * a1 * H1(x/beta) * np.exp(-((x/beta)**2) / 2 ) * a2 * H2(y/beta) * np.exp(-((y/beta)**2) / 2)
+    Sc = lambda x,y: (1/beta) * a1 \
+        * H1(x/beta) \
+        * np.exp(-((x/beta)**2) / 2 ) \
+        * a2 * H2(y/beta) * np.exp(-((y/beta)**2) / 2)
+    
     return Sc(x1, x2)
 
 
@@ -144,13 +152,15 @@ def polar2D(
     x2: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 2D polar shapelet function evaluated at (x1,x2) [float or array].
+    r""" Returns a 2D polar shapelet function [1]_
+    evaluated at (x1,x2) [float or array].
     
-    The 2D polar shapelet function is defined in ref. [1] as
+    The 2D polar shapelet function is defined as
 
     .. math:: 
         
-        S_{n, m}(r, \theta; \beta) = \alpha_1 \alpha_2 r^{|m|} L_{(n-|m|)/2}^{|m|} 
+        S_{n, m}(r, \theta; \beta) = 
+            \alpha_1 \alpha_2 r^{|m|} L_{(n-|m|)/2}^{|m|} 
             \left(\frac{r^2}{\beta^2}\right) 
             exp\left( -\frac{r^2}{2\beta^2} \right)
             exp(-im\theta) 
@@ -161,31 +171,31 @@ def polar2D(
 
     .. math:: 
     
-        \alpha_2 = \left[ \frac{[(n-|m|)/2]!} {\pi[(n+|m|)/2]!} \right]^{\frac{1}{2}}
+        \alpha_2 = 
+            \left[ \frac{[(n-|m|)/2]!} {\pi[(n+|m|)/2]!} \right]^{\frac{1}{2}}
 
     where :math:`\beta` is the shapelet length scale, 
-    :math:`L` is the generalized (associated) laguerre polynomial [2], 
+    :math:`L` is the generalized (associated) laguerre polynomial [2]_, 
     :math:`n` is the shapelet order, and 
     :math:`m` is also the shapelet order.
 
     Parameters
     ----------
     n : int  
-        &emsp; Shapelet order. :math:`n \geq 0`  
+        Shapelet order. :math:`n \geq 0`  
     m : int  
-        &emsp; Shapelet order.:math:`m \in [-n, n]`. If n odd/even, m is odd/even  
+        Shapelet order.:math:`m \in [-n, n]`. If n odd/even, m is odd/even  
     x1 : Union[float,np.ndarray]  
-        &emsp; First input to shapelet function  
+        First input to shapelet function  
     x2 : Union[float,np.ndarray]  
-        &emsp; Second input to shapelet function  
+        Second input to shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
-
+        The shapelet length scale parameter  
+    
     References
     ----------
-    * [1] https://doi.org/10.1111/j.1365-2966.2005.09453.x
-    * [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
+    .. [1] https://doi.org/10.1111/j.1365-2966.2005.09453.x
+    .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
     """
     if n < 0:
         raise ValueError('n must be a non-negative integer.')
@@ -200,7 +210,7 @@ def polar2D(
     nm = (n - np.abs(m))/2
     nm2 = (n + np.abs(m))/2
 
-    # Generate Laguerre polynomial
+    # Generate LG polynomial
     L = genlaguerre(nm, np.abs(m))
 
     # Calculate the weighting constant
@@ -221,9 +231,10 @@ def orthonormalpolar2D_n0(
     x2: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 2D orthonormal polar shapelet function evaluated at (x1,x2) [float or array].
+    r""" Returns a 2D orthonormal polar shapelet function [1]_
+    evaluated at (x1,x2) [float or array].
     
-    The orthonormal 2D polar shapelet function is defined in ref. [1] as
+    The orthonormal 2D polar shapelet function is defined as
 
     .. math::
         
@@ -236,36 +247,32 @@ def orthonormalpolar2D_n0(
         \beta = \frac{fl}{\sqrt{m}}
 
     where :math:`\beta` is the shapelet length scale, 
-    :math:`f` is a geometric scale factor [1], 
-    :math:`l` is the characteristic wavelength of the image [2], and 
+    :math:`f` is a geometric scale factor, 
+    :math:`l` is the characteristic wavelength of the image [2]_, and 
     :math:`m` is the shapelet degree of rotational symmetry.
 
     Parameters
     ----------
     m : int  
-        &emsp; Shapelet degree of rotational symmetry. :math:`m > 1`  
+        Shapelet degree of rotational symmetry. :math:`m > 1`  
     x1 : Union[float,np.ndarray]  
-        &emsp; First input to shapelet function  
+        First input to shapelet function  
     x2 : Union[float,np.ndarray]  
-        &emsp; Second input to shapelet function  
+        Second input to shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
+        The shapelet length scale parameter  
 
     Notes
     -----
-    This orthonormal shapelet framework was developed for :math:`n = 0` polar shapelets [1]. 
-    This shapelet formulation is a re-parameterization of the shapelets.functions.polar2D function.
+    This shapelet formulation is a re-parameterization of shapelets.functions.polar2D.
 
-    References
-    ----------
-    * [1] https://doi.org/10.1088/1361-6528/aaf353
-    * [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
-
+    .. [1] https://doi.org/10.1088/1361-6528/aaf353
+    .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
     """
     if m < 1:
         raise ValueError("Function only supports m >= 1.")
 
-    # Generate Laguerre polynomial
+    # Generate LG polynomial
     n = 0
     L = genlaguerre(n, m)
 
@@ -286,11 +293,11 @@ def orthonormalpolar2D_n1(
     x2: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 2D orthonormal polar shapelet function evaluated at (x1,x2) [float or array].
+    r""" Returns a 2D orthonormal polar shapelet function with one
+    degree of radial symmetry [1]_ evaluated at (x1,x2) [float or array].
 
-    This shapelet function has one degree of radial symmetry, contrary to shapelets.functions.orthonormalpolar2D_n0.
-
-    The orthonormal 2D polar shapelet function with one degree of radial symmetry is defined in ref. [1] as
+    The orthonormal 2D polar shapelet function
+    with one degree of radial symmetry is defined as
 
     .. math::
         
@@ -299,30 +306,28 @@ def orthonormalpolar2D_n1(
             e^{-\frac{r^2}{2\beta^2}} e^{-im\theta} 
 
     where :math:`\beta` is the shapelet length scale, 
-    :math:`l` is the characteristic wavelength of the image [2], and 
+    :math:`l` is the characteristic wavelength of the image [2]_, and 
     :math:`m` is the shapelet degree of rotational symmetry.
 
     Parameters
     ----------
     m : int  
-        &emsp; Shapelet degree of rotational symmetry. :math:`m > 1`  
+        Shapelet degree of rotational symmetry. :math:`m > 1`  
     x1 : Union[float,np.ndarray]  
-        &emsp; First input to shapelet function  
+        First input to shapelet function  
     x2 : Union[float,np.ndarray]  
-        &emsp; Second input to shapelet function  
+        Second input to shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
+        The shapelet length scale parameter  
 
     Notes
     -----
-    This orthonormal shapelet framework was developed for :math:`n = 1` polar shapelets [1].
-    Note that this shapelet formulation is a re-parameterization of the shapelets.functions.polar2D function.
+    This shapelet formulation is a re-parameterization of shapelets.functions.polar2D.
 
     References
     ----------
-    * [1] https://hdl.handle.net/10012/20779
-    * [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
-
+    .. [1] https://hdl.handle.net/10012/20779
+    .. [2] http://dx.doi.org/10.1103/PhysRevE.91.033307
     """
     if m < 1:
         raise ValueError("Function only supports m >= 1.")
@@ -343,9 +348,10 @@ def exponential1D(
     x1: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 1D exponential shapelet function evaluated at (x1) [float or array].
+    r""" Returns a 1D exponential shapelet function [1]_
+    evaluated at (x1) [float or array].
 
-    The 1D exponential shapelet function is defined in ref. [1] as
+    The 1D exponential shapelet function is defined as 
 
     .. math:: 
     
@@ -358,23 +364,22 @@ def exponential1D(
         \alpha = \frac{(-1)^{n-1}}{\sqrt{n^3\beta}} 
 
     where :math:`\beta` is the shapelet length scale, 
-    :math:`L` is the generalized (associated) laguerre polynomial [2], and 
+    :math:`L` is the generalized (associated) laguerre polynomial [2]_, and 
     :math:`n` is the shapelet order.
 
     Parameters
     ----------
     n : int  
-        &emsp; Shapelet order. Must be non-negative. :math:`n \geq 1`  
+        Shapelet order. Must be non-negative. :math:`n \geq 1`  
     x1 : Union[float,np.ndarray]  
-        &emsp; The input to the shapelet function. :math:`x1 \geq 0`  
+        The input to the shapelet function. :math:`x1 \geq 0`  
     beta : float  
-        &emsp; The shapelet length scale parameter  
-        
+        The shapelet length scale parameter  
+    
     References
     ----------
-    * [1] https://doi.org/10.1093/mnras/stz787
-    * [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
+    .. [1] https://doi.org/10.1093/mnras/stz787
+    .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
     """
     if n < 1:
         raise ValueError('n must be >= 1.')
@@ -384,7 +389,7 @@ def exponential1D(
     elif x1 < 0:
         raise ValueError('x1 must be >= 0.')
 
-    # Generate Laguerre polynomial
+    # Generate LG polynomial
     L = genlaguerre(n-1, 1)
 
     # Define common expressions
@@ -403,9 +408,10 @@ def exponential2D(
     x2: Union[float,np.ndarray], 
     beta: float
 ):
-    r""" Returns a 2D exponential shapelet function evaluated at (x1,x2) [float or array].
+    r""" Returns a 2D exponential shapelet function [1]_
+    evaluated at (x1,x2) [float or array].
 
-    The 2D exponential shapelet function is defined in ref. [1] as
+    The 2D exponential shapelet function is defined as  
 
     .. math:: 
         
@@ -419,28 +425,27 @@ def exponential2D(
             \sqrt{ \frac{2}{\beta\pi(2n+1)^3} \frac{(n-|m|)!}{(n+|m|)!} } 
 
     where :math:`\beta` is the shapelet length scale, 
-    :math:`L` is the generalized (associated) laguerre polynomial [2], 
+    :math:`L` is the generalized (associated) laguerre polynomial [2]_, 
     :math:`n` is the shapelet order, and 
     :math:`m` is also the shapelet order.
 
     Parameters
     ----------
     n : int  
-        &emsp; Shapelet order. :math:`n \geq 0`  
+        Shapelet order. :math:`n \geq 0`  
     m : int  
-        &emsp; Shapelet order. :math:`m \in [-n, n]`  
+        Shapelet order. :math:`m \in [-n, n]`  
     x1 : Union[float,np.ndarray]  
-        &emsp; First input to shapelet function  
+        First input to shapelet function  
     x2 : Union[float,np.ndarray]  
-        &emsp; Second input to shapelet function  
+        Second input to shapelet function  
     beta : float  
-        &emsp; The shapelet length scale parameter  
+        The shapelet length scale parameter  
 
     References
     ----------
-    * [1] https://doi.org/10.1093/mnras/stz787
-    * [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
-
+    .. [1] https://doi.org/10.1093/mnras/stz787
+    .. [2] https://scipy.github.io/devdocs/reference/generated/scipy.special.genlaguerre.html
     """
     if n < 0:
         raise ValueError('n must be a non-negative integer.')
@@ -453,10 +458,11 @@ def exponential2D(
     nm3 = (2*n) + 1
     b = 2 / (beta*nm3)
 
-    # Generate Laguerre polynomial
+    # Generate LG polynomial
     L = genlaguerre(nm, 2*np.abs(m))
     # Calculate the weighting constant
-    c = (-1)**n * np.sqrt(2 * (beta*np.pi)**-1 * nm3**-3) * np.sqrt(factorial(int(nm), exact=True) / factorial(int(nm2), exact=True))
+    c = (-1)**n * np.sqrt(2 * (beta*np.pi)**-1 * nm3**-3) \
+        * np.sqrt(factorial(int(nm), exact=True) / factorial(int(nm2), exact=True))
 
     # Define shapelet
     def Sp(r, t): return c * (r*b)**(np.abs(m)) * L(r*b) * np.exp(-(r/beta) * nm3**-1) * np.exp(-1j*m*t)
