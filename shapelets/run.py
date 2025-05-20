@@ -32,16 +32,16 @@ def run(
     working_dir: str
 ):
     r""" Main run function that does the following,
-    (1) parses the configuration file, 
-    (2) sets up output directory for results, and 
-    (3) runs associated analysis
+        (1) parses the configuration file, 
+        (2) sets up output directory for results, and 
+        (3) runs associated analysis
 
     Parameters
     ----------
     config_filepath : str
-        &emsp; The absolute or relative path of a configuration file
+        The absolute or relative path of a configuration file
     working_dir : str
-        &emsp; The working directory (where the config. file is) 
+        The working directory (where the config. file is) 
 
     """
     config = configparser.ConfigParser()
