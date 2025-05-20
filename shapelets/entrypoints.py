@@ -21,7 +21,7 @@ import subprocess
 import sys 
 import time
 
-from . import run
+from shapelets.run import run
 
 
 def run_shapelets():

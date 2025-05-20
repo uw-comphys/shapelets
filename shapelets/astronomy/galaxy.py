@@ -15,7 +15,7 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
+"""
 This module holds functions required to decompose images of galaxies via shapelet decomposition.
 """
 
@@ -27,7 +27,7 @@ from matplotlib.patches import Ellipse, Patch
 import numpy as np
 import sep
 
-from .misc import *
+from shapelets.astronomy.misc import *
 
 STAR_SIZE = 31 # crude circle with radius of 3 pixels
 STAR_COLOUR = 'lightgreen'
@@ -35,21 +35,21 @@ GALAXY_COLOUR = 'red'
 
 REFINE_ITERATIONS = 4
 
+
 @dataclass
 class Stamp:
-    r""" 
-    Contains the necessary information to extract a celestial object from a given dataset.
+    r""" Contains the necessary information to extract a celestial object from a given dataset.
 
     Parameters
     ----------
-    * x1: np.ndarray (dtype=int)
-        * Coordinate representing the corner of postage stamp closest to origin (inclusive)
-    * x2: np.ndarray (dtype=int)
-        * Coordinate representing the corner of postage stamp furthest from origin (inclusive)
-    * xc: np.ndarray (dtype=float)
-        * Representing middle of celestial object in postage stamp
-    * beta: float
-        * The characteristic shapelet scale that the celestial object will be decomposed at
+    x1 : np.ndarray (dtype=int)
+        Coordinate representing the corner of postage stamp closest to origin (inclusive)
+    x2 : np.ndarray (dtype=int)
+        Coordinate representing the corner of postage stamp furthest from origin (inclusive)
+    xc : np.ndarray (dtype=float)
+        Representing middle of celestial object in postage stamp
+    beta : float
+        The characteristic shapelet scale that the celestial object will be decomposed at
 
     """
     x1: np.ndarray
@@ -57,27 +57,38 @@ class Stamp:
     xc: np.ndarray
     beta: float
 
-def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], data: np.ndarray, n_max: int, n_compress: int, output_path: str=None, verbose: bool=True) -> None:
-    r"""
-    Decomposes a series of galaxies into a reduced shapelet representation.
+
+def decompose_galaxies(
+    galaxy_stamps: list[Stamp], 
+    star_stamps: list[Stamp], 
+    data: np.ndarray, 
+    n_max: int, 
+    n_compress: int, 
+    output_path: str=None, 
+    verbose: bool=True
+):
+    r""" Decomposes a series of galaxies into a reduced shapelet representation [1]_.
 
     Parameters
     ----------
-    * galaxy_stamps: list[Stamp]
-        * List of stamps for the galaxies in the astronomical image data
-    * star_stamps: list[Stamp]
-        * List of stamps for the stars in the astronomical image data
-    * data: np.ndarray
-        * Original astronomical data
-    * n_max: int
-        * Maximum order of shapelets
-    * n_compress: int
-        * Length of truncated list of shapelet coefficients used to reconstruct astronomical data
-    * output_path: str, optional
-        * Folder to store output images. If set to None (default), no images are saved
-    * verbose: bool, optional
-        * True (default) to print out information to console
-        
+    galaxy_stamps : list[Stamp]
+        List of stamps for the galaxies in the astronomical image data
+    star_stamps : list[Stamp]
+        List of stamps for the stars in the astronomical image data
+    data : np.ndarray
+        Original astronomical data
+    n_max : int
+        Maximum order of shapelets
+    n_compress : int
+        Length of truncated list of shapelet coefficients used to reconstruct astronomical data
+    output_path : str, optional
+        Folder to store output images. If set to None (default), no images are saved
+    verbose : bool, optional
+        True (default) to print out information to console
+
+    References
+    ----------
+    .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
     """
 
     if n_max < 1:
@@ -116,30 +127,40 @@ def decompose_galaxies(galaxy_stamps: list[Stamp], star_stamps: list[Stamp], dat
         else:
             create_plots(image, img1, img2, n_compress)
 
-def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: bool=True, verbose: bool=True) -> tuple[list[Stamp], list[Stamp]]:
+
+def get_postage_stamps(
+    data: np.ndarray, 
+    output_path: str=None, 
+    SHOW_STAMPS: bool=True, 
+    verbose: bool=True
+):
     r"""
-    Extracts a list of galaxy image stamps and star image stamps from the provided astronomical image data.
+    Extracts a list of galaxy image stamps and star image stamps
+    from the provided astronomical image data [1]_.
 
     Parameters
     ----------
-    * data: np.ndarray
-        * $n\times m$ array of astronomical image data
-    * output_path: str, optional
-        * Folder to store output images. If set to None (default), no images are saved
-    * SHOW_STAMPS: bool, optional
-        * If set to True (default) displays astronomical image data with stamps identified
-    * verbose: bool, optional
-        * True (default) to print out information to console
+    data : np.ndarray
+        :math:`n \times m` array of astronomical image data
+    output_path : str, optional
+        Folder to store output images. If set to None (default), no images are saved
+    SHOW_STAMPS : bool, optional
+        If set to True (default) displays astronomical image data with stamps identified
+    verbose : bool, optional
+        True (default) to print out information to console
         
     Returns
     -------
-    * galaxy_stamp_list: list[Stamp]
-        * List of stamps for the galaxies found in the astronomical image data
-    * star_stamp_list: list[Stamp]
-        * List of stamps for the stars found in the astronomical image data
-    * data: np.ndarray
-        * $n\times m$ array of astronomical image data, minus the background determined by the ``sep`` python package 
+    galaxy_stamp_list : list[Stamp]
+        List of stamps for the galaxies found in the astronomical image data
+    star_stamp_list : list[Stamp]
+        List of stamps for the stars found in the astronomical image data
+    data : np.ndarray
+        :math:`n \times m` array of astronomical image data, minus the bkgd determined by ``sep`` python package 
 
+    References
+    ----------
+    .. [1] https://doi.org/10.1046/j.1365-8711.2003.05901.x
     """
     if (output_path == None) and verbose:
         print("No output path provided, galaxy map image will not be saved")
@@ -226,49 +247,55 @@ def get_postage_stamps(data: np.ndarray, output_path: str=None, SHOW_STAMPS: boo
     return galaxy_stamp_list, star_stamp_list, data
 
 def load_fits_data(filename: str) -> np.ndarray:
-    r"""
-    Loads data as numpy.ndarray from provided .fits file [1].
+    r""" Loads data as numpy.ndarray from provided .fits file [1]_.
 
     Parameters
     ----------
-    * filename: str
-        * Absolute or relative filepath to .fits file
+    filename : str
+        Absolute or relative filepath to .fits file
         
     Returns
     -------
-    * data: np.ndarray
-        * $n \times m$ array of astronomical image data
+    data : np.ndarray
+        :math:`n \times m` array of astronomical image data
     
     Notes
     -----
-    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of astronomical image data between observatories [1]. FITS provides a method to transport arrays and tables of data alongside its related metadata. 
+    Flexible Image Transport System (or FITS) files were designed to standarize the exchange of 
+    astronomical image data between observatories [1]_. 
+    FITS provides a method to transport arrays and tables of data alongside its related metadata. 
     
     References
     ----------
-    * [1] https://fits.gsfc.nasa.gov/rfc4047.txt
-
+    .. [1] https://fits.gsfc.nasa.gov/rfc4047.txt
     """
     with fits.open(filename) as hdul:
         hdul.verify("fix")
         data = hdul[0].data
         return data.byteswap(inplace=True).newbyteorder()
     
-def create_plots(data: np.ndarray, reconstructed: np.ndarray, reconstructed_compressed: np.ndarray, compression_factor: int, output_path: str=None) -> None:
-    r"""
-    Displays original data and image reconstructions, alongside the error from projection onto shapelet basis.
+def create_plots(
+    data: np.ndarray, 
+    reconstructed: np.ndarray, 
+    reconstructed_compressed: np.ndarray, 
+    compression_factor: int, 
+    output_path: str=None
+):
+    r""" Displays original data and image reconstructions, 
+    alongside the error from projection onto shapelet basis.
 
     Parameters
     ----------
-    * data: np.ndarray
-        * Original astronomical data
-    * reconstructed: np.ndarray
-        * Reconstruction of astronomical data using calculated shapelet coefficients
-    * reconstructed_compressed: np.ndarray
-        * Reconstruction of astronomical data using truncated list of shapelet coefficients
-    * compression_factor: int
-        * Length of truncated list of shapelet coefficients used to reconstruct astronomical data
-    * output_path: str, optional
-        * File_path to save images to. If set to None (default), then fig is not saved
+    data : np.ndarray
+        Original astronomical data
+    reconstructed : np.ndarray
+        Reconstruction of astronomical data using calculated shapelet coefficients
+    reconstructed_compressed : np.ndarray
+        Reconstruction of astronomical data using truncated list of shapelet coefficients
+    compression_factor : int
+        Length of truncated list of shapelet coefficients used to reconstruct astronomical data
+    output_path : str, optional
+        File_path to save images to. If set to None (default), then fig is not saved
         
     """
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
