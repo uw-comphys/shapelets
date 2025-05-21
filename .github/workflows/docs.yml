@@ -29,7 +29,7 @@ jobs:
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       # Use negative regular expressions to suppress pdoc compilation for non .py files
-      - run: pdoc --math -o docs/ shapelets !shapelets.self_assembly._rdistance*
+      - run: pdoc --math -d numpy -o docs/ shapelets !shapelets.self_assembly._rdistance*
 
       - uses: actions/upload-pages-artifact@v3
         with:

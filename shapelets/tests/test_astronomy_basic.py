@@ -20,20 +20,23 @@ import unittest
 
 import numpy as np
 
-from shapelets.astronomy import (
-    get_nspace,
-    get_compressed_nspace,
+from shapelets.astronomy.galaxy import(
     load_fits_data,
     Stamp,
     get_postage_stamps,
+)
+from shapelets.astronomy.misc import (
+    get_nspace,
+    get_compressed_nspace,
     decompose_kernel,
     reconstruct,
     update_shapelet_parameters
 )
 
+
 class TestAstronomyBasic(unittest.TestCase):
-    r"""
-    Unit tests to support functionality of shapelets.astronomy sub-module.
+    r""" Unit tests to support functionality of shapelets.astronomy sub-module.
+    
     Uses one astronomical data file galaxies.fits and a variety of test cases
     Currently includes tests for:
         - astronomy.galaxy.load_fits_data
@@ -44,7 +47,6 @@ class TestAstronomyBasic(unittest.TestCase):
         - astronomy.misc.get_nspace
         - astronomy.misc.get_compressed_nspace
     """
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.dir = __file__.replace(os.path.basename(__file__), 'images/')
@@ -57,7 +59,6 @@ class TestAstronomyBasic(unittest.TestCase):
         cls.galaxy_stamps = galaxy_stamps
         cls.stamp = cls.galaxy_stamps[0]
         cls.data = noiseless_data
-
 
     def test_a_nspace(self) -> None:
         # Test get_nspace

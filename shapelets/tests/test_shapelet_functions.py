@@ -19,7 +19,7 @@ import unittest
 
 import numpy as np
 
-from shapelets.core.functions import (
+from shapelets.functions import (
     cartesian1D,
     cartesian2D,
     polar2D,
@@ -29,16 +29,16 @@ from shapelets.core.functions import (
     exponential2D
 )
 
+
 class TestShapeletFunctions(unittest.TestCase):
-    r"""
-    Unit tests for the various shapelet function formulations in shapelets/functions.py.
+    r""" Unit tests for the various shapelet function formulations in shapelets.functions.
+
     Currently includes,
         - cartesian shapelets (shapelets.functions.cartesian1D and shapelets.functions.cartesian2D),
         - polar shapelets (shapelets.functions.polar2D),
         - orthonormal polar shapelets (shapelets.functions.orthonormalpolar2D_n0), and
         - exponential shapelets (shapelets.functions.exponential1D and shapelets.functions.exponential2D)
     """
-
     @classmethod
     def setUpClass(cls) -> None:
         # Define the set of values to test shapelet functions

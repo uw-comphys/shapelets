@@ -15,8 +15,12 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
-This module holds core analysis functions for the self-assembly submodule. It includes image analysis techniques for (pattern) nanostructures, such as defect identification, pattern orientation, and the response distance method. 
+"""
+This module holds core analysis functions for the self-assembly submodule. 
+It includes image analysis techniques for (pattern) nanostructures, such as 
+    defect identification, 
+    local pattern orientation, 
+    and the response distance method. 
 """
 
 import ctypes
@@ -32,11 +36,9 @@ from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
  
-from .convolution import convresponse_n0
-from .kernel import get_opt_kernel_n0
-from .misc import trim_image
-from .scaling import lambda_to_beta_n0
-from .wavelength import get_wavelength
+import shapelets.self_assembly.kernel as kernel
+from shapelets.self_assembly.misc import trim_image
+import shapelets.self_assembly.wavelength as wavelength
 
 __all__ = [
     'defectid',
@@ -45,33 +47,38 @@ __all__ = [
 ]
 
 
-def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
-    r""" 
-    Computes the defect identification method from ref. [1]. Also known as the defect response distance method in ref. [1].
+def defectid(
+    image: np.ndarray, 
+    pattern_order: str, 
+    verbose: bool = True
+):
+    r""" Computes the defect identification method [1]_. 
+    Also known as the defect response distance method.
 
     Parameters
     ----------
-    * image: numpy.ndarray
-        * The image loaded as a numpy array
-    * pattern_order: str
-        * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    * verbose: bool, optional
-        * True (default) to print out information from convolution operation to console
+    image : numpy.ndarray
+        The image loaded as a numpy array
+    pattern_order : str
+        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    verbose : bool, optional
+        True (default) to print out information from convolution operation to console
     
     Returns
     -------
-    * centroids: np.ndarray
-        * The centroids from k-means clustering [2]. Each centroid is a row vector
-    * clusterMembers2D: np.ndarray
-        * Shows which cluster each pixel from image is a member of. I.e., value of x would mean it belongs to the cluster who's centroid is defined by centroids[x] (in numpy array notation)
-    * defects: np.ndarray
-        * The result of the defect response distance method [1]
+    centroids : np.ndarray
+        The centroids from k-means clustering [2]_. Each centroid is a row vector
+    clusterMembers2D : np.ndarray
+        Shows which cluster each pixel from image is a member of. 
+        I.e., value of x would mean it belongs to the cluster who's 
+        centroid is defined by centroids[x] (in numpy array notation)
+    defects : np.ndarray
+        The result of the defect response distance method
 
     References
     ----------
-    * [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    * [2] https://doi.org/10.1007/978-3-642-29807-3
-
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [2] https://doi.org/10.1007/978-3-642-29807-3
     """
     if not isinstance(image, np.ndarray):
         raise TypeError('image must be a numpy array.')
@@ -86,7 +93,7 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     num_clusters = min_clusters[pattern_order]
     
     # get convolutional response data 
-    response = convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
+    response = kernel.convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
@@ -128,40 +135,47 @@ def defectid(image: np.ndarray, pattern_order: str, verbose: bool = True):
     
     return centroids, clusterMembers2D, defects 
 
-def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
-    r""" 
-    Computes the local pattern orientation from ref. [1] via an iterative scheme using shapelet orientation at maximum response from steerable filter theory [2].
+
+def orientation(
+    image: np.ndarray, 
+    pattern_order: str, 
+    verbose: bool = True
+):
+    r""" Computes local pattern orientation [1]_ via an iterative scheme using 
+    shapelet orientation at maximum response from steerable filter theory [2]_.
 
     Parameters
     ----------
-    * image: numpy.ndarray
-        * The image loaded as a numpy array
-    * pattern_order: str
-        * Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    * verbose: bool, optional
-        * True (default) to print out results of orientation algorithm to console
+    image : numpy.ndarray
+        The image loaded as a numpy array
+    pattern_order : str
+        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    verbose : bool, optional
+        True (default) to print out results of orientation algorithm to console
 
     Returns
     -------
-    * mask: np.ndarray
-        * The mask for well-defined features
-    * dilate: np.ndarray
-        * The dilated mask
-    * orientation: np.ndarray
-        * Applying smoothing/blending to the dilated mask via median filter kernel [3]
-    * maxval: float
-        * The maximum allowed orientation value, where $maxval = \frac{2 \pi}{m}$
+    mask : np.ndarray
+        The mask for well-defined features
+    dilate : np.ndarray
+        The dilated mask
+    orientation: np.ndarray
+        Applying smoothing/blending to the dilated mask via median filter kernel [3]_
+    maxval : float
+        The maximum allowed orientation value, where
+        :math:`maxval = \frac{2 \pi}{m}`
     
     Notes
     -----
-    This function uses shapelets.self_assembly.misc.trim_image during iteration to converge on an acceptable orientation result. Therefore, the orientation result will **not** have the same shape as the original image.
+    This function uses shapelets.self_assembly.misc.trim_image during iteration to 
+    converge on an acceptable orientation result. 
+    Therefore, the orientation result will not have the same shape as the original image.
 
     References
     ----------
-    * [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    * [2] https://doi.org/10.1109/34.93808
-    * [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
-    
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [2] https://doi.org/10.1109/34.93808
+    .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
     """
     if not isinstance(image, np.ndarray):
         raise TypeError('image must be a numpy array.')
@@ -177,7 +191,7 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     maxval = 2*np.pi / (ind+1)
     
     # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=False)
+    l = wavelength.get_wavelength(image=image, verbose=False)
 
     # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
     # note that custom convolutional response function embedded here since vectors need to be independently normalized
@@ -190,10 +204,10 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
     
     for i in range(mmax):
         # get beta
-        beta = lambda_to_beta_n0(m=i+1, l=l)
+        beta = wavelength.lambda_to_beta_n0(m=i+1, l=l)
 
         # get grid for discretization and initialize shapelet kernel
-        shapelet = get_opt_kernel_n0(m=i+1, beta=beta)
+        shapelet = kernel.get_optimal_kernel_n0(m=i+1, beta=beta)
 
         # convolve kernel (shapelet) with image
         con = fftconvolve(image, shapelet, mode = 'same')
@@ -248,38 +262,52 @@ def orientation(image: np.ndarray, pattern_order: str, verbose: bool = True):
 
     return mask, dilate, orientation_final, maxval
 
-def rdistance(image: np.ndarray, num_clusters: int = 20, shapelet_order: Union[str,int] = 'default', 
-              ux: Union[str,list] = 'default', uy: Union[str,list] = 'default', verbose: bool = True) -> np.ndarray: 
-    r""" 
-    Compute the response distance method from ref. [1]. By default, attempts to use the fastest implementation (C++) as opposed to Python; defaults to Python upon error. 
+
+def rdistance(
+    image: np.ndarray, 
+    num_clusters: int = 20, 
+    shapelet_order: Union[str,int] = 'default', 
+    ux: Union[str,list] = 'default', 
+    uy: Union[str,list] = 'default', 
+    verbose: bool = True
+): 
+    r""" Compute the response distance method [1]_. 
+    By default, attempts to use the fastest implementation (C++) 
+    as opposed to Python; defaults to Python upon error. 
 
     Parameters
     ----------
-    * image: numpy.ndarray
-        * The image loaded as a numpy array
-    * num_clusters: int
-        * The number of clusters as input to k-means clustering [2]. Default is 20 from ref. [3]. Can pass 0 to not use k-means clustering on reference region
-    * shapelet_order: Union[str,int]
-        * Set as 'default' to use higher-order shapelets [4] ($m \leq m'$). Can also pass positive integer value for filter m upper bound
-    * ux: Union[str,list]
-        * The bounds in the x-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
-    * uy: Union[str,list]
-        * The bounds in the y-direction for the reference region. If using list option, must be 2 element list. Choosing "default" will force user to choose ref. region during runtime
-    * verbose: bool, optional
+    image : numpy.ndarray
+        The image loaded as a numpy array
+    num_clusters : int
+        The number of clusters as input to k-means clustering [2]_. 
+        Default is 20 from ref. [3]_. 
+        Can pass 0 to not use k-means clustering on reference region
+    shapelet_order : Union[str,int]
+        Set as 'default' to use higher-order shapelets [4]_ (:math:`m \leq m'`). 
+        Can also pass positive integer value for filter m upper bound
+    ux : Union[str,list]
+        The bounds in the x-direction for the reference region. 
+        If using list option, must be 2 element list. 
+        Choosing "default" will force user to choose ref. region during runtime
+    uy : Union[str,list]
+        The bounds in the y-direction for the reference region. 
+        If using list option, must be 2 element list. 
+        Choosing "default" will force user to choose ref. region during runtime
+    verbose : bool, optional
         True (default) to print out results of response distance method to console
 
     Returns
     -------
-    * d: np.ndarray
-        * The response distance scalar field. Its dimensions are the same as the input image
+    d : np.ndarray
+        The response distance scalar field. Its dimensions are the same as the input image
 
     References
     ----------
-    * [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    * [3] https://doi.org/10.1088/1361-6528/aaf353
-    * [2] https://doi.org/10.1007/978-3-642-29807-3
-    * [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
-
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [3] https://doi.org/10.1088/1361-6528/aaf353
+    .. [2] https://doi.org/10.1007/978-3-642-29807-3
+    .. [4] http://dx.doi.org/10.1088/1361-6528/ad1df4
     """
     if not isinstance(image, np.ndarray):
         raise TypeError('image must be a numpy array.')
@@ -339,7 +367,7 @@ def rdistance(image: np.ndarray, num_clusters: int = 20, shapelet_order: Union[s
         plt.show()"""
     
     # get convolutional response data, enforce shapelet_order parameter checking inside function call
-    response = convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
+    response = kernel.convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
 
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]
@@ -389,31 +417,37 @@ def rdistance(image: np.ndarray, num_clusters: int = 20, shapelet_order: Union[s
 
     return d
 
-def _rdistance(refVectors: np.ndarray, testVectors: np.ndarray) -> np.ndarray:
+
+def _rdistance(
+    refVectors: np.ndarray, 
+    testVectors: np.ndarray
+):
     r"""
-    Wrapper function for C++ implementation of response distance method [a]. Heavily reliant on ctypes library. On average, this C++ implementation is 14-16x faster than Python [b].
+    Wrapper function for C++ implementation of response distance method [1]_. 
+    On average, this C++ implementation is 14-16x faster than Python [2]_.
 
     Parameters
     ----------
-    * refVectors : np.ndarray
-        * The reference response vectors as a 2-dimensional array
-    * testVectors : np.ndarray
-        * The test (or non-reference) response vectors as a 2-dimensional array
+    refVectors : np.ndarray
+        The reference response vectors as a 2-dimensional array
+    testVectors : np.ndarray
+        The test (or non-reference) response vectors as a 2-dimensional array
 
     Returns
     -------
-    * rdists: np.ndarray
-        * The response distances as a 1-dimensional array (must be reshaped to match image dimensions)
+    rdists : np.ndarray
+        The response distances as a 1-dimensional array 
+        (must be reshaped to match image dimensions)
 
     Notes
     -----
-    Any changes made to _rdistance.cpp requires re-compiling the shared library via g++ -fPIC -shared -o _rdistance.so _rdistance.cpp
+    Any changes made to _rdistance.cpp requires re-compiling the shared library.
+    One such use is "g++ -fPIC -shared -o _rdistance.so _rdistance.cpp" 
 
     References
     ----------
-    * [a] http://dx.doi.org/10.1103/PhysRevE.91.033307
-    * [b] https://hdl.handle.net/10012/20779
-
+    .. [1] http://dx.doi.org/10.1103/PhysRevE.91.033307
+    .. [2] https://hdl.handle.net/10012/20779
     """
     # ensure input vectors are of type numpy.float64
     refVectors = refVectors.astype(np.float64)

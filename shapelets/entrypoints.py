@@ -21,13 +21,18 @@ import subprocess
 import sys 
 import time
 
-from . import run
+from shapelets.run import run
+
 
 def run_shapelets():
-    r"""
-    Main function that runs shapelets that is called via entry point "shapelets-run".
+    r""" Main function that runs shapelets that is called via entry point "shapelets-run".
+
     Currently supports one additional argument - the path to configuration file. 
-    Example - "shapelets-run /path/to/CONFIG" where /path/to/CONFIG is the relative or absolute path to a configuration file.
+
+    Example
+    -------
+    > shapelets-run /path/to/CONFIG 
+    where /path/to/CONFIG is the relative or absolute path to a configuration file.
     """
     # enforce configuration filepath
     if len(sys.argv) == 2: 
@@ -50,8 +55,13 @@ def run_shapelets():
 
 
 def run_tests():
-    r"""
-    Main function that runs all the unit tests via unittest from Python STL. This is only invoked via the entry point "shapelets-test" from any directory on your system.
+    r"""Main function that runs all the unit tests via unittest from Python STL. 
+
+    This is only invoked via the entry point "shapelets-test" from any directory on your system.
+
+    Example
+    -------
+    > shapelets-test
     """
     print("Initiating shapelets unit tests. This will likely take a few minutes.")
 
@@ -59,12 +69,11 @@ def run_tests():
 
     # if the user knows what they're doing, this would use same interpreter as that to install the package
     pyinterp = sys.executable 
-    tests_dir = os.path.join(Path(__file__).parents[1], 'tests')
+    tests_dir = os.path.join(Path(__file__).parents[1], 'shapelets', 'tests')
 
     # automatically find and run all unit tests using unittest built-in discovery feature
     if pyinterp:
         subprocess.call([pyinterp, '-B', '-m', 'unittest', '-v'], cwd=tests_dir)
-
     else: 
         # This loop should theoretically never hit... an interpreter should always be found
         import platform

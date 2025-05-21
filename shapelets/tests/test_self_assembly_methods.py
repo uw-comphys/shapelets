@@ -20,22 +20,24 @@ import unittest
 
 import numpy as np
 
-from shapelets.self_assembly import (
-    read_image,
+from shapelets.self_assembly.kernel import(
     convresponse_n0,
     convresponse_n1,
+)
+from shapelets.self_assembly.misc import read_image
+from shapelets.self_assembly.quant import (
     defectid,
     orientation,
     rdistance
 )
 
+
 class TestSelfAssemblyMethods(unittest.TestCase):
-    r"""
-    Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
+    r""" Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
+    
     Specifically tests all methods in the self_assembly.quant sub-module.
     Uses one simulated nanostructure image for testing, hexSIM1.png in ./images.
     """
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.dir = __file__.replace(os.path.basename(__file__), 'images/')

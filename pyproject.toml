@@ -15,8 +15,11 @@ dependencies = [
 	"numpy<2.0", # testing with numpy=2.0.0 broke other dependencies...
     "opencv-python",
     "pdoc",
+    "scikit-learn",
+    "scikit-image",
     "sep",
     "scipy",
+    "tensorflow",
 ]
 
 authors = [
@@ -24,6 +27,7 @@ authors = [
 	{name = "Matthew Peres Tino", email = "mptino@uwaterloo.ca"},
 	{name = "Matthew Peres Tino"},
 	{name = "Abbas Yusuf Abdulaziz"},
+	{name = "Cameron Chin"},
 	{name = "Nasser Mohieddin Abukhdeir"},
 	{name = "Robert Suderman"},
 	{name = "Thomas Akdeniz"},
@@ -48,8 +52,8 @@ classifiers = [
 ## NON-METADATA ##
 
 [project.scripts]
-shapelets-run = "shapelets.core.entry_points:run_shapelets"
-shapelets-test = "shapelets.core.entry_points:run_tests"
+shapelets-run = "shapelets.entrypoints:run_shapelets"
+shapelets-test = "shapelets.entrypoints:run_tests"
 
 [project.urls]
 homepage = "https://uw-comphys.github.io/shapelets"

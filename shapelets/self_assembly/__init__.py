@@ -15,13 +15,15 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
-r"""
+"""
 The self-assembly submodule.
 """
 
-from .convolution import *
-from .kernel import *
-from .misc import *
-from .quant import *
-from .scaling import *
-from .wavelength import *
+# TODO: get around circular import error so that we can do import shapelets.self_assembly.rdistance etc.
+"""
+from shapelets.self_assembly.quant import(
+    defectid,
+    orientation,
+    rdistance,
+)
+"""

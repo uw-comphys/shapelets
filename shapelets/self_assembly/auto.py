@@ -15,6 +15,10 @@
 # <https://www.gnu.org/licenses/>.                                                                                     #
 ########################################################################################################################
 
+"""
+This module holds functions relevant for the unsupervised shapelets response distance method.
+"""
+
 import numpy as np
 import os
 from pathlib import Path
@@ -27,26 +31,27 @@ from skimage.filters import threshold_otsu
 from sklearn.neural_network import MLPRegressor
 import tensorflow as tf
 
-from .convolution import convresponse_n0
-from .misc import read_image
-from .quant import rdistance
-from .wavelength import get_wavelength
+from shapelets.self_assembly.convolution import convresponse_n0
+from shapelets.self_assembly.misc import read_image
+from shapelets.self_assembly.quant import rdistance
+from shapelets.self_assembly.wavelength import get_wavelength
 
 
-def infer(response_vectors: np.ndarray) -> str:
-    r"""
-    This function performs pattern inference using a trained CNN model to predict the pattern present in image.
+def infer(response_vectors: np.ndarray):
+    r""" This function performs pattern inference using a trained CNN model to predict 
+    the pattern present in image and return the predicted pattern class.
+
     The shapelets response vectors are otsu thresholded and resized to 256x256 prior to inference.
 
     Parameters
     ----------
-    * response_vectors: np.ndarray
+    response_vectors : np.ndarray  
         Response vectors of channels m = [2, 3, 6].
 
     Returns
     -------
-    * predicted_class: str
-        Predicted class name (i.e. 'hex', 'stripe', 'neither')
+    predicted_class : str  
+        Predicted class name (i.e. 'hex', 'stripe', 'neither')  
 
     Notes
     -----
@@ -61,7 +66,7 @@ def infer(response_vectors: np.ndarray) -> str:
         raise ValueError("response_vectors must be normalized to [0, 1]")
 
     # Load the best model from train.py
-    model_path = Path(__file__).parent / "models" / "CNN.h5"
+    model_path = os.path.join(Path(__file__).parents[0], "CNN.h5")
     model = tf.keras.models.load_model(model_path)
 
     # Apply Otsu thresholding to each channel
@@ -89,27 +94,34 @@ def infer(response_vectors: np.ndarray) -> str:
     return predicted_class
 
 
-def find_reference_region(image: np.ndarray, threshold: int = -1, stride: int = 1):
-    r"""
-    This function performs a convolution operation on the input image to find an ideal reference region based on the minimum sum of the output of several convolutions.
+def find_reference_region(
+    image: np.ndarray, 
+    threshold: int = -1, 
+    stride: int = 1
+):
+    r""" Performs a convolution operation on the input image to find an ideal reference 
+    region based on the minimum sum of the output of several convolutions.
 
     Parameters
     ----------
-    * image: np.ndarray
-        Input image
-    * threshold : int, optional
-        If non-zero number, return information for all possible tiles after applying the stride and taking that top % of the ideal boxes. Default is -1 so no thresholding applied, only returns best box
-    * stride: int, optional
-        Stride value for selecting stride-separated boxes. Default is 25, should be some number relative to the window_size such as window_size//2 or window_size//4
+    image : np.ndarray  
+        Input image  
+    threshold : int, optional  
+        If non-zero number, return information for all possible tiles after applying the stride  
+        and take the top threshold (%) of the ideal boxes  
+        Default is -1 so no thresholding applied, only returns best box  
+    stride : int, optional  
+        Stride value for selecting stride-separated boxes.   
+        Default is 25, should be relative to window_size (e.g window_size//2)
 
     Returns
     -------
-    * best_box: tuple[tuple[int, int], tuple[int, int]]
-        Coordinates of the top-left and bottom-right corners of the ideal box
-    * top_left_coords: list[tuple[int, int], ...]
-        List of top-left coordinates for each tile (if all_tiles is True).
-    * box_sums: list[int]
-        - List of sums for each tile (if all_tiles is True).
+    best_box : tuple[tuple[int, int], tuple[int, int]]  
+        Coordinates of the top-left and bottom-right corners of the ideal box  
+    top_left_coords : list[tuple[int, int], ...]  
+        List of top-left coordinates for each tile (if all_tiles is True).  
+    box_sums : list[int]    
+        List of sums for each tile (if all_tiles is True).
 
     Notes
     -----
@@ -174,29 +186,35 @@ def find_reference_region(image: np.ndarray, threshold: int = -1, stride: int = 
         return best_box
 
 
-def predict(pattern_type: str, response_vectors: np.ndarray, model_path: str):
-    r"""
-    This function loads a trained MLPRegressor model based on the pattern type and predicts the response distance at each pixel.
+def predict(
+    pattern_type: str, 
+    response_vectors: np.ndarray, 
+    model_path: str
+):
+    r""" This function loads a trained MLPRegressor model based on the 
+    pattern type and predicts the response distance at each pixel.
+
     This generates a response distance image that can be used to approximate the response distance method.
 
     Parameters
     ----------
-    * pattern_type : str
-        Type of pattern ('hex' or 'stripe') for selecting the appropriate trained model
-    * response_vectors : np.ndarray
-        Response vectors
-    * model_path : str
-        Directory path for the CNN prediction model
+    pattern_type : str  
+        Type of pattern ('hex' or 'stripe') for selecting the appropriate trained model  
+    response_vectors : np.ndarray  
+        Response vectors  
+    model_path : str  
+        Directory path for the CNN prediction model  
 
     Returns
     -------
-    * ideal_box_data: tuple[tuple[int, int], tuple[int, int]]
-        Coordinates of the top-left and bottom-right corners of the ideal box and the top_left coords and sums if threshold flag enabled
-    * prediction: np.ndarray
-        Predicted image's response distance
-    * response: np.ndarray
-        Shapelet response vectors
-    * window_size: int
+    ideal_box_data : tuple[tuple[int, int], tuple[int, int]]  
+        Coordinates of the top-left and bottom-right corners of the ideal box  
+        also returns top_left coords and sums if threshold flag enabled  
+    prediction : np.ndarray  
+        Predicted image's response distance  
+    response : np.ndarray  
+        Shapelet response vectors  
+    window_size : int  
         Window size determined for reference region bounding box
 
     Notes
@@ -225,10 +243,10 @@ def predict(pattern_type: str, response_vectors: np.ndarray, model_path: str):
 
 
 if __name__ == "__main__":
+    # TODO: this test script will be re-organized into a separate method consistent with entry points for shapelets package.
+
     import matplotlib.pyplot as plt
     from matplotlib.patches import Rectangle
-
-    # TODO: this test script will be re-organized into a separate method consistent with entry points for shapelets package.
 
     model = MLPRegressor()
 
@@ -296,7 +314,7 @@ if __name__ == "__main__":
             # Split the selected filepath into the filename+ext and the rest of the path
             dir_path, filename = os.path.split(file_path)
             # Use predicted pattern type and filepath to get predicted response distance and ideal reference region location
-            model_path = Path(__file__).parent / "models" / f"MLPRegressor-{pattern_type}-denoising-std0.05.pickle"
+            model_path = os.path.join(Path(__file__).parents[0], f"MLPRegressor-{pattern_type}-denoising-std0.05.pickle")
             prediction = predict(pattern_type, response_vectors, model_path)
             pred_time = time() - starttime
             print(f"Pred Time: {pred_time}")
