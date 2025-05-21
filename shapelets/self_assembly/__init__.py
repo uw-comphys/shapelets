@@ -19,8 +19,4 @@
 The self-assembly submodule.
 """
 
-from .quant import(
-    defectid, 
-    orientation, 
-    rdistance
-)
+from .quant import *

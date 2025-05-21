@@ -52,8 +52,8 @@ classifiers = [
 ## NON-METADATA ##
 
 [project.scripts]
-shapelets-run = "shapelets.core.entry_points:run_shapelets"
-shapelets-test = "shapelets.core.entry_points:run_tests"
+shapelets-run = "shapelets.entrypoints:run_shapelets"
+shapelets-test = "shapelets.entrypoints:run_tests"
 
 [project.urls]
 homepage = "https://uw-comphys.github.io/shapelets"
