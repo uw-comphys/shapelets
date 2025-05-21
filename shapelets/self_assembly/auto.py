@@ -31,7 +31,7 @@ from skimage.filters import threshold_otsu
 from sklearn.neural_network import MLPRegressor
 import tensorflow as tf
 
-from shapelets.self_assembly.convolution import convresponse_n0
+from shapelets.self_assembly.kernel import convresponse_n0
 from shapelets.self_assembly.misc import read_image
 from shapelets.self_assembly.quant import rdistance
 from shapelets.self_assembly.wavelength import get_wavelength
