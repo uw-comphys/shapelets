@@ -69,12 +69,11 @@ def run_tests():
 
     # if the user knows what they're doing, this would use same interpreter as that to install the package
     pyinterp = sys.executable 
-    tests_dir = os.path.join(Path(__file__).parents[1], 'tests')
+    tests_dir = os.path.join(Path(__file__).parents[1], 'shapelets', 'tests')
 
     # automatically find and run all unit tests using unittest built-in discovery feature
     if pyinterp:
         subprocess.call([pyinterp, '-B', '-m', 'unittest', '-v'], cwd=tests_dir)
-
     else: 
         # This loop should theoretically never hit... an interpreter should always be found
         import platform
