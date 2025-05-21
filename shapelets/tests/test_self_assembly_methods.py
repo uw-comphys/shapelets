@@ -20,15 +20,15 @@ import unittest
 
 import numpy as np
 
-from shapelets.self_assembly import (
-    defectid,
-    orientation,
-    rdistance
-)
-from shapelets.self_assembly.misc import read_image
 from shapelets.self_assembly.kernel import(
     convresponse_n0,
     convresponse_n1,
+)
+from shapelets.self_assembly.misc import read_image
+from shapelets.self_assembly.quant import (
+    defectid,
+    orientation,
+    rdistance
 )
 
 

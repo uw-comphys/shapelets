@@ -36,15 +36,9 @@ from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
  
-from shapelets.self_assembly.kernel import(
-    convresponse_n0,
-    get_optimal_kernel_n0
-)
+import shapelets.self_assembly.kernel as kernel
 from shapelets.self_assembly.misc import trim_image
-from shapelets.self_assembly.wavelength import(
-    get_wavelength,
-    lambda_to_beta_n0,
-)
+import shapelets.self_assembly.wavelength as wavelength
 
 __all__ = [
     'defectid',
@@ -99,7 +93,7 @@ def defectid(
     num_clusters = min_clusters[pattern_order]
     
     # get convolutional response data 
-    response = convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
+    response = kernel.convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
     response2D = response.reshape(-1, response.shape[-1])
     
     # clustering 
@@ -197,7 +191,7 @@ def orientation(
     maxval = 2*np.pi / (ind+1)
     
     # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=False)
+    l = wavelength.get_wavelength(image=image, verbose=False)
 
     # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
     # note that custom convolutional response function embedded here since vectors need to be independently normalized
@@ -210,10 +204,10 @@ def orientation(
     
     for i in range(mmax):
         # get beta
-        beta = lambda_to_beta_n0(m=i+1, l=l)
+        beta = wavelength.lambda_to_beta_n0(m=i+1, l=l)
 
         # get grid for discretization and initialize shapelet kernel
-        shapelet = get_optimal_kernel_n0(m=i+1, beta=beta)
+        shapelet = kernel.get_optimal_kernel_n0(m=i+1, beta=beta)
 
         # convolve kernel (shapelet) with image
         con = fftconvolve(image, shapelet, mode = 'same')
@@ -373,7 +367,7 @@ def rdistance(
         plt.show()"""
     
     # get convolutional response data, enforce shapelet_order parameter checking inside function call
-    response = convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
+    response = kernel.convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
 
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]

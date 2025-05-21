@@ -30,11 +30,7 @@ from shapelets.functions import(
     orthonormalpolar2D_n0, 
     orthonormalpolar2D_n1
 )
-from shapelets.self_assembly.wavelength import(
-    get_wavelength,
-    lambda_to_beta_n0, 
-    lambda_to_beta_n1
-)
+import shapelets.self_assembly.wavelength as wavelength
 
 
 def convresponse_n0(
@@ -91,7 +87,7 @@ def convresponse_n0(
         mmax = shapelet_order
 
     # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=verbose)
+    l = wavelength.get_wavelength(image=image, verbose=verbose)
 
     minRespTol = 0.1
     
@@ -104,7 +100,7 @@ def convresponse_n0(
         phi = np.empty((Ny, Nx, mmax))
         for i in range(mmax):
             # get beta
-            beta = lambda_to_beta_n0(m=i+1, l=l)
+            beta = wavelength.lambda_to_beta_n0(m=i+1, l=l)
 
             # get grid for discretization and initialize shapelet kernel
             shapelet = get_optimal_kernel_n0(m=i+1, beta=beta)
@@ -126,7 +122,7 @@ def convresponse_n0(
         while currResp > minRespTol:
             # get beta
             m += 1
-            beta = lambda_to_beta_n0(m=m, l=l)
+            beta = wavelength.lambda_to_beta_n0(m=m, l=l)
 
             # get grid for discretization and initialize shapelet kernel
             shapelet = get_optimal_kernel_n0(m=m, beta=beta)
@@ -206,7 +202,7 @@ def convresponse_n1(
         raise ValueError('mmax parameter must be >= 0.')
 
     # get characteristic wavelength of image 
-    l = get_wavelength(image=image, verbose=verbose)
+    l = wavelength.get_wavelength(image=image, verbose=verbose)
 
     Ny, Nx = image.shape
 
@@ -215,7 +211,7 @@ def convresponse_n1(
 
     for i in range(mmax):
         # get optimal beta from numerical scheme
-        beta = lambda_to_beta_n1(m=i+1, l=l)
+        beta = wavelength.lambda_to_beta_n1(m=i+1, l=l)
 
         # get optimal kernel size
         shapelet = get_optimal_kernel_n1(m = i+1, beta = beta)

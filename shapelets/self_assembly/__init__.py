@@ -19,4 +19,11 @@
 The self-assembly submodule.
 """
 
-from .quant import *
+# TODO: get around circular import error so that we can do import shapelets.self_assembly.rdistance etc.
+"""
+from shapelets.self_assembly.quant import(
+    defectid,
+    orientation,
+    rdistance,
+)
+"""
