@@ -1,4 +1,13 @@
-on: [push]
+# draft-pdf.yml :: create PDF according to Journal of Open Source Software template
+name: draft-pdf
+
+on:
+    push:
+      branches:
+        - publications
+    pull_request:
+      branches:
+        - publications
 
 jobs:
   paper:
