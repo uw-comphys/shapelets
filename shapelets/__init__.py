@@ -19,6 +19,6 @@
 
 r"""
 
-.. include:: ../WEBHOME.md
+.. include:: ../docs/website.md
 
 """

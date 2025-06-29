@@ -60,7 +60,7 @@ The **response_distance** method may contain up to four additional parameters.
 ### Run Example
 
 Ensure `shapelets` is installed before proceeding.
-See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) for installation instructions.
+See [here](https://uw-comphys.github.io/shapelets/shapelets/docs/install.html) for installation instructions.
 
 This example assumes the working directory has a sub-directory ``analysis`` containing the necessary files: ``analysis/config`` and ``analysis/images/lamSIM1.png``. 
 

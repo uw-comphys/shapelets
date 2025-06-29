@@ -17,10 +17,10 @@
 
 r"""
 
-This submodule contains documentation for several examples of implemeneted shapelets applications (see below), installation instructions, custom commands, and a CHANGELOG for detailed commit history.
+This submodule contains documentation for several examples of implemented shapelets applications (see below) and other important resources (see options on left-hand side tab).
 
 Examples for the **shapelets.self_assembly** submodule:
-* Example 1 - computing the response distance ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
+* Example 1 - the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
 * Example 2 - the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 * Example 3 - local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4))
 
@@ -29,9 +29,10 @@ Examples for the **shapelets.astronomy** submodule:
 
 """
 
+from .changelog import *
+from .commands import *
 from .example_1 import *
 from .example_2 import *
 from .example_3 import *
 from .example_4 import *
-from .installation_guide import *
-from .custom_commands import *
+from .install import *
