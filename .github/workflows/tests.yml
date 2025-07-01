@@ -1,0 +1,35 @@
+# tests.yml :: run unit tests on python 3.10 runners across different OS
+name: tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install shapelets and dependencies
+        run:
+          python3 -m pip install .
+
+      - name: Run unit tests
+        run:
+          cd ./shapelets/tests && python3 -B -m unittest -v
