@@ -17,12 +17,6 @@
 
 r"""
 
-# Custom Commands (entry points)
-
-The shapelets library makes use of [entry points](https://packaging.python.org/en/latest/specifications/entry-points/).
-These are custom command-line arguments to interact with the shapelets package.
-
-* `shapelets-run /path/to/config` - To run a shapelets application via configuration file. Here `/path/to/config` is the relative or absolute filepath to your configuration file - see the [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html). 
-* `shapelets-test` - triggers all shapelets unit tests. Use this command either (1) after modifying the source code or (2) after [installation](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html) to ensure library integrity.
+.. include:: ../../docs/install.md
 
 """

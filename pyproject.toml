@@ -14,7 +14,6 @@ dependencies = [
     "matplotlib",
 	"numpy<2.0", # testing with numpy=2.0.0 broke other dependencies...
     "opencv-python",
-    "pdoc",
     "scikit-learn",
     "scikit-image",
     "sep",
@@ -64,6 +63,7 @@ tracker = "https://github.com/uw-comphys/shapelets/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
+exclude = ["docs"]
 
 [tool.setuptools.package-data]
 # Using shapelets as the main directory, then list global patterns underneath it

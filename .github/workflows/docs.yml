@@ -23,17 +23,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      # ADJUST THIS: install all dependencies (including pdoc)
-      - run: pip install -e .
+      # Install all dependencies (including pdoc)
+      - run: pip install -e . && pip install pdoc
       
-      # ADJUST THIS: build your documentation into docs/.
-      # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
+      # Build your documentation into pdocs/
       # Use negative regular expressions to suppress pdoc compilation for non .py files
-      - run: pdoc --math -d numpy -o docs/ shapelets !shapelets.self_assembly._rdistance*
+      - run: pdoc --math -d numpy -o pdocs/ shapelets !shapelets.self_assembly._rdistance*
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/
+          path: pdocs/
 
   # Deploy the artifact to GitHub pages.
   # This is a separate job so that only actions/deploy-pages has the necessary permissions.

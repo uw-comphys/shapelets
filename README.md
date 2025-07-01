@@ -36,19 +36,24 @@ It also implements several shapelets applications, such as
 
 ## Getting Started
 
+### Installation
+
 If you have Python 3.10+ installed on your machine, you can install the shapelets library via pip: 
 
     pip install shapelets
 
-Otherwise, consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/installation_guide.html).
+Otherwise, consult the [installation guide](https://uw-comphys.github.io/shapelets/shapelets/docs/install.html).
 
-If you plan to use the shapelets library for your own work, please cite appropriately using this [citation](#citation).
-For any problems, create a post using the [issue tracker](https://github.com/uw-comphys/shapelets/issues). 
+### Using Shapelets
+
+See the shapelets [examples](https://uw-comphys.github.io/shapelets/shapelets/docs.html) for shapelets applications implemented with this package. 
+
+Also checkout our [custom commands](https://uw-comphys.github.io/shapelets/shapelets/docs/commands.html) to see how to use shapelets from the command-line.
 
 ## Contribute
 
 The authors of the shapelets library welcome contributions to the source code. 
-Please follow the contribution policy [here](https://github.com/uw-comphys/shapelets/blob/main/CONTRIBUTE.md).
+Please follow the contribution policy [here](https://github.com/uw-comphys/shapelets/blob/main/docs/contribute.md).
 
 ## Citation
 ```

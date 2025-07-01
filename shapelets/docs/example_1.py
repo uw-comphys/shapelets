@@ -17,6 +17,6 @@
 
 r"""
 
-.. include:: ../../examples/example_1/example_1.md
+.. include:: ../../docs/example_1.md
 
 """
