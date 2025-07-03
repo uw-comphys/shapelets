@@ -17,7 +17,21 @@
 
 r"""
 
-This submodule contains documentation for several examples of implemented shapelets applications (see below) and other important resources (see options on left-hand side tab).
+## Documentation 
+
+This submodule contains documentation for the shapelets package. You can navigate the documentation on the left-hand side, and below is an overview of each tab. 
+
+### Changelog
+
+The changelog for the shapelets package, providing an overview of changes associated to each version release.
+
+### Commmands
+
+This page describes the custom commands created for the shapelets package to be used from the command-line.
+
+### Examples
+
+We provide a series of examples demonstrating the shapelets applications included with shapelets. 
 
 Examples for the **shapelets.self_assembly** submodule:
 * Example 1 - the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307))
@@ -26,6 +40,10 @@ Examples for the **shapelets.self_assembly** submodule:
 
 Examples for the **shapelets.astronomy** submodule:
 * Example 4 - decomposition and reconstruction of images of galaxies ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x))
+
+### Install
+
+The installation guide for the shapelets package for Windows, macOS, and Linux (Ubuntu). 
 
 """
 
