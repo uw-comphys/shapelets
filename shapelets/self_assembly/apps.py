@@ -17,10 +17,6 @@
 
 """
 This module holds core analysis functions for the self-assembly submodule. 
-It includes image analysis techniques for (pattern) nanostructures, such as 
-    defect identification, 
-    local pattern orientation, 
-    and the response distance method. 
 """
 
 import ctypes
@@ -29,241 +25,50 @@ import os
 import platform
 import time 
 from typing import Union
+import warnings
 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.cluster.vq import kmeans, vq
 from scipy.signal import fftconvolve
 from scipy.ndimage import grey_dilation, median_filter
- 
-import shapelets.self_assembly.kernel as kernel
+
+from shapelets.self_assembly.tools import (
+    convresponse_n0,
+    get_wavelength,
+    lambda_to_beta_n0,
+    get_optimal_kernel_n0
+)
+
 from shapelets.self_assembly.misc import trim_image
-import shapelets.self_assembly.wavelength as wavelength
+
 
 __all__ = [
-    'defectid',
+    'response_distance',
+    'identify_defects',
     'orientation',
-    'rdistance',
 ]
 
-
-def defectid(
-    image: np.ndarray, 
-    pattern_order: str, 
-    verbose: bool = True
-):
-    r""" Computes the defect identification method [1]_. 
-    Also known as the defect response distance method.
-
-    Parameters
-    ----------
-    image : numpy.ndarray
-        The image loaded as a numpy array
-    pattern_order : str
-        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    verbose : bool, optional
-        True (default) to print out information from convolution operation to console
+def __getattr__(name):
+    r"""Handle deprecated function names with import-time warnings."""
     
-    Returns
-    -------
-    centroids : np.ndarray
-        The centroids from k-means clustering [2]_. Each centroid is a row vector
-    clusterMembers2D : np.ndarray
-        Shows which cluster each pixel from image is a member of. 
-        I.e., value of x would mean it belongs to the cluster who's 
-        centroid is defined by centroids[x] (in numpy array notation)
-    defects : np.ndarray
-        The result of the defect response distance method
+    defunct = {
+        'rdistance': response_distance,
+        'defectid': identify_defects
+    }
 
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1007/978-3-642-29807-3
-    """
-    if not isinstance(image, np.ndarray):
-        raise TypeError('image must be a numpy array.')
-
-    if not isinstance(pattern_order, str):
-        raise TypeError('pattern_order parameter must be of str type.')
-    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
-        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
+    if name in defunct:
+        warnings.warn(
+            f"{name}() is deprecated, please use {defunct[name].__name__}() instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        return defunct[name]
     
-    # enforce appropriate number of clusters depending on pattern_order
-    min_clusters = {'stripe': 4, 'square': 8, 'hexagonal': 10}
-    num_clusters = min_clusters[pattern_order]
-    
-    # get convolutional response data 
-    response = kernel.convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
-    response2D = response.reshape(-1, response.shape[-1])
-    
-    # clustering 
-    t1 = time.time()
-    if verbose:
-        print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
-    centroids = kmeans(response2D, num_clusters)[0]
-    clusterMembers1D, dists1D = vq(response2D, centroids)
-    clusterMembers2D = clusterMembers1D.reshape(response.shape[0:2]) 
-    
-    t2 = time.time() - t1
-    if verbose:
-        print(f"Clustering runtime = {t2:0.3} s")
-
-    # get inputs of selected clusters
-    plt.imshow(clusterMembers2D, cmap='jet')
-    plt.axis('off')
-    plt.title('a = add point; del/backspace = remove point; enter = finish')
-    win_positions = np.array(plt.ginput(n = -1, timeout = -1, mouse_add=None, mouse_pop=None, mouse_stop=None))
-    win_positions = np.round(win_positions, 0).astype(int)
-
-    # now mask out non-selected clusters
-    dists1D = (dists1D - dists1D.min()) / (dists1D.max() - dists1D.min())
-    dists2D = dists1D.reshape(response.shape[0:2])
-    defects = np.zeros((response.shape[0], response.shape[1]))
-
-    selected_clusters = []
-    for i in range(win_positions.shape[0]):
-        x, y = win_positions[i][0], win_positions[i][1]
-        cluster = clusterMembers2D[y, x] 
-
-        if cluster not in selected_clusters:
-            selected_clusters.append(cluster)
-            # mask out the cluster from non-trimmed data, clusterMembers2D
-            defects += np.where(clusterMembers2D == int(cluster), 1, 0)
-    
-    # compute defect response distance
-    defects = defects * dists2D
-    
-    return centroids, clusterMembers2D, defects 
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
-def orientation(
-    image: np.ndarray, 
-    pattern_order: str, 
-    verbose: bool = True
-):
-    r""" Computes local pattern orientation [1]_ via an iterative scheme using 
-    shapelet orientation at maximum response from steerable filter theory [2]_.
-
-    Parameters
-    ----------
-    image : numpy.ndarray
-        The image loaded as a numpy array
-    pattern_order : str
-        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
-    verbose : bool, optional
-        True (default) to print out results of orientation algorithm to console
-
-    Returns
-    -------
-    mask : np.ndarray
-        The mask for well-defined features
-    dilate : np.ndarray
-        The dilated mask
-    orientation: np.ndarray
-        Applying smoothing/blending to the dilated mask via median filter kernel [3]_
-    maxval : float
-        The maximum allowed orientation value, where
-        :math:`maxval = \frac{2 \pi}{m}`
-    
-    Notes
-    -----
-    This function uses shapelets.self_assembly.misc.trim_image during iteration to 
-    converge on an acceptable orientation result. 
-    Therefore, the orientation result will not have the same shape as the original image.
-
-    References
-    ----------
-    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
-    .. [2] https://doi.org/10.1109/34.93808
-    .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
-    """
-    if not isinstance(image, np.ndarray):
-        raise TypeError('image must be a numpy array.')
-    
-    if not isinstance(pattern_order, str):
-        raise TypeError('pattern_order parameter must be of str type.')
-    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
-        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
-
-    # get orientation information based on pattern_order
-    params = {'stripe': 0, 'square': 3, 'hexagonal': 5}
-    ind = params[pattern_order]
-    maxval = 2*np.pi / (ind+1)
-    
-    # get characteristic wavelength of image 
-    l = wavelength.get_wavelength(image=image, verbose=False)
-
-    # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
-    # note that custom convolutional response function embedded here since vectors need to be independently normalized
-
-    Ny, Nx = image.shape
-    mmax = 6
-
-    omega = np.empty((Ny, Nx, mmax)) 
-    phi = np.empty((Ny, Nx, mmax))
-    
-    for i in range(mmax):
-        # get beta
-        beta = wavelength.lambda_to_beta_n0(m=i+1, l=l)
-
-        # get grid for discretization and initialize shapelet kernel
-        shapelet = kernel.get_optimal_kernel_n0(m=i+1, beta=beta)
-
-        # convolve kernel (shapelet) with image
-        con = fftconvolve(image, shapelet, mode = 'same')
-        omega[:,:,i] = np.abs(con)
-        phi[:,:,i] = np.angle(con)
-    
-    # normalize response individually, not in terms of vectors across m values
-    for i in range(omega.shape[2]):
-            omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
-
-    # to correct angles on [0, 2pi/m] as per the local orientation method from ref. [1]
-    # NOTE: this is not exactly equivalent to the optimal filter orientation from steerable filter theory, but has minor modifications
-    for i in range(phi.shape[2]):
-        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
-        phi[:,:,i] *=  2*np.pi / (i+1)
-
-    # find the response threshold iteratively 
-    orient = phi[:,:,ind].copy()
-    resp_og = omega[:,:,ind].copy()
-    dilationsize = int( np.round(2*l, 0) )
-    blendsize = int( np.round(4*l, 0) )
-    
-    accept_solution = False
-    resptol = 1.0
-    errtol = 0.01
-    
-    if verbose:
-        print(f"Beginning iteration with response tolerance = {errtol}\n")
-
-    while not accept_solution:
-        resp = np.where(resp_og > resptol, 1, 0)
-        mask = trim_image((orient * resp), l)
-        
-        dilate = grey_dilation(mask, size=dilationsize)
-        orientation_final = median_filter(dilate, size=blendsize)
-    
-        # compute error on undefined values after blending
-        err = (orientation_final == 0.0).sum() / orientation_final.size
-            
-        if err > errtol:
-            # TODO: Adaptive step width for resptol to decrease runtime
-            resptol -= 0.01
-            resptol = np.round(resptol, 2)
-            if verbose:
-                print(f"Orientation failed with error {err:0.5}. Reducing threshold to {resptol}")
-        elif resptol < 0:
-            raise RuntimeError('Orientation failed to produce plot.')
-        else:
-            if verbose:
-                print(f"Orientation successful with error {err:0.5}")
-            accept_solution = True  
-
-    return mask, dilate, orientation_final, maxval
-
-
-def rdistance(
+def response_distance(
     image: np.ndarray, 
     num_clusters: int = 20, 
     shapelet_order: Union[str,int] = 'default', 
@@ -367,7 +172,7 @@ def rdistance(
         plt.show()"""
     
     # get convolutional response data, enforce shapelet_order parameter checking inside function call
-    response = kernel.convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
+    response = convresponse_n0(image = image, shapelet_order = shapelet_order, verbose=verbose)[0]
 
     # compute response distance
     Ny, Nx = response.shape[0], response.shape[1]
@@ -515,3 +320,219 @@ def _rdistance(
     rdists = np.ctypeslib.as_array(ptrRdistance, shape=(numtest,))
 
     return rdists
+
+
+def identify_defects(
+    image: np.ndarray, 
+    pattern_order: str, 
+    verbose: bool = True
+):
+    r""" Computes the defect identification method [1]_. 
+    Also known as the defect response distance method.
+
+    Parameters
+    ----------
+    image : numpy.ndarray
+        The image loaded as a numpy array
+    pattern_order : str
+        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    verbose : bool, optional
+        True (default) to print out information from convolution operation to console
+    
+    Returns
+    -------
+    centroids : np.ndarray
+        The centroids from k-means clustering [2]_. Each centroid is a row vector
+    clusterMembers2D : np.ndarray
+        Shows which cluster each pixel from image is a member of. 
+        I.e., value of x would mean it belongs to the cluster who's 
+        centroid is defined by centroids[x] (in numpy array notation)
+    defects : np.ndarray
+        The result of the defect response distance method
+
+    References
+    ----------
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [2] https://doi.org/10.1007/978-3-642-29807-3
+    """
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image must be a numpy array.')
+
+    if not isinstance(pattern_order, str):
+        raise TypeError('pattern_order parameter must be of str type.')
+    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
+        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
+    
+    # enforce appropriate number of clusters depending on pattern_order
+    min_clusters = {'stripe': 4, 'square': 8, 'hexagonal': 10}
+    num_clusters = min_clusters[pattern_order]
+    
+    # get convolutional response data 
+    response = convresponse_n0(image = image, shapelet_order = 'default', verbose=verbose)[0]
+    response2D = response.reshape(-1, response.shape[-1])
+    
+    # clustering 
+    t1 = time.time()
+    if verbose:
+        print(f"Performing k-means clustering with k={num_clusters}, this may take a while...")
+    centroids = kmeans(response2D, num_clusters)[0]
+    clusterMembers1D, dists1D = vq(response2D, centroids)
+    clusterMembers2D = clusterMembers1D.reshape(response.shape[0:2]) 
+    
+    t2 = time.time() - t1
+    if verbose:
+        print(f"Clustering runtime = {t2:0.3} s")
+
+    # get inputs of selected clusters
+    plt.imshow(clusterMembers2D, cmap='jet')
+    plt.axis('off')
+    plt.title('a = add point; del/backspace = remove point; enter = finish')
+    win_positions = np.array(plt.ginput(n = -1, timeout = -1, mouse_add=None, mouse_pop=None, mouse_stop=None))
+    win_positions = np.round(win_positions, 0).astype(int)
+
+    # now mask out non-selected clusters
+    dists1D = (dists1D - dists1D.min()) / (dists1D.max() - dists1D.min())
+    dists2D = dists1D.reshape(response.shape[0:2])
+    defects = np.zeros((response.shape[0], response.shape[1]))
+
+    selected_clusters = []
+    for i in range(win_positions.shape[0]):
+        x, y = win_positions[i][0], win_positions[i][1]
+        cluster = clusterMembers2D[y, x] 
+
+        if cluster not in selected_clusters:
+            selected_clusters.append(cluster)
+            # mask out the cluster from non-trimmed data, clusterMembers2D
+            defects += np.where(clusterMembers2D == int(cluster), 1, 0)
+    
+    # compute defect response distance
+    defects = defects * dists2D
+    
+    return centroids, clusterMembers2D, defects 
+
+
+def orientation(
+    image: np.ndarray, 
+    pattern_order: str, 
+    verbose: bool = True
+):
+    r""" Computes local pattern orientation [1]_ via an iterative scheme using 
+    shapelet orientation at maximum response from steerable filter theory [2]_.
+
+    Parameters
+    ----------
+    image : numpy.ndarray
+        The image loaded as a numpy array
+    pattern_order : str
+        Pattern order (symmetry type). Options are: 'stripe', 'square', 'hexagonal'
+    verbose : bool, optional
+        True (default) to print out results of orientation algorithm to console
+
+    Returns
+    -------
+    mask : np.ndarray
+        The mask for well-defined features
+    dilate : np.ndarray
+        The dilated mask
+    orientation: np.ndarray
+        Applying smoothing/blending to the dilated mask via median filter kernel [3]_
+    maxval : float
+        The maximum allowed orientation value, where
+        :math:`maxval = \frac{2 \pi}{m}`
+    
+    Notes
+    -----
+    This function uses shapelets.self_assembly.misc.trim_image during iteration to 
+    converge on an acceptable orientation result. 
+    Therefore, the orientation result will not have the same shape as the original image.
+
+    References
+    ----------
+    .. [1] http://dx.doi.org/10.1088/1361-6528/ad1df4
+    .. [2] https://doi.org/10.1109/34.93808
+    .. [3] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
+    """
+    if not isinstance(image, np.ndarray):
+        raise TypeError('image must be a numpy array.')
+    
+    if not isinstance(pattern_order, str):
+        raise TypeError('pattern_order parameter must be of str type.')
+    elif pattern_order not in ['stripe', 'square', 'hexagonal']:
+        raise ValueError('pattern_order parameter only accepts "stripe", "square", "hexagonal" str values.')
+
+    # get orientation information based on pattern_order
+    params = {'stripe': 0, 'square': 3, 'hexagonal': 5}
+    ind = params[pattern_order]
+    maxval = 2*np.pi / (ind+1)
+    
+    # get characteristic wavelength of image 
+    l = get_wavelength(image=image, verbose=False)
+
+    # get convolutional response data up to m=6 (higher-order shapelets not needed for this method)
+    # note that custom convolutional response function embedded here since vectors need to be independently normalized
+
+    Ny, Nx = image.shape
+    mmax = 6
+
+    omega = np.empty((Ny, Nx, mmax)) 
+    phi = np.empty((Ny, Nx, mmax))
+    
+    for i in range(mmax):
+        # get beta
+        beta = lambda_to_beta_n0(m=i+1, l=l)
+
+        # get grid for discretization and initialize shapelet kernel
+        shapelet = get_optimal_kernel_n0(m=i+1, beta=beta)
+
+        # convolve kernel (shapelet) with image
+        con = fftconvolve(image, shapelet, mode = 'same')
+        omega[:,:,i] = np.abs(con)
+        phi[:,:,i] = np.angle(con)
+    
+    # normalize response individually, not in terms of vectors across m values
+    for i in range(omega.shape[2]):
+            omega[:,:,i] =  (omega[:,:,i] - omega[:,:,i].min()) / ( omega[:,:,i].max() - omega[:,:,i].min())
+
+    # to correct angles on [0, 2pi/m] as per the local orientation method from ref. [1]
+    # NOTE: this is not exactly equivalent to the optimal filter orientation from steerable filter theory, but has minor modifications
+    for i in range(phi.shape[2]):
+        phi[:,:,i] = (phi[:,:,i] - phi[:,:,i].min()) / (phi[:,:,i].max() - phi[:,:,i].min())
+        phi[:,:,i] *=  2*np.pi / (i+1)
+
+    # find the response threshold iteratively 
+    orient = phi[:,:,ind].copy()
+    resp_og = omega[:,:,ind].copy()
+    dilationsize = int( np.round(2*l, 0) )
+    blendsize = int( np.round(4*l, 0) )
+    
+    accept_solution = False
+    resptol = 1.0
+    errtol = 0.01
+    
+    if verbose:
+        print(f"Beginning iteration with response tolerance = {errtol}\n")
+
+    while not accept_solution:
+        resp = np.where(resp_og > resptol, 1, 0)
+        mask = trim_image((orient * resp), l)
+        
+        dilate = grey_dilation(mask, size=dilationsize)
+        orientation_final = median_filter(dilate, size=blendsize)
+    
+        # compute error on undefined values after blending
+        err = (orientation_final == 0.0).sum() / orientation_final.size
+            
+        if err > errtol:
+            # TODO: Adaptive step width for resptol to decrease runtime
+            resptol -= 0.01
+            resptol = np.round(resptol, 2)
+            if verbose:
+                print(f"Orientation failed with error {err:0.5}. Reducing threshold to {resptol}")
+        elif resptol < 0:
+            raise RuntimeError('Orientation failed to produce plot.')
+        else:
+            if verbose:
+                print(f"Orientation successful with error {err:0.5}")
+            accept_solution = True  
+
+    return mask, dilate, orientation_final, maxval

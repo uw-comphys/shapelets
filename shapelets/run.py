@@ -18,13 +18,17 @@
 import ast 
 import configparser
 import os
-import sys
 
 from shapelets.astronomy.galaxy import decompose_galaxies, get_postage_stamps, load_fits_data
 from shapelets.self_assembly.misc import process_output, read_image
-from shapelets.self_assembly.quant import defectid, orientation, rdistance
+from shapelets.self_assembly.apps import identify_defects, orientation, response_distance
 
-METHODS = ['galaxy_decompose', 'response_distance', 'orientation', 'identify_defects']
+METHODS = [
+    'galaxy_decompose',
+    'response_distance', 
+    'orientation', 
+    'identify_defects'
+]
 
 
 def run(
@@ -34,7 +38,7 @@ def run(
     r""" Main run function that does the following,
         (1) parses the configuration file, 
         (2) sets up output directory for results, and 
-        (3) runs associated analysis
+        (3) runs associated analysis, saving results
 
     Parameters
     ----------
@@ -49,22 +53,25 @@ def run(
 
     if config.get('general', 'method') not in METHODS:
         available_methods = ', '.join(m for m in METHODS)
-        raise RuntimeError(f"The method '{config.get('general', 'method')}' provided in configuration your file is invalid. Available options are: {available_methods}.")
+        errmsg  = f"The method '{config.get('general', 'method')}' in configuration your file is invalid.\n"
+        errmsg += f"Available options are {available_methods}" 
+        raise RuntimeError(errmsg)
     
     image_dir = os.path.join(working_dir, 'images')
     if not os.path.exists(image_dir): 
-        raise RuntimeError(f"Path '{image_dir}' does not exist.")
+        errmsg = f"Path '{image_dir}' does not exist."
+        raise RuntimeError(errmsg)
     
     output_dir = os.path.join(working_dir, 'output')
     if not os.path.exists(output_dir): 
         os.mkdir(output_dir)
 
+    # Grab method that user wants to run
     method = config.get('general', 'method')
 
-    # shapelets.astronomy submodule #
-    # ----------------------------- #
-
-    # galaxy decomposition: https://doi.org/10.1046/j.1365-8711.2003.05901.x #
+    # ------------------- #
+    # shapelets.astronomy #
+    # ------------------- #
 
     if method == 'galaxy_decompose':
         fits_name = config.get('general', 'fits_name')
@@ -81,19 +88,22 @@ def run(
         (galaxy_stamps, star_stamps, noiseless_data) = get_postage_stamps(fits_data, output_base_path)
         decompose_galaxies(galaxy_stamps, star_stamps, noiseless_data, n_max, compression_factor, output_base_path)
 
-        sys.exit()
+        return
 
-
+    # ----------------------- #
     # shapelets.self_assembly #
     # ----------------------- #
 
     image_name = config.get('general', 'image_name')
     image = read_image(image_name = image_name, image_path = image_dir)
 
-    # response distance: https://doi.org/10.1088/1361-6528/ad1df4 #
-
     if method == 'response_distance':
-        shapelet_order = config.get('response_distance', 'shapelet_order', fallback = 'default')
+        shapelet_order = config.get(
+            'response_distance', 
+            'shapelet_order', 
+            fallback = 'default'
+        )
+
         if shapelet_order != 'default':
             shapelet_order = ast.literal_eval(shapelet_order)
 
@@ -107,24 +117,46 @@ def run(
         if uy != 'default':
             uy = ast.literal_eval(uy)
 
-        rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
+        rd_field = response_distance(
+            image = image, 
+            num_clusters = num_clusters, 
+            shapelet_order = shapelet_order, 
+            ux = ux, 
+            uy = uy
+        )
 
-        process_output(image = image, image_name = image_name, save_path = output_dir, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
-
-    # local pattern orientation: https://doi.org/10.1088/1361-6528/ad1df4 #
+        output_objects = (rd_field, num_clusters)
 
     elif method == 'orientation':
-        pattern_order = config.get('orientation', 'pattern_order')
+        pattern_order = config.get(
+            'orientation', 
+            'pattern_order'
+        )
 
-        mask, dilate, blended, maxval = orientation(image = image, pattern_order = pattern_order)
+        mask, dilate, blended, maxval = orientation(
+            image = image, 
+            pattern_order = pattern_order
+        )
 
-        process_output(image = image, image_name = image_name, save_path = output_dir, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
-    
-    # defect identification method: https://doi.org/10.1088/1361-6528/ad1df4 #
+        output_objects = (mask, dilate, blended, maxval)
 
     elif method == 'identify_defects':
-        pattern_order = config.get('identify_defects', 'pattern_order')
+        pattern_order = config.get(
+            'identify_defects', 
+            'pattern_order'
+        )
 
-        centroids, clusterMembers, defects = defectid(image = image, pattern_order = pattern_order)
+        centroids, clusterMembers, defects = identify_defects(image = image, pattern_order = pattern_order)
 
-        process_output(image = image, image_name = image_name, save_path = output_dir, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
+        output_objects = (centroids, clusterMembers, defects)
+
+    # save outputs
+    process_output(
+        image = image, 
+        image_name = image_name, 
+        save_path = output_dir, 
+        output_from = method, 
+        output_objects = output_objects,
+    )
+
+    return

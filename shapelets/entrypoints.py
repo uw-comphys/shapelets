@@ -49,7 +49,7 @@ def run_shapelets():
         working_dir = Path(config_filepath).parents[0]
         os.chdir(working_dir)
 
-        run.run(config_filepath, working_dir)
+        run(config_filepath, working_dir)
     else: 
         raise RuntimeError('Please provide the path to the configuration file, i.e. "shapelets-run /path/to/config".')
 

@@ -19,11 +19,8 @@
 import os 
 from pathlib import Path
 
-from shapelets.self_assembly import (
-    read_image,
-    rdistance,
-    process_output
-) 
+from shapelets.self_assembly.apps import response_distance
+from shapelets.self_assembly.misc import read_image, process_output
 
 ## Section 2: parameters
 image_name = "lamSIM1.png"
@@ -43,9 +40,16 @@ if not os.path.exists(save_path):
 
 # 3.2: compute the response distance 
 try: # if ux, uy are defined above
-    rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
+    rd_field = response_distance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = ux, uy = uy)
 except NameError:
-    rd_field = rdistance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = 'default', uy = 'default')
+    rd_field = response_distance(image = image, num_clusters = num_clusters, shapelet_order = shapelet_order, ux = 'default', uy = 'default')
 
 # 3.3: processing and saving the results to the **output/** directory 
-process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'response_distance', d = rd_field, num_clusters = num_clusters)
+output_objects = (rd_field, num_clusters)
+process_output(
+    image = image, 
+    image_name = image_name, 
+    save_path = save_path, 
+    output_from = 'response_distance', 
+    output_objects = output_objects,
+)

@@ -19,11 +19,7 @@
 import os
 from pathlib import Path
 
-from shapelets.astronomy import (
-    load_fits_data,
-    get_postage_stamps,
-    decompose_galaxies
-)
+from shapelets.astronomy.galaxy import load_fits_data, get_postage_stamps, decompose_galaxies
 
 ## Section 2: parameters
 fits_name = "galaxies.fits"

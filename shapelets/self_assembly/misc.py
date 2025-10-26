@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.ndimage import median_filter
 
-from shapelets.self_assembly.wavelength import get_wavelength
+from shapelets.self_assembly.tools import get_wavelength
 
 
 def read_image(
@@ -100,12 +100,12 @@ def process_output(
     image_name: str, 
     save_path: str, 
     output_from: str, 
-    **kwargs
+    output_objects: tuple,
 ):
-    r"""  Processes and saves output from any of the functions below,
-    shapelets.self_assembly.quant.rdistance,
-    shapelets.self_assembly.quant.orientation,
-    shapelets.self_assembly.quant.defectid
+    r"""Processes and saves output from any of the functions below,
+    shapelets.self_assembly.apps.rdistance,
+    shapelets.self_assembly.apps.orientation,
+    shapelets.self_assembly.apps.identify_defects
     
     It was used to generate Figures 6, 7, 8, and 9 [1]_.
 
@@ -124,13 +124,12 @@ def process_output(
     output_from : str
         The name of the method for which we will process and save the output/results. 
         Options are: 'response_distance', 'orientation', or 'identify_defects'
+    output_objects : tuple
+        The output objects from the associated method.
 
     Notes
     -----
-    Required kwargs are,
-    output_from = 'response_distance': d, num_clusters (see shapelets.self_assembly.quant.rdistance)
-    output_from = 'orientation': mask, dilate, orientation, maxval (see shapelets.self_assembly.quant.orientation)
-    output_from = 'identify_defects': defects, centroids, clusterMembers (see shapelets.self_assembly.quant.defectid)
+    See shapelets.self_assembly.apps for details on each method and their outputs.
 
     References
     ----------
@@ -139,21 +138,21 @@ def process_output(
     # check that save_path exists
     if not os.path.exists(save_path):
         os.mkdir(save_path)
-        
+    
     os.chdir(save_path)
 
     # need to get characteristic wavelength for image trimming
     char_wavelength = get_wavelength(image = image, verbose = False)
 
     if output_from == 'response_distance':
-        # get kwargs
-        d = kwargs['d']
-        num_clusters = kwargs['num_clusters']
+        # unpack
+        rd_field, num_clusters = output_objects
+
         if num_clusters == 'default':
             num_clusters = '20'
 
         # final image processing for response distance scalar field
-        d = (d-d.min()) / (d.max()-d.min())
+        d = (rd_field-rd_field.min()) / (rd_field.max()-rd_field.min())
         d = 1-d
         d = trim_image(im=d, l=char_wavelength)
 
@@ -173,11 +172,8 @@ def process_output(
         print(f"Figure {plotname1} and {plotname2} saved to {save_path}")
     
     elif output_from == 'orientation':
-        # get kwargs
-        mask = kwargs['mask']
-        dilate = kwargs['dilate']
-        orientation = kwargs['orientation']
-        maxval = kwargs['maxval']
+        # unpack
+        mask, dilate, orientation, maxval = output_objects
         
         # plot and save
         plt.figure()
@@ -214,10 +210,8 @@ def process_output(
         print(f"Figure {plotname1}, {plotname2}, {plotname3}, and {plotname4} saved to {save_path}")
     
     elif output_from == 'identify_defects':
-        # get kwargs
-        defects = kwargs['defects']
-        centroids = kwargs['centroids']
-        clusterMembers = kwargs['clusterMembers']
+        # unpack
+        centroids, clusterMembers, defects = output_objects
         
         # apply some smoothing on scale of half lambda
         kernelsize = int(np.round(char_wavelength/2, 0))

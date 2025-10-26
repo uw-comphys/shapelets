@@ -2,7 +2,7 @@
 
 See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2) for files and code related to this example. 
 
-This example demonstrates the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.quant.defectid`` for the simulated hexagonal self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) shown below.
+This example demonstrates the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.apps.identify_defects`` for the simulated hexagonal self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) shown below.
 
 ![](images/hexSIM1.png)
 

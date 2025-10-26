@@ -2,7 +2,7 @@
 
 See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3) for files and code related to this example. 
 
-This example demonstrates the local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.quant.orientation`` for a square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950))
+This example demonstrates the local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.apps.orientation`` for a square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950))
 
 ![](images/sqrAFM2.png)
 

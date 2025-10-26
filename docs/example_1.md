@@ -2,7 +2,7 @@
 
 See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1) for files and code related to this example. 
 
-This example demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) implemented in ``shapelets.self_assembly.quant.rdistance`` for a simulated stripe self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
+This example demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) implemented in ``shapelets.self_assembly.apps.response_distance`` for a simulated stripe self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
 
 ![](images/lamSIM1.png)
 

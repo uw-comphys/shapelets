@@ -19,11 +19,8 @@
 import os 
 from pathlib import Path
 
-from shapelets.self_assembly import (
-    read_image,
-    defectid,
-    process_output
-) 
+from shapelets.self_assembly.apps import identify_defects
+from shapelets.self_assembly.misc import read_image, process_output
 
 ## Section 2: parameters
 image_name = "hexSIM1.png"
@@ -39,7 +36,14 @@ if not os.path.exists(save_path):
     os.mkdir(save_path)
 
 # 3.2: compute the defect identification method
-centroids, clusterMembers, defects = defectid(image = image, pattern_order = pattern_order)
+centroids, clusterMembers, defects = identify_defects(image = image, pattern_order = pattern_order)
 
 # 3.3: processing and saving the results to the **output/** directory 
-process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'identify_defects', centroids = centroids, clusterMembers = clusterMembers, defects = defects)
+output_objects = (centroids, clusterMembers, defects)
+process_output(
+    image = image, 
+    image_name = image_name, 
+    save_path = save_path, 
+    output_from = 'identify_defects', 
+    output_objects = output_objects,
+)
