@@ -19,11 +19,30 @@
 The self-assembly submodule.
 """
 
-# TODO: get around circular import error so that we can do import shapelets.self_assembly.rdistance etc.
-"""
+import warnings
+
+# Allow for easy access to main self-assembly applications
+# e.g. from shapelets.self_assembly import response_distance
 from shapelets.self_assembly.apps import(
+    response_distance,
     identify_defects,
     orientation,
-    rdistance,
 )
-"""
+
+def __getattr__(name):
+    r"""Handle deprecated function names with import-time warnings."""
+    
+    defunct = {
+        'rdistance': response_distance,
+        'defectid': identify_defects
+    }
+
+    if name in defunct:
+        warnings.warn(
+            f"{name}() is deprecated, please use {defunct[name].__name__}() instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        return defunct[name]
+    
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
