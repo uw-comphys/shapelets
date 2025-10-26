@@ -19,11 +19,8 @@
 import os 
 from pathlib import Path
 
-from shapelets.self_assembly import (
-    read_image,
-    orientation,
-    process_output
-) 
+from shapelets.self_assembly.apps import orientation
+from shapelets.self_assembly.misc import read_image, process_output
 
 ## Section 2: parameters
 image_name = "sqrAFM2.png"
@@ -42,4 +39,11 @@ if not os.path.exists(save_path):
 mask, dilate, blended, maxval = orientation(image = image, pattern_order = pattern_order)
 
 # 3.3: processing and saving the results to the **output/** directory 
-process_output(image = image, image_name = image_name, save_path = save_path, output_from = 'orientation', mask = mask, dilate = dilate, orientation = blended, maxval = maxval)
+output_objects = (mask, dilate, blended, maxval)
+process_output(
+    image = image, 
+    image_name = image_name, 
+    save_path = save_path, 
+    output_from = 'orientation', 
+    output_objects= output_objects,
+)
