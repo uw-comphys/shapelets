@@ -21,7 +21,7 @@ import os
 
 from shapelets.astronomy.galaxy import decompose_galaxies, get_postage_stamps, load_fits_data
 from shapelets.self_assembly.misc import process_output, read_image
-from shapelets.self_assembly.quant import defectid, orientation, rdistance
+from shapelets.self_assembly.apps import identify_defects, orientation, response_distance
 
 METHODS = [
     'galaxy_decompose',
@@ -103,7 +103,7 @@ def run(
             'shapelet_order', 
             fallback = 'default'
         )
-        
+
         if shapelet_order != 'default':
             shapelet_order = ast.literal_eval(shapelet_order)
 
@@ -117,7 +117,7 @@ def run(
         if uy != 'default':
             uy = ast.literal_eval(uy)
 
-        rd_field = rdistance(
+        rd_field = response_distance(
             image = image, 
             num_clusters = num_clusters, 
             shapelet_order = shapelet_order, 
@@ -146,7 +146,7 @@ def run(
             'pattern_order'
         )
 
-        centroids, clusterMembers, defects = defectid(image = image, pattern_order = pattern_order)
+        centroids, clusterMembers, defects = identify_defects(image = image, pattern_order = pattern_order)
 
         output_objects = (centroids, clusterMembers, defects)
 

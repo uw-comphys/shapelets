@@ -20,22 +20,22 @@ import unittest
 
 import numpy as np
 
-from shapelets.self_assembly.kernel import(
+from shapelets.self_assembly.tools import(
     convresponse_n0,
     convresponse_n1,
 )
 from shapelets.self_assembly.misc import read_image
-from shapelets.self_assembly.quant import (
-    defectid,
+from shapelets.self_assembly.apps import (
+    identify_defects,
     orientation,
-    rdistance
+    response_distance,
 )
 
 
-class TestSelfAssemblyMethods(unittest.TestCase):
+class TestSelfAssemblyApps(unittest.TestCase):
     r""" Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
     
-    Specifically tests all methods in the self_assembly.quant sub-module.
+    Specifically tests all applications in the self_assembly.apps sub-module.
     Uses one simulated nanostructure image for testing, hexSIM1.png in ./images.
     """
     @classmethod
@@ -89,15 +89,15 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         self.assertEqual(omega.shape, self.image.shape + (6,))
         self.assertEqual(phi.shape, self.image.shape + (6,))
     
-    # Note: cannot test outputs as defectid() is an interactive function.
-    def test_defectid(self) -> None:
+    # Note: cannot test outputs as identify_defects() is an interactive function.
+    def test_identify_defects(self) -> None:
         with self.assertRaises(TypeError):
-            defectid([], pattern_order='stripe')
+            identify_defects([], pattern_order='stripe')
         
         with self.assertRaises(ValueError):
-            defectid(self.image, pattern_order='')
+            identify_defects(self.image, pattern_order='')
         with self.assertRaises(TypeError):
-            defectid(self.image, pattern_order=1.)
+            identify_defects(self.image, pattern_order=1.)
 
     def test_orientation(self) -> None:
         with self.assertRaises(TypeError):
@@ -118,29 +118,28 @@ class TestSelfAssemblyMethods(unittest.TestCase):
         errtol = 0.01 
         self.assertTrue(err <= errtol) # ensure that iteration stopped correctly
     
-    def test_rdistance(self) -> None:
+    def test_response_distance(self) -> None:
         with self.assertRaises(TypeError):
-            rdistance([])
-        
+            response_distance([])
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters=-1)
+            response_distance(self.image, num_clusters=-1)
         with self.assertRaises(TypeError):
-            rdistance(self.image, num_clusters=1.)
+            response_distance(self.image, num_clusters=1.)
 
         with self.assertRaises(TypeError):
-            rdistance(self.image, num_clusters=20, ux=[1, 2], uy='default')
+            response_distance(self.image, num_clusters=20, ux=[1, 2], uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters=20, ux='incorrect', uy='default')
+            response_distance(self.image, num_clusters=20, ux='incorrect', uy='default')
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters=20, ux='default', uy='incorrect')            
+            response_distance(self.image, num_clusters=20, ux='default', uy='incorrect')
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters=20, ux=[1,2,3], uy=[1,2])
+            response_distance(self.image, num_clusters=20, ux=[1,2,3], uy=[1,2])
         with self.assertRaises(ValueError):
-            rdistance(self.image, num_clusters=20, ux=[1,2], uy=[1,2,3])
+            response_distance(self.image, num_clusters=20, ux=[1,2], uy=[1,2,3])
 
         ux, uy = [237, 283], [32, 78]
 
-        d = rdistance(self.image, num_clusters=20, ux=ux, uy=uy, verbose=False)
+        d = response_distance(self.image, num_clusters=20, ux=ux, uy=uy, verbose=False)
 
         self.assertTrue(d.shape, self.image.shape)
         self.assertTrue(d.min() >= 0.)

@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.ndimage import median_filter
 
-from shapelets.self_assembly.wavelength import get_wavelength
+from shapelets.self_assembly.tools import get_wavelength
 
 
 def read_image(
@@ -103,9 +103,9 @@ def process_output(
     output_objects: tuple,
 ):
     r"""Processes and saves output from any of the functions below,
-    shapelets.self_assembly.quant.rdistance,
-    shapelets.self_assembly.quant.orientation,
-    shapelets.self_assembly.quant.defectid
+    shapelets.self_assembly.apps.rdistance,
+    shapelets.self_assembly.apps.orientation,
+    shapelets.self_assembly.apps.identify_defects
     
     It was used to generate Figures 6, 7, 8, and 9 [1]_.
 
@@ -129,10 +129,7 @@ def process_output(
 
     Notes
     -----
-    Required kwargs are,
-    output_from = 'response_distance': d, num_clusters (see shapelets.self_assembly.quant.rdistance)
-    output_from = 'orientation': mask, dilate, orientation, maxval (see shapelets.self_assembly.quant.orientation)
-    output_from = 'identify_defects': defects, centroids, clusterMembers (see shapelets.self_assembly.quant.defectid)
+    See shapelets.self_assembly.apps for details on each method and their outputs.
 
     References
     ----------

@@ -22,21 +22,21 @@ import unittest
 import numpy as np
 
 from shapelets.self_assembly.misc import read_image
-from shapelets.self_assembly.wavelength import(
+from shapelets.self_assembly.tools import(
     get_wavelength,
     lambda_to_beta_n0,
     lambda_to_beta_n1
 )
 
 
-class TestSelfAssemblyBasic(unittest.TestCase):
+class TestSelfAssemblyTools(unittest.TestCase):
     r""" Unit tests in support of more advanced functionality of shapelets.self_assembly sub-module.
 
     Uses two simulated images of nanostructure, lamSIM1.png and hexSIM1.png in ./images for testing.
     Currently includes:
         - self_assembly.misc.read_image, 
-        - self_assembly.wavelength.get_wavelength, and
-        - self_assembly.wavelength.lambda_to_beta_n0
+        - self_assembly.tools.get_wavelength, and
+        - self_assembly.tools.lambda_to_beta_n0
     """
 
     @classmethod

@@ -31,10 +31,10 @@ from skimage.filters import threshold_otsu
 from sklearn.neural_network import MLPRegressor
 import tensorflow as tf
 
-from shapelets.self_assembly.kernel import convresponse_n0
+from shapelets.self_assembly.tools import convresponse_n0
 from shapelets.self_assembly.misc import read_image
-from shapelets.self_assembly.quant import rdistance
-from shapelets.self_assembly.wavelength import get_wavelength
+from shapelets.self_assembly.applications import rdistance
+from shapelets.self_assembly.tools import get_wavelength
 
 
 def infer(response_vectors: np.ndarray):
@@ -336,7 +336,7 @@ if __name__ == "__main__":
             # Take the ideal_data from the predictor and split into seperate coords
             top_left, bottom_right = ideal_data[0], ideal_data[1]
             # Apply K-means response distance method on the image using the predicted reference region
-            rdist = rdistance(
+            rdist = response_distance
                 image=image,
                 num_clusters=20,
                 ux=[top_left[0], bottom_right[0]],
