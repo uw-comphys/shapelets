@@ -4,7 +4,7 @@ See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_2)
 
 This example demonstrates the defect identification method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.apps.identify_defects`` for the simulated hexagonal self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) shown below.
 
-![](images/hexSIM1.png)
+![](../examples/example_2/images/hexSIM1.png)
 
 ## Overview
 
@@ -60,11 +60,11 @@ During runtime you will be prompted to manually select the clusters associated w
 
 The output (shown below) will be available in ``./analysis/output`` containing the location of each cluster (top left), radar chart of centroid response vectors (top right), the defect response distance scalar field (bottom left), and this field superimposed onto the original pattern (bottom right). In this example, clusters 2, 5, and 8 were chosen by the user as defect clusters. 
 
-![](../images/hexSIM1_defectid_clustloc_k10.png)
-![](../images/hexSIM1_defectid_rc_k10.png)
+![](../examples/images/hexSIM1_defectid_clustloc_k10.png)
+![](../examples/images/hexSIM1_defectid_rc_k10.png)
 
-![](../images/hexSIM1_defectid_drd_k10.png)
-![](../images/hexSIM1_defectid_drd_overlay_k10.png)
+![](../examples/images/hexSIM1_defectid_drd_k10.png)
+![](../examples/images/hexSIM1_defectid_drd_overlay_k10.png)
 
 ## Additional Notes
 

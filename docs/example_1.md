@@ -4,7 +4,7 @@ See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_1)
 
 This example demonstrates the response distance method ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)) implemented in ``shapelets.self_assembly.apps.response_distance`` for a simulated stripe self-assembled nanostructure image ([R. Suderman (2015)](https://doi.org/10.1103/PhysRevE.91.033307)).
 
-![](images/lamSIM1.png)
+![](../examples/example_1/images/lamSIM1.png)
 
 ## Overview
 
@@ -68,8 +68,8 @@ To run the example, execute ``shapelets-run ./analysis/config`` in the command l
 
 The output (shown below) will be available in ``./analysis/output`` containing the response distance scalar field (left) as well as this field superimposed onto the original pattern (right).
 
-![](../images/lamSIM1_response_distance_k20.png)
-![](../images/lamSIM1_response_distance_overlay_k20.png)
+![](../examples/images/lamSIM1_response_distance_k20.png)
+![](../examples/images/lamSIM1_response_distance_overlay_k20.png)
 
 ## Selecting subdomain bounds during runtime
 

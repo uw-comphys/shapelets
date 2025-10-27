@@ -5,8 +5,8 @@ See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_4)
 This example demonstrates the galaxy decomposition and reconstruction method ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)) implemented via multiple functions in the ``shapelets.astronomy`` submodule for a FITS file, which contains a subset of images of galaxies from the Hubble Deep Field North ([A. Refregier (2003)](https://doi.org/10.1046/j.1365-8711.2003.05901.x)). 
 This data is shown below as linear (left) and mean normalized (right) greyscale images. 
 
-![](../images/galaxies_linear.png)
-![](../images/galaxies_std.png)
+![](../examples/images/galaxies_linear.png)
+![](../examples/images/galaxies_std.png)
 
 ## Overview
 
@@ -70,8 +70,8 @@ The second image (right) contains information about the first decomposed galaxy,
 * a reconstruction of the galaxy using the all calculated coefficients and a compressed set coefficients, and
 * the compressed reconstruction's relative error
 
-![](../images/galaxies_map.png)
-![](../images/galaxies_decomposed.png)
+![](../examples/images/galaxies_map.png)
+![](../examples/images/galaxies_decomposed.png)
 
 ## Additional Notes
 

@@ -63,7 +63,7 @@ tracker = "https://github.com/uw-comphys/shapelets/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-exclude = ["docs"]
+exclude = ["shapelets.docs", "shapelets.docs.*"]
 
 [tool.setuptools.package-data]
 # Using shapelets as the main directory, then list global patterns underneath it

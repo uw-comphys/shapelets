@@ -4,7 +4,7 @@ See [here](https://github.com/uw-comphys/shapelets/tree/main/examples/example_3)
 
 This example demonstrates the local pattern orientation method ([M.P. Tino (2024)](http://dx.doi.org/10.1088/1361-6528/ad1df4)) implemented in ``shapelets.self_assembly.apps.orientation`` for a square self-assembled nanostructure image ([C. Tang (2008)](https://doi.org/10.1126/science.1162950))
 
-![](images/sqrAFM2.png)
+![](../examples/example_3/images/sqrAFM2.png)
 
 ## Overview
 
@@ -48,11 +48,11 @@ Depending on your computer hardware, the iterative convergence scheme may take a
 
 The output (shown below) will then be available in ``./analysis/output`` containing the mask (top left), dilated feature orientation (top right), smoothed orientation result, and the smoothed orientation result superimposed onto the original pattern (shown below, respectively).
 
-![](../images/sqrAFM2_orientation_maskedresp.png)
-![](../images/sqrAFM2_orientation_dilate.png)
+![](../examples/images/sqrAFM2_orientation_maskedresp.png)
+![](../examples/images/sqrAFM2_orientation_dilate.png)
 
-![](../images/sqrAFM2_orientation_blend.png)
-![](../images/sqrAFM2_orientation_overlay.png)
+![](../examples/images/sqrAFM2_orientation_blend.png)
+![](../examples/images/sqrAFM2_orientation_overlay.png)
 
 ## Additional Notes
 
