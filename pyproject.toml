@@ -6,13 +6,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "shapelets"
-version = "1.2"
+version = "1.3"
 description = "Shapelets provide reference access to various shapelet functions and some of their applications."
 requires-python = ">=3.10"
 dependencies = [
     "astropy",
     "matplotlib",
-	"numpy<2.0", # testing with numpy=2.0.0 broke other dependencies...
+	"numpy<2.0",
     "opencv-python",
     "scikit-learn",
     "scikit-image",
