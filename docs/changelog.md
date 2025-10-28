@@ -7,6 +7,19 @@ All substantial or important changes to `shapelets` will be written in this file
 - MNT: General modifications, maintenance (including documentation), or enhancements 
 - NEW: Introduction of a new component or feature
 
+## [1.3] -- Oct 27, 2025
+- FIX: Restored original importing schemes to match JOSS paper, e.g. `from shapelets.self_assembly import orientation` ([#83](https://github.com/uw-comphys/shapelets/pull/83))
+- MNT: Deprecated function warnings; old imports (from JOSS paper) will still work, user notified of new function name ([#83](https://github.com/uw-comphys/shapelets/pull/83))
+- MNT: Exclude `shapelets/docs` from `pip install` ([#82](https://github.com/uw-comphys/shapelets/pull/82))
+- MNT: Documentation maintenance and removed `pdoc` as dependency ([#81](https://github.com/uw-comphys/shapelets/pull/81))
+- MNT: Modify GitHub action for JOSS paper compilation to run only on `publications` branch ([#80](https://github.com/uw-comphys/shapelets/pull/80))
+- NEW: New GitHub actions to run unit-tests on windows, macos, and linux (ubuntu) ([#80](https://github.com/uw-comphys/shapelets/pull/80))
+- NEW: Enforced `numpy` docstring format for all functions ([#77](https://github.com/uw-comphys/shapelets/pull/77))
+- NEW: Added CC as latest author to shapelets package, welcome! ([#77](https://github.com/uw-comphys/shapelets/pull/77))
+- MNT: Support for passing relative/absolute filepaths to config file, e.g. `shapelets-run /path/to/config` ([#76](https://github.com/uw-comphys/shapelets/pull/76))
+- MNT: Change main entry point from `shapelets` to `shapelets-run` ([#76](https://github.com/uw-comphys/shapelets/pull/76))
+- NEW: Addition of unsupervised shapelet method via `auto.py` (is standalone script; needs work to merge into package) ([#73](https://github.com/uw-comphys/shapelets/pull/73))
+
 ## [1.2] -- Dec 14, 2024
 - NEW: Introduced CHANGELOG.md for detailed version control history 
 - NEW: Introduced `shapelets.core` for essential components (i.e., shapelet functions, entry points) ([#68](https://github.com/uw-comphys/shapelets/pull/68))
@@ -22,7 +35,7 @@ All substantial or important changes to `shapelets` will be written in this file
 - FIX: Fixed issue where unit tests were not available after pip installation ([#45](https://github.com/uw-comphys/shapelets/pull/45))
 - MNT: Simplified input parameters and improved readability for `shapelets.self_assembly` methods 
 - MNT: Edits to documentation, including examples, README, and official website
-- NEW: Formal library citation now available via CITATION.cff
+- NEW: Formal library citation now available via CITATION.cff 
 - MNT: Minor modifications and corrections to [JOSS manuscript](https://joss.theoj.org/papers/10.21105/joss.06058)
 
 ## [1.0] -- Mar 14, 2024
