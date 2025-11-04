@@ -29,7 +29,7 @@ It also implements several shapelets applications, such as
 
 ### Installation
 
-If you have Python 3.10+ installed on your machine, you can install the shapelets library via pip: 
+If you have Python 3.11+ installed on your machine, you can install the shapelets library via pip: 
 
     pip install shapelets
 
