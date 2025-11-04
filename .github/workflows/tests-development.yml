@@ -1,4 +1,4 @@
-# tests-development.yml :: run unit tests on python 3.10-3.13 on various OSs
+# tests-development.yml :: run unit tests on python 3.11-3.13 on various OSs
 name: tests-development
 
 on:
