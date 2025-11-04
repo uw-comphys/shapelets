@@ -12,7 +12,8 @@ requires-python = ">=3.10"
 dependencies = [
     "astropy",
     "matplotlib",
-	"numpy<2.0",
+    "numpy>=2.0; python_version>='3.13'",
+    "numpy>=1.21,<2.0; python_version<'3.13'",
     "opencv-python",
     "scikit-learn",
     "scikit-image",
