@@ -1,5 +1,5 @@
-# tests.yml :: run unit tests on python 3.10-3.13 on various OSs
-name: tests
+# tests-development.yml :: run unit tests on python 3.10-3.13 on various OSs
+name: tests-development
 
 on:
   push:
@@ -11,13 +11,13 @@ on:
 
 jobs:
   test:
-    name: Tests - ${{ matrix.os }} - Python ${{ matrix.python-version }}
+    name: ${{ matrix.os }} - Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.11', '3.12', '3.13']
 
     steps:
       - name: Check out code
