@@ -246,6 +246,7 @@ def get_postage_stamps(
 
     return galaxy_stamp_list, star_stamp_list, data
 
+
 def load_fits_data(filename: str) -> np.ndarray:
     r""" Loads data as numpy.ndarray from provided .fits file [1]_.
 
@@ -272,8 +273,16 @@ def load_fits_data(filename: str) -> np.ndarray:
     with fits.open(filename) as hdul:
         hdul.verify("fix")
         data = hdul[0].data
-        return data.byteswap(inplace=True).newbyteorder()
+        data = data.byteswap(inplace=True)
+        # NumPy 1/2 compatibility #
+        try:
+            # NumPy 1.x
+            return data.newbyteorder() 
+        except AttributeError:
+            # NumPy 2.x
+            return data.view(data.dtype.newbyteorder())
     
+
 def create_plots(
     data: np.ndarray, 
     reconstructed: np.ndarray, 
